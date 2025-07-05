@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { Calendar, Clock, TrendingUp, Users, Award, BarChart3, TrendingDown } from 'lucide-react';
+import { Calendar, Clock, TrendingUp, Users, Award, TrendingDown } from 'lucide-react';
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";

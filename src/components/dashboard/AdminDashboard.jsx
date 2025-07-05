@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useToast } from '../ui/use-toast';
 import PageMetaDialog from './PageMetaDialog';
 import TextLogoDialog from './TextLogoDialog';
+import Cookies from 'js-cookie';
 
 const AdminDashboard = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -47,6 +48,7 @@ const AdminDashboard = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('adminAuthenticated');
+        Cookies.remove('isLogin');
         toast({
             title: 'Logged Out',
             description: 'You have been logged out successfully',
