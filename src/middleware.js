@@ -11,6 +11,10 @@ export function middleware(request) {
         '/admin/google-verification',
         '/admin/news',
         '/admin/predictions',
+        '/api/metadata/create-metadata',
+        '/api/metadata/update-metadata',
+        '/api/metadata/delete-metadata',
+        '/api/auth/add-user',
 
     ];
 
