@@ -8,13 +8,13 @@ import Footer from '@/components/Footer';
 
 
 export const metadata = {
-  title: "guide",
-  description: 'guide',
+  title: "Sample title guide",
+  description: 'Sample Desc guide',
 
   openGraph: {
-    title: 'Sample  OG Title',
+    title: 'Sample  OG Title Guide',
     description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL,
+    url: process.env.NEXT_PUBLIC_BASEURL + "/guide",
     type: "website",
     images: [
       {

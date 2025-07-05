@@ -13,9 +13,9 @@ export const metadata = {
   description: 'Discover the hottest UK49s numbers that appear most frequently in recent draws. Analyze trends and patterns to improve your lottery strategy.',
 
   openGraph: {
-    title: 'Sample  OG Title',
+    title: 'Sample  OG Title Hot Balls',
     description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL,
+    url: process.env.NEXT_PUBLIC_BASEURL + "/hot-balls",
     type: "website",
     images: [
       {

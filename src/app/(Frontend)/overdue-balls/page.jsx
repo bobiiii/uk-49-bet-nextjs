@@ -13,9 +13,9 @@ export const metadata = {
   description: "Track overdue UK49s numbers that haven't appeared in recent draws. Analyze patterns and identify potential comeback numbers.",
 
   openGraph: {
-    title: 'Sample  OG Title',
+    title: 'Sample  OG Title Overdue balls',
     description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL,
+    url: process.env.NEXT_PUBLIC_BASEURL + "/overdue-balls",
     type: "website",
     images: [
       {

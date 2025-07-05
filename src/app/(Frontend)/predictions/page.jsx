@@ -9,9 +9,9 @@ export const metadata = {
   description: "Get expert UK49s predictions using advanced AI algorithms and statistical analysis. View hot numbers, cold numbers, pattern analysis and number generation tools for better lottery picks.",
 
   openGraph: {
-    title: 'Sample  OG Title',
+    title: 'Sample  OG Title Predictions',
     description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL,
+    url: process.env.NEXT_PUBLIC_BASEURL + "/predictions" ,
     type: "website",
     images: [
       {

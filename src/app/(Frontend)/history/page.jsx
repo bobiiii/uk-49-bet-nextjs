@@ -8,9 +8,9 @@ export const metadata = {
   description: "Browse the complete UK49s lottery history archive with advanced search and filtering options. Find historical results by date, draw type, and more from our comprehensive database.",
 
   openGraph: {
-    title: 'Sample  OG Title',
+    title: 'Sample  OG Title history',
     description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL,
+    url: process.env.NEXT_PUBLIC_BASEURL + "/history",
     type: "website",
     images: [
       {

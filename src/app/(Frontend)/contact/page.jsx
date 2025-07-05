@@ -9,9 +9,9 @@ export const metadata = {
   description: 'contact',
 
   openGraph: {
-    title: 'Sample  OG Title',
+    title: 'Sample  OG Title contact',
     description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL,
+    url: process.env.NEXT_PUBLIC_BASEURL + "/contact",
     type: "website",
     images: [
       {

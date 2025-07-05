@@ -12,9 +12,9 @@ export const metadata = {
   description: 'Learn about UK49s Results, your trusted source for accurate lottery information, analysis, and predictions since 2020. Meet our team and discover our mission.',
 
   openGraph: {
-    title: 'Sample  OG Title',
+    title: 'Sample  OG Title About',
     description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL,
+    url: process.env.NEXT_PUBLIC_BASEURL + "/about",
     type: "website",
     images: [
       {

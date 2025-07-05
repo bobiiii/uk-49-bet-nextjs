@@ -12,9 +12,9 @@ export const metadata = {
   description: "Learn how UK49s Results protects your privacy and handles your personal information. Read our comprehensive privacy policy and data protection practices.",
 
   openGraph: {
-    title: 'Sample  OG Title',
+    title: 'Sample  OG Title Privacy',
     description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL,
+    url: process.env.NEXT_PUBLIC_BASEURL + "/privacy",
     type: "website",
     images: [
       {

@@ -9,9 +9,9 @@ export const metadata = {
   description: 'faq',
 
   openGraph: {
-    title: 'Sample  OG Title',
+    title: 'Sample  OG Title FAQ',
     description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL,
+    url: process.env.NEXT_PUBLIC_BASEURL + "/faq",
     type: "website",
     images: [
       {

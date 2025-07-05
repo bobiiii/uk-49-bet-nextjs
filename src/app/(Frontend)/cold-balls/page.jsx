@@ -12,9 +12,9 @@ export const metadata = {
   description: 'Explore the coldest UK49s numbers that appear least frequently in recent draws. Find patterns and opportunities in number selection.',
 
   openGraph: {
-    title: 'Sample  OG Title',
+    title: 'Sample  OG Title Cold Balls',
     description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL,
+    url: process.env.NEXT_PUBLIC_BASEURL + "/cold-balls",
     type: "website",
     images: [
       {

@@ -9,9 +9,9 @@ export const metadata = {
   description: "View the latest UK49s lottery results for today's Lunchtime and Teatime draws. Get live winning numbers, prize breakdowns, and recent draw results updated daily.",
 
   openGraph: {
-    title: 'Sample  OG Title',
+    title: 'Sample  OG Title Results',
     description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL,
+    url: process.env.NEXT_PUBLIC_BASEURL + "/results",
     type: "website",
     images: [
       {

@@ -13,9 +13,9 @@ export const metadata = {
   description: "Comprehensive UK49s lottery statistics including hot numbers, cold numbers, frequency analysis, and historical patterns to improve your winning chances.",
 
   openGraph: {
-    title: 'Sample  OG Title',
+    title: 'Sample  OG Title Statistics',
     description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL,
+    url: process.env.NEXT_PUBLIC_BASEURL + "/statistics",
     type: "website",
     images: [
       {
