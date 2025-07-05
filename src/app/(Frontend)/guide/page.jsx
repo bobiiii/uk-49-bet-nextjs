@@ -42,7 +42,7 @@ export const metadata = {
 
 
 
-function Guide() {
+function page() {
   return (
     <>
       <Header />
@@ -435,4 +435,4 @@ function Guide() {
   );
 };
 
-export default Guide;
+export default page;
