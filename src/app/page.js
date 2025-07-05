@@ -7,7 +7,7 @@ import LotteryBalls from "@/components/LotteryBalls";
 
 
 export const metadata = {
-  title: "SHome - Latest UK49s Results & Predictions",
+  title: "Home - Latest UK49s Results & Predictions",
   description: "Get the latest UK49s lottery results, expert predictions, and winning strategies. View today's Lunchtime and Teatime draws with comprehensive analysis.",
 
   openGraph: {
