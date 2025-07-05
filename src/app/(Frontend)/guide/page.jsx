@@ -2,8 +2,6 @@
 import React from 'react';
 import { BookOpen, Clock, PoundSterling, Target, AlertCircle, CheckCircle, Plus, Minus } from 'lucide-react';
 import Link from 'next/link';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 
 
 
@@ -45,7 +43,6 @@ export const metadata = {
 function page() {
   return (
     <>
-      <Header />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -430,7 +427,6 @@ function page() {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

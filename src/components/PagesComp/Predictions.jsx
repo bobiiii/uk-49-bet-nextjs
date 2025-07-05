@@ -4,8 +4,6 @@ import Link from 'next/link';
 import LotteryBalls from '@/components/LotteryBalls';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Brain, TrendingUp, Target, Lightbulb, RefreshCw, Star, Calendar, Trophy } from 'lucide-react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 
 
 
@@ -116,7 +114,6 @@ function Predictions() {
 
     return (
         <>
-            <Header />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
                 {/* Header */}
                 <div className="text-center mb-6 sm:mb-8">
@@ -438,7 +435,6 @@ function Predictions() {
                     </Accordion>
                 </div>
             </div>
-            <Footer />
         </>
     );
 };
