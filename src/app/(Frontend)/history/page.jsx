@@ -1,3 +1,4 @@
+import History from '@/components/PagesComp/History';
 import React from 'react';
 
 
