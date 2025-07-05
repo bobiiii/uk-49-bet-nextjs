@@ -1,4 +1,9 @@
-import NewsManager from '@/components/dashboard/NewsManager';
+"use client";
+import dynamic from 'next/dynamic';
+const NewsManager = dynamic(() => import('@/components/PagesComp/AdminNews'), {
+  ssr: false,
+  loading: () => <p>Loading News Manager...</p>, // Optional: custom loading state
+});
 import React from 'react'
 
 function page() {
@@ -9,4 +14,4 @@ function page() {
     )
 }
 
-export default page;
+export default page
