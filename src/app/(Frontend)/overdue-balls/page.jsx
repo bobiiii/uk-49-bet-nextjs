@@ -19,8 +19,8 @@ export const metadata = {
     type: "website",
     images: [
       {
-        url: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
-        secureUrl: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        url: 'hhttps://lovable.dev/opengraph-image-p98pqg.png',
+        secureUrl: 'hhttps://lovable.dev/opengraph-image-p98pqg.png',
         width: 1200,
         height: 630,
         alt: 'Preview image for Sample Site',
