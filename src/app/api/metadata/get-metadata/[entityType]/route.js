@@ -1,7 +1,7 @@
 import { MetadataModel } from "@/app/api/_utils/metadataModel";
 import { NextResponse } from "next/server";
 import { startDB } from "@/app/api/_utils/startDb";
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 
 export async function GET(req, { params }) {
   try {

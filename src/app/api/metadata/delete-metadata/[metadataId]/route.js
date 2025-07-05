@@ -2,7 +2,7 @@ import { MetadataModel } from "@/app/api/_utils/metadataModel";
 import { NextResponse } from "next/server";
 import { startDB } from "@/app/api/_utils/startDb";
 import mongoose from "mongoose";
-import { deleteImageFromDrive } from "@/app/api/_utils/imageHandlers";
+// import { deleteImageFromDrive } from "@/app/api/_utils/imageHandlers";
 
 export async function DELETE(req, { params }) {
   try {
