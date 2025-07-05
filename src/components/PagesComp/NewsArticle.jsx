@@ -7,8 +7,6 @@ import { useParams } from 'next/navigation'
 import { Calendar, Clock, User, ArrowLeft, Share2, BookmarkPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 
 
 
@@ -117,7 +115,6 @@ function NewsArticle() {
 
     return (
         <>
-            <Header />
             <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Breadcrumb */}
                 <nav className="mb-6">
@@ -260,7 +257,6 @@ function NewsArticle() {
           color: #6b7280;
         }
       `}</style>
-            <Footer />
         </>
     );
 };

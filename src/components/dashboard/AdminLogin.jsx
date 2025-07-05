@@ -11,6 +11,7 @@ import { z } from 'zod';
 import { Lock, User } from 'lucide-react';
 import { useToast } from '../ui/use-toast';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 const loginSchema = z.object({
     username: z.string().min(1, 'Username is required'),
@@ -42,6 +43,7 @@ const AdminLogin = () => {
                 title: 'Login Successful',
                 description: 'Welcome to the admin panel',
             });
+            Cookies.set("isLogin", true);
             navigate.push('/admin');
         } else {
             toast({

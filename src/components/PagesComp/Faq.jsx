@@ -2,8 +2,6 @@
 "use client";
 import React, { useState } from 'react';
 import { HelpCircle, ChevronDown, ChevronUp, Search, Clock, PoundSterling, Target, Shield } from 'lucide-react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 
 
 
@@ -148,7 +146,6 @@ const Faq = () => {
 
     return (
         <>
-            <Header />
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Header */}
                 <div className="text-center mb-8">
@@ -264,7 +261,6 @@ const Faq = () => {
                     </div>
                 </div>
             </div>
-            <Footer />
         </>
     );
 };

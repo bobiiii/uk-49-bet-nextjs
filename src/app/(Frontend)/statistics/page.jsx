@@ -1,10 +1,8 @@
 
 import React from 'react';
 import LotteryBalls from '@/components/LotteryBalls';
-import { TrendingUp, BarChart3, Calendar, Target, TrendingDown, Clock } from 'lucide-react';
+import { TrendingUp, TrendingDown, Clock } from 'lucide-react';
 import Link from 'next/link';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 
 
 
@@ -52,7 +50,6 @@ function Statistics() {
 
   return (
     <>
-      <Header />
       <div className="bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header */}
@@ -191,7 +188,6 @@ function Statistics() {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };

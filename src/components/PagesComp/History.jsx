@@ -2,11 +2,9 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import LotteryBalls from '@/components/LotteryBalls';
-import { Calendar, Clock, Filter, Download, Search } from 'lucide-react';
+import { Filter, Download, Search } from 'lucide-react';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 
 
 
@@ -44,7 +42,6 @@ const History = () => {
 
     return (
         <>
-            <Header />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 overflow-x-hidden">
                 {/* Header */}
                 <div className="mb-6 sm:mb-8">
@@ -221,7 +218,6 @@ const History = () => {
                     </div>
                 </div>
             </div>
-            <Footer />
         </>
     );
 };

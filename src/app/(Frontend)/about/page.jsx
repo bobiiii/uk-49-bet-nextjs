@@ -1,8 +1,7 @@
 import React from 'react';
 
 import { Users, Target, Award, Shield, TrendingUp, Clock, Heart, Star } from 'lucide-react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+
 
 
 
@@ -79,7 +78,6 @@ const About = () => {
 
   return (
     <>
-      <Header />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="text-center mb-12">
@@ -287,7 +285,6 @@ const About = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };
