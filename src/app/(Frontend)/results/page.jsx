@@ -3,12 +3,51 @@ import React, { useState } from 'react';
 import LotteryBalls from '@/components/LotteryBalls';
 import { Calendar, Clock, Download } from 'lucide-react';
 import Link from 'next/link';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 // import { Link } from 'react-router-dom';
 
- function Results ()  {
+
+
+
+export const metadata = {
+  title: "Latest UK49s Results Today - Live Draw Numbers",
+  description: "View the latest UK49s lottery results for today's Lunchtime and Teatime draws. Get live winning numbers, prize breakdowns, and recent draw results updated daily.",
+
+  openGraph: {
+    title: 'Sample  OG Title',
+    description: 'Sample  Og Desc',
+    url: process.env.NEXT_PUBLIC_BASEURL,
+    type: "website",
+    images: [
+      {
+        url: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        secureUrl: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Preview image for Sample Site',
+      }
+    ],
+
+
+
+    site_name: process.env.NEXT_PUBLIC_SITENAME,
+  },
+  keywords:
+    [
+      "UK49s results today, latest UK49s results, UK49s winning numbers, lunchtime results, teatime results, UK49s live results, lottery results today"
+    ],
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_BASEURL + "/results",
+  },
+
+};
+
+
+function Results() {
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [displayCount, setDisplayCount] = useState(30);
-  
+
   // Mock historical results data - only 30 recent results
   const results = [
     {
@@ -64,7 +103,7 @@ import Link from 'next/link';
       const date = new Date('2024-06-27');
       date.setDate(date.getDate() - Math.floor(index / 2));
       const isLunchtime = index % 2 === 1;
-      
+
       return {
         id: index + 7,
         date: date.toISOString().split('T')[0],
@@ -91,7 +130,7 @@ import Link from 'next/link';
   const exportToCSV = () => {
     const currentDate = new Date().toISOString().split('T')[0];
     const websiteUrl = 'https://uk49sresults.com';
-    
+
     const headers = ['Date', 'Draw', 'Time', 'Number 1', 'Number 2', 'Number 3', 'Number 4', 'Number 5', 'Number 6', 'Bonus Ball'];
     const csvContent = [
       `UK49s Results Export - ${currentDate}`,
@@ -119,15 +158,16 @@ import Link from 'next/link';
   };
 
   return (
-      
-      
+
+    <>
+      <Header />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-4">Lunchtime & Teatime Results</h1>
           <p className="text-lg sm:text-xl text-gray-600">These are most recent 30 draws results of lunchtime and teatime. Here players can see the draw name, date, main numbers and booster balls of each draw. To find the <Link href="/" className="text-blue-600 hover:text-blue-800 underline">latest results</Link> visit homepage.</p>
-          <Link 
-            href="/statistics" 
+          <Link
+            href="/statistics"
             className="inline-flex items-center mt-2 text-blue-600 hover:text-blue-800 font-medium"
           >
             View Statistics →
@@ -141,11 +181,10 @@ import Link from 'next/link';
               <div className="flex flex-col space-y-4">
                 {/* Date and Draw Info - Centered */}
                 <div className="flex flex-col items-center text-center space-y-2">
-                  <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    result.draw === 'Lunchtime' 
-                      ? 'bg-blue-100 text-blue-800' 
-                      : 'bg-purple-100 text-purple-800'
-                  }`}>
+                  <div className={`px-3 py-1 rounded-full text-sm font-medium ${result.draw === 'Lunchtime'
+                    ? 'bg-blue-100 text-blue-800'
+                    : 'bg-purple-100 text-purple-800'
+                    }`}>
                     {result.draw} Results
                   </div>
                   <div className="flex flex-row items-center justify-between gap-2">
@@ -162,8 +201,8 @@ import Link from 'next/link';
 
                 {/* Lottery Balls - Centered */}
                 <div className="flex justify-center">
-                  <LotteryBalls 
-                    numbers={result.numbers} 
+                  <LotteryBalls
+                    numbers={result.numbers}
                     boosterBall={result.boosterBall}
                     size="medium"
                     mobileLayout={true}
@@ -177,7 +216,7 @@ import Link from 'next/link';
         {/* Load More */}
         {hasMoreResults && (
           <div className="text-center mt-6 sm:mt-8">
-            <button 
+            <button
               onClick={loadMoreResults}
               className="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors w-full sm:w-auto"
             >
@@ -205,7 +244,9 @@ import Link from 'next/link';
           </div>
         </div>
       </div>
-    
+      <Footer />
+    </>
+
   );
 };
 

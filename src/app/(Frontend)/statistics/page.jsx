@@ -3,8 +3,46 @@ import React from 'react';
 import LotteryBalls from '@/components/LotteryBalls';
 import { TrendingUp, BarChart3, Calendar, Target, TrendingDown, Clock } from 'lucide-react';
 import Link from 'next/link';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
-function Statistics  ()  {
+
+
+export const metadata = {
+  title: "Statistics - UK49s Number Analysis & Trends",
+  description: "Comprehensive UK49s lottery statistics including hot numbers, cold numbers, frequency analysis, and historical patterns to improve your winning chances.",
+
+  openGraph: {
+    title: 'Sample  OG Title',
+    description: 'Sample  Og Desc',
+    url: process.env.NEXT_PUBLIC_BASEURL,
+    type: "website",
+    images: [
+      {
+        url: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        secureUrl: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Preview image for Sample Site',
+      }
+    ],
+
+
+
+    site_name: process.env.NEXT_PUBLIC_SITENAME,
+  },
+  keywords:
+    [
+      "UK49s statistics, lottery analysis, hot numbers, cold numbers, frequency analysis, number patterns, lottery trends"
+    ],
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_BASEURL + "/statistics",
+  },
+
+};
+
+
+function Statistics() {
   // Mock data for statistics
   const mostFrequent = [7, 23, 31, 42, 14];
   const leastFrequent = [1, 8, 19, 25, 38];
@@ -14,14 +52,14 @@ function Statistics  ()  {
 
   return (
     <>
-      
+      <Header />
       <div className="bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">UK49s Statistics</h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Comprehensive analysis of UK49s lottery numbers including frequency patterns, 
+              Comprehensive analysis of UK49s lottery numbers including frequency patterns,
               hot and cold numbers, and statistical trends to help improve your chances.
             </p>
           </div>
@@ -93,8 +131,8 @@ function Statistics  ()  {
                     </div>
                     <div className="flex items-center">
                       <div className="w-24 bg-gray-200 rounded-full h-2 mr-3">
-                        <div 
-                          className="bg-blue-600 h-2 rounded-full" 
+                        <div
+                          className="bg-blue-600 h-2 rounded-full"
                           style={{ width: `${item.percentage}%` }}
                         ></div>
                       </div>
@@ -153,6 +191,7 @@ function Statistics  ()  {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

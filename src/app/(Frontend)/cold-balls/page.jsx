@@ -2,8 +2,46 @@ import React from 'react';
 import LotteryBalls from '@/components/LotteryBalls';
 import { TrendingDown, Calendar, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
-function ColdBalls  () {
+
+
+export const metadata = {
+  title: "Cold Balls - Least Frequent UK49s Numbers",
+  description: 'Explore the coldest UK49s numbers that appear least frequently in recent draws. Find patterns and opportunities in number selection.',
+
+  openGraph: {
+    title: 'Sample  OG Title',
+    description: 'Sample  Og Desc',
+    url: process.env.NEXT_PUBLIC_BASEURL,
+    type: "website",
+    images: [
+      {
+        url: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        secureUrl: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Preview image for Sample Site',
+      }
+    ],
+
+
+
+    site_name: process.env.NEXT_PUBLIC_SITENAME,
+  },
+  keywords:
+    [
+      "UK49s cold numbers, rare numbers, lottery analysis, cold balls, number patterns"
+    ],
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_BASEURL + "/cold-balls",
+  },
+
+};
+
+
+function ColdBalls() {
   // Mock data for cold numbers
   const coldNumbers = [
     { number: 1, frequency: 3, lastSeen: '2024-06-15' },
@@ -22,7 +60,7 @@ function ColdBalls  () {
 
   return (
     <>
-      
+      <Header />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -55,7 +93,7 @@ function ColdBalls  () {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex items-center">
               <TrendingDown className="h-8 w-8 text-blue-500 mr-3" />
@@ -144,6 +182,7 @@ function ColdBalls  () {
           </Link>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

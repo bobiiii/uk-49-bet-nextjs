@@ -1,11 +1,51 @@
 
 import React from 'react';
 import { BookOpen, Clock, PoundSterling, Target, AlertCircle, CheckCircle, Plus, Minus } from 'lucide-react';
-import  Link  from 'next/link';
+import Link from 'next/link';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
-function Guide  ()  {
+
+
+export const metadata = {
+  title: "guide",
+  description: 'guide',
+
+  openGraph: {
+    title: 'Sample  OG Title',
+    description: 'Sample  Og Desc',
+    url: process.env.NEXT_PUBLIC_BASEURL,
+    type: "website",
+    images: [
+      {
+        url: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        secureUrl: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Preview image for Sample Site',
+      }
+    ],
+
+
+
+    site_name: process.env.NEXT_PUBLIC_SITENAME,
+  },
+  keywords:
+    [
+      "guide"
+    ],
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_BASEURL + "/guide",
+  },
+
+};
+
+
+
+function Guide() {
   return (
     <>
+      <Header />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -43,7 +83,7 @@ function Guide  ()  {
         {/* How to Play */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">How to Play</h2>
-          
+
           <div className="space-y-6">
             <div className="flex items-start">
               <div className="bg-blue-100 text-blue-800 rounded-full w-8 h-8 flex items-center justify-center font-bold mr-4 mt-1">1</div>
@@ -92,7 +132,7 @@ function Guide  ()  {
         {/* Booster Ball Section */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Play With or Without Booster Ball</h2>
-          
+
           <div className="grid md:grid-cols-2 gap-6">
             {/* Without Booster Ball */}
             <div className="border-2 border-gray-200 rounded-lg p-6">
@@ -102,7 +142,7 @@ function Guide  ()  {
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900">6 Ball Draw (Without Booster)</h3>
               </div>
-              
+
               <div className="space-y-4">
                 <div>
                   <h4 className="font-medium text-gray-900 mb-2">How it Works:</h4>
@@ -113,7 +153,7 @@ function Guide  ()  {
                     <li>• Simpler betting structure</li>
                   </ul>
                 </div>
-                
+
                 <div>
                   <h4 className="font-medium text-gray-900 mb-2">Benefits:</h4>
                   <ul className="text-sm text-green-600 space-y-1">
@@ -146,7 +186,7 @@ function Guide  ()  {
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900">7 Ball Draw (With Booster)</h3>
               </div>
-              
+
               <div className="space-y-4">
                 <div>
                   <h4 className="font-medium text-gray-900 mb-2">How it Works:</h4>
@@ -157,7 +197,7 @@ function Guide  ()  {
                     <li>• Additional prize tiers</li>
                   </ul>
                 </div>
-                
+
                 <div>
                   <h4 className="font-medium text-gray-900 mb-2">Benefits:</h4>
                   <ul className="text-sm text-green-600 space-y-1">
@@ -231,8 +271,8 @@ function Guide  ()  {
               <AlertCircle className="h-5 w-5 text-blue-600 mr-3 mt-0.5" />
               <div>
                 <p className="text-sm text-blue-800">
-                  <strong>Tip:</strong> New players often start with the 6 ball draw to understand the game, 
-                  then move to the 7 ball draw for more winning opportunities. Both options are available 
+                  <strong>Tip:</strong> New players often start with the 6 ball draw to understand the game,
+                  then move to the 7 ball draw for more winning opportunities. Both options are available
                   for lunchtime and teatime draws.
                 </p>
               </div>
@@ -243,7 +283,7 @@ function Guide  ()  {
         {/* Betting Options */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Betting Options</h2>
-          
+
           <div className="grid md:grid-cols-2 gap-6">
             <div className="border border-gray-200 rounded-lg p-4">
               <h3 className="text-lg font-semibold text-gray-900 mb-3">6 Number Draw</h3>
@@ -268,7 +308,7 @@ function Guide  ()  {
         {/* Prize Structure */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Prize Structure</h2>
-          
+
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -313,7 +353,7 @@ function Guide  ()  {
               </tbody>
             </table>
           </div>
-          
+
           <p className="text-xs text-gray-500 mt-4">
             *Prize amounts vary based on stake and bookmaker. Check with your chosen operator for exact prize structures.
           </p>
@@ -322,7 +362,7 @@ function Guide  ()  {
         {/* Playing Tips */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Playing Tips</h2>
-          
+
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-3 text-green-600">Do's</h3>
@@ -377,7 +417,7 @@ function Guide  ()  {
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">Responsible Gaming</h3>
               <p className="text-gray-700 text-sm mb-3">
-                Lottery games should be played for entertainment only. Remember that gambling can be addictive, 
+                Lottery games should be played for entertainment only. Remember that gambling can be addictive,
                 and you should never bet more than you can afford to lose.
               </p>
               <ul className="text-sm text-gray-600 space-y-1">
@@ -390,6 +430,7 @@ function Guide  ()  {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

@@ -1,12 +1,14 @@
 import Image from "next/image";
-import LotteryBalls from '../components/LotteryBalls';
 import { Calendar, Clock, TrendingUp, Users, Award, BarChart3, TrendingDown } from 'lucide-react';
 import Link from "next/link";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import LotteryBalls from "@/components/LotteryBalls";
 
 
 export const metadata = {
-  title: "Sample Homepage Title",
-  description: 'Sample Homepage Desc',
+  title: "SHome - Latest UK49s Results & Predictions",
+  description: "Get the latest UK49s lottery results, expert predictions, and winning strategies. View today's Lunchtime and Teatime draws with comprehensive analysis.",
 
   openGraph: {
     title: 'Sample Homepage OG Title',
@@ -27,6 +29,10 @@ export const metadata = {
 
     site_name: process.env.NEXT_PUBLIC_SITENAME,
   },
+  keywords:
+    [
+      "about UK49s Results, lottery information, team, mission, UK49s analysis, lottery statistics"
+    ],
 
   alternates: {
     canonical: process.env.NEXT_PUBLIC_BASEURL,
@@ -35,7 +41,7 @@ export const metadata = {
 };
 
 export default function Home() {
-    const latestResults = {
+  const latestResults = {
     lunchtime: {
       date: '2024-06-30',
       time: '12:49',
@@ -55,6 +61,7 @@ export default function Home() {
   const overdueNumbers = [13, 29, 6, 22, 37];
   return (
     <>
+      <Header />
       <section className="py-8 sm:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8 sm:mb-12">
@@ -395,6 +402,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   );
 }

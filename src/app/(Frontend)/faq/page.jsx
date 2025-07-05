@@ -2,6 +2,46 @@
 "use client";
 import React, { useState } from 'react';
 import { HelpCircle, ChevronDown, ChevronUp, Search, Clock, PoundSterling, Target, Shield } from 'lucide-react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+
+
+
+export const metadata = {
+  title: "faq",
+  description: 'faq',
+
+  openGraph: {
+    title: 'Sample  OG Title',
+    description: 'Sample  Og Desc',
+    url: process.env.NEXT_PUBLIC_BASEURL,
+    type: "website",
+    images: [
+      {
+        url: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        secureUrl: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Preview image for Sample Site',
+      }
+    ],
+
+
+
+    site_name: process.env.NEXT_PUBLIC_SITENAME,
+  },
+  keywords:
+    [
+      "faq"
+    ],
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_BASEURL + "/faq",
+  },
+
+};
+
+
+
 
 const FAQ = () => {
   const [openSection, setOpenSection] = useState(null);
@@ -136,7 +176,7 @@ const FAQ = () => {
   const filteredSections = faqSections.map(section => ({
     ...section,
     questions: section.questions.filter(
-      qa => 
+      qa =>
         qa.q.toLowerCase().includes(searchTerm.toLowerCase()) ||
         qa.a.toLowerCase().includes(searchTerm.toLowerCase())
     )
@@ -144,6 +184,7 @@ const FAQ = () => {
 
   return (
     <>
+      <Header />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -170,7 +211,7 @@ const FAQ = () => {
           {filteredSections.map((section) => {
             const Icon = section.icon;
             const isOpen = openSection === section.id;
-            
+
             return (
               <div key={section.id} className="bg-white rounded-lg shadow-md overflow-hidden">
                 <button
@@ -259,6 +300,7 @@ const FAQ = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

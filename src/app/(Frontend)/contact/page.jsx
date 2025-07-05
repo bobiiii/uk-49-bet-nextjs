@@ -4,8 +4,48 @@ import React, { useState } from 'react';
 import { Phone, Mail, MapPin, Clock, Send, MessageCircle, HelpCircle, AlertCircle } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import Link from 'next/link';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
-function Contact  ()  {
+
+
+export const metadata = {
+  title: "contact",
+  description: 'contact',
+
+  openGraph: {
+    title: 'Sample  OG Title',
+    description: 'Sample  Og Desc',
+    url: process.env.NEXT_PUBLIC_BASEURL,
+    type: "website",
+    images: [
+      {
+        url: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        secureUrl: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Preview image for Sample Site',
+      }
+    ],
+
+
+
+    site_name: process.env.NEXT_PUBLIC_SITENAME,
+  },
+  keywords:
+    [
+      "contact"
+    ],
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_BASEURL + "/contact",
+  },
+
+};
+
+
+
+
+function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -25,7 +65,7 @@ function Contact  ()  {
     try {
       // Initialize EmailJS (replace with your actual IDs)
       const serviceId = 'service_your_id';
-      const templateId = 'template_your_id'; 
+      const templateId = 'template_your_id';
       const publicKey = 'your_public_key';
 
       const templateParams = {
@@ -38,7 +78,7 @@ function Contact  ()  {
       };
 
       await emailjs.send(serviceId, templateId, templateParams, publicKey);
-      
+
       // Reset form and show success
       setFormData({
         name: '',
@@ -48,7 +88,7 @@ function Contact  ()  {
         message: ''
       });
       setSubmitStatus('success');
-      
+
     } catch (error) {
       console.error('Error sending email:', error);
       setSubmitStatus('error');
@@ -66,6 +106,7 @@ function Contact  ()  {
 
   return (
     <>
+      <Header />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -77,7 +118,7 @@ function Contact  ()  {
           {/* Contact Form */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
-            
+
             {submitStatus === 'success' && (
               <div className="mb-6 p-4 bg-green-100 border border-green-200 rounded-lg">
                 <p className="text-green-800">Your message has been sent successfully! We'll get back to you soon.</p>
@@ -89,9 +130,9 @@ function Contact  ()  {
                 <p className="text-red-800">Failed to send message. Please check your internet connection and try again, or contact us directly at aloracarl@gmail.com</p>
               </div>
             )}
-            
+
             <form onSubmit={handleSubmit} className="space-y-6">
-              
+
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
@@ -108,7 +149,7 @@ function Contact  ()  {
                     placeholder="Your full name"
                   />
                 </div>
-                
+
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                     Email Address
@@ -189,12 +230,12 @@ function Contact  ()  {
             </form>
           </div>
 
-          
+
           <div className="space-y-6">
             {/* Quick Contact */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-xl font-bold text-gray-900 mb-4">Quick Contact</h3>
-              
+
               <div className="space-y-4">
                 <div className="flex items-center">
                   <div className="bg-blue-100 p-3 rounded-full mr-4">
@@ -223,7 +264,7 @@ function Contact  ()  {
             {/* Office Hours */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-xl font-bold text-gray-900 mb-4">Support Hours</h3>
-              
+
               <div className="space-y-3">
                 <div className="flex items-center">
                   <Clock className="h-5 w-5 text-gray-500 mr-3" />
@@ -232,7 +273,7 @@ function Contact  ()  {
                     <p className="text-gray-600">Monday - Sunday: 9:00 AM - 9:00 PM</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center">
                   <Mail className="h-5 w-5 text-gray-500 mr-3" />
                   <div>
@@ -267,7 +308,7 @@ function Contact  ()  {
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">Important Notice</h3>
                   <p className="text-gray-700 text-sm mb-3">
-                    We are an informational website providing UK49s results and analysis. 
+                    We are an informational website providing UK49s results and analysis.
                     We do not operate the lottery or handle betting transactions.
                   </p>
                   <p className="text-gray-700 text-sm">
@@ -279,10 +320,10 @@ function Contact  ()  {
           </div>
         </div>
 
-        
+
         <div className="bg-white rounded-lg shadow-md p-6 mt-8">
           <h3 className="text-xl font-bold text-gray-900 mb-6 text-center">Other Ways to Reach Us</h3>
-          
+
           <div className="grid md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -330,6 +371,7 @@ function Contact  ()  {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

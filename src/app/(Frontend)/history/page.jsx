@@ -5,19 +5,58 @@ import LotteryBalls from '@/components/LotteryBalls';
 import { Calendar, Clock, Filter, Download, Search } from 'lucide-react';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+
+
+
+export const metadata = {
+  title: "Complete UK49s Results History & Archive",
+  description: "Browse the complete UK49s lottery history archive with advanced search and filtering options. Find historical results by date, draw type, and more from our comprehensive database.",
+
+  openGraph: {
+    title: 'Sample  OG Title',
+    description: 'Sample  Og Desc',
+    url: process.env.NEXT_PUBLIC_BASEURL,
+    type: "website",
+    images: [
+      {
+        url: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        secureUrl: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Preview image for Sample Site',
+      }
+    ],
+
+
+
+    site_name: process.env.NEXT_PUBLIC_SITENAME,
+  },
+  keywords:
+    [
+      "UK49s history, lottery archive, historical results, search results, filter results, complete history, UK49s database, past draws"
+    ],
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_BASEURL + "/history",
+  },
+
+};
+
+
 
 const History = () => {
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const [searchDate, setSearchDate] = useState('');
   const resultsPerPage = 20;
-  
+
   // Mock historical results data - extended for history
   const allResults = Array.from({ length: 200 }, (_, index) => {
     const date = new Date('2024-06-30');
     date.setDate(date.getDate() - Math.floor(index / 2));
     const isLunchtime = index % 2 === 1;
-    
+
     return {
       id: index + 1,
       date: date.toISOString().split('T')[0],
@@ -39,8 +78,8 @@ const History = () => {
   const currentResults = filteredResults.slice(startIndex, startIndex + resultsPerPage);
 
   return (
-<>
-      
+    <>
+      <Header />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 overflow-x-hidden">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
@@ -66,7 +105,7 @@ const History = () => {
                 <option value="teatime">Teatime Only</option>
               </select>
             </div>
-            
+
             <div className="flex items-center space-x-2">
               <Search className="h-5 w-5 text-gray-500" />
               <input
@@ -111,11 +150,10 @@ const History = () => {
                 <TableRow key={result.id}>
                   <TableCell className="font-medium">{result.date}</TableCell>
                   <TableCell>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      result.draw === 'Lunchtime' 
-                        ? 'bg-blue-100 text-blue-800' 
-                        : 'bg-purple-100 text-purple-800'
-                    }`}>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${result.draw === 'Lunchtime'
+                      ? 'bg-blue-100 text-blue-800'
+                      : 'bg-purple-100 text-purple-800'
+                      }`}>
                       {result.draw}
                     </span>
                   </TableCell>
@@ -123,7 +161,7 @@ const History = () => {
                   <TableCell>
                     <div className="flex space-x-1">
                       {result.numbers.map((num, idx) => (
-                        <div  key={idx} className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
+                        <div key={idx} className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">
                           {num}
                         </div>
                       ))}
@@ -145,18 +183,17 @@ const History = () => {
           {currentResults.map((result) => (
             <div key={result.id} className="bg-white rounded-lg shadow-md p-4">
               <div className="flex justify-between items-center mb-3">
-                <div className={`px-3 py-2 rounded-full text-sm font-bold ${
-                  result.draw === 'Lunchtime' 
-                    ? 'bg-blue-100 text-blue-800' 
-                    : 'bg-purple-100 text-purple-800'
-                }`}>
+                <div className={`px-3 py-2 rounded-full text-sm font-bold ${result.draw === 'Lunchtime'
+                  ? 'bg-blue-100 text-blue-800'
+                  : 'bg-purple-100 text-purple-800'
+                  }`}>
                   {result.draw}
                 </div>
                 <span className="font-bold text-sm">{result.date}</span>
               </div>
               <div className="flex justify-center overflow-hidden">
-                <LotteryBalls 
-                  numbers={result.numbers} 
+                <LotteryBalls
+                  numbers={result.numbers}
                   boosterBall={result.boosterBall}
                   size="small"
                   mobileLayout={true}
@@ -170,12 +207,12 @@ const History = () => {
         <Pagination className="mb-8">
           <PaginationContent>
             <PaginationItem>
-              <PaginationPrevious 
+              <PaginationPrevious
                 onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                 className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
               />
             </PaginationItem>
-            
+
             {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
               const pageNum = Math.max(1, Math.min(totalPages - 4, currentPage - 2)) + i;
               return (
@@ -190,9 +227,9 @@ const History = () => {
                 </PaginationItem>
               );
             })}
-            
+
             <PaginationItem>
-              <PaginationNext 
+              <PaginationNext
                 onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                 className={currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
               />
@@ -219,6 +256,7 @@ const History = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

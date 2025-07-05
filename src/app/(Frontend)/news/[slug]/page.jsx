@@ -1,15 +1,53 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import  Link  from 'next/link';
+import Link from 'next/link';
 import { useParams } from 'next/navigation'
 
 // import { useParams } from 'react-router-dom';
 import { Calendar, Clock, User, ArrowLeft, Share2, BookmarkPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 
-function NewsArticle  ()  {
+
+
+export const metadata = {
+  title: "news",
+  description: 'news',
+
+  openGraph: {
+    title: 'Sample  OG Title',
+    description: 'Sample  Og Desc',
+    url: process.env.NEXT_PUBLIC_BASEURL,
+    type: "website",
+    images: [
+      {
+        url: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        secureUrl: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Preview image for Sample Site',
+      }
+    ],
+
+
+
+    site_name: process.env.NEXT_PUBLIC_SITENAME,
+  },
+  keywords:
+    [
+      "news"
+    ],
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_BASEURL + "/news",
+  },
+
+};
+
+
+function NewsArticle() {
   const { slug } = useParams();
   const [article, setArticle] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,7 +58,7 @@ function NewsArticle  ()  {
       if (savedArticles && slug) {
         const articles = JSON.parse(savedArticles);
         // First try to find by slug, fallback to id for backward compatibility
-        const foundArticle = articles.find((a) => 
+        const foundArticle = articles.find((a) =>
           (a.slug === slug || a.id === slug) && a.status === 'published'
         );
         setArticle(foundArticle || null);
@@ -46,44 +84,45 @@ function NewsArticle  ()  {
 
   if (loading) {
     return (
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-3/4 mb-4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
-            <div className="space-y-4">
-              <div className="h-4 bg-gray-200 rounded"></div>
-              <div className="h-4 bg-gray-200 rounded"></div>
-              <div className="h-4 bg-gray-200 rounded w-5/6"></div>
-            </div>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 rounded w-3/4 mb-4"></div>
+          <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
+          <div className="space-y-4">
+            <div className="h-4 bg-gray-200 rounded"></div>
+            <div className="h-4 bg-gray-200 rounded"></div>
+            <div className="h-4 bg-gray-200 rounded w-5/6"></div>
           </div>
         </div>
+      </div>
 
     );
   }
 
   if (!article) {
     return (
-      
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Article Not Found</h1>
-          <p className="text-gray-600 mb-6">The article you're looking for doesn't exist or has been removed.</p>
-          <Link href="/news">
-            <Button>
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to News
-            </Button>
-          </Link>
-        </div>
-       );
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">Article Not Found</h1>
+        <p className="text-gray-600 mb-6">The article you're looking for doesn't exist or has been removed.</p>
+        <Link href="/news">
+          <Button>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to News
+          </Button>
+        </Link>
+      </div>
+    );
   }
 
   return (
     <>
+      <Header />
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <nav className="mb-6">
-          <Link 
-            href="/news" 
+          <Link
+            href="/news"
             className="text-blue-600 hover:text-blue-800 flex items-center text-sm"
           >
             <ArrowLeft className="h-4 w-4 mr-1" />
@@ -120,10 +159,10 @@ function NewsArticle  ()  {
             </div>
             <div className="flex items-center">
               <Calendar className="h-4 w-4 mr-2" />
-              <span>{new Date(article.date).toLocaleDateString('en-GB', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
+              <span>{new Date(article.date).toLocaleDateString('en-GB', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
               })}</span>
             </div>
             <div className="flex items-center">
@@ -147,7 +186,7 @@ function NewsArticle  ()  {
 
         {/* Article Content */}
         <div className="prose prose-lg max-w-none">
-          <div 
+          <div
             className="article-content"
             dangerouslySetInnerHTML={{ __html: article.content }}
           />
@@ -221,6 +260,7 @@ function NewsArticle  ()  {
           color: #6b7280;
         }
       `}</style>
+      <Footer />
     </>
   );
 };

@@ -1,8 +1,53 @@
 import React from 'react';
 
 import { Users, Target, Award, Shield, TrendingUp, Clock, Heart, Star } from 'lucide-react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+
+
+
+
+export const metadata = {
+  title: "About UK49s Results - Your Trusted Lottery Information Hub",
+  description: 'Learn about UK49s Results, your trusted source for accurate lottery information, analysis, and predictions since 2020. Meet our team and discover our mission.',
+
+  openGraph: {
+    title: 'Sample  OG Title',
+    description: 'Sample  Og Desc',
+    url: process.env.NEXT_PUBLIC_BASEURL,
+    type: "website",
+    images: [
+      {
+        url: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        secureUrl: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Preview image for Sample Site',
+      }
+    ],
+
+
+
+    site_name: process.env.NEXT_PUBLIC_SITENAME,
+  },
+  keywords:
+    [
+      "about UK49s Results, lottery information, team, mission, UK49s analysis, lottery statistics"
+    ],
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_BASEURL + "/about",
+  },
+
+};
+
+
+
 
 const About = () => {
+
+
+
+
   const teamMembers = [
     {
       name: "Sarah Johnson",
@@ -11,14 +56,14 @@ const About = () => {
       image: null
     },
     {
-      name: "Mike Thompson", 
+      name: "Mike Thompson",
       role: "Data Scientist",
       bio: "Expert in statistical modeling and prediction algorithms",
       image: null
     },
     {
       name: "Emma Davies",
-      role: "Content Manager", 
+      role: "Content Manager",
       bio: "Specialist in lottery news and winner stories",
       image: null
     }
@@ -34,13 +79,13 @@ const About = () => {
 
   return (
     <>
-      
+      <Header />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">About UK49s Results</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Your trusted companion for UK49s lottery results, predictions, and analysis. 
+            Your trusted companion for UK49s lottery results, predictions, and analysis.
             We've been helping lottery enthusiasts make informed decisions since 2020.
           </p>
         </div>
@@ -51,8 +96,8 @@ const About = () => {
             <Target className="h-16 w-16 text-blue-600 mx-auto mb-6" />
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Our Mission</h2>
             <p className="text-lg text-gray-700 max-w-4xl mx-auto">
-              To provide accurate, timely, and comprehensive UK49s lottery information while promoting 
-              responsible gaming. We believe in empowering players with data-driven insights and 
+              To provide accurate, timely, and comprehensive UK49s lottery information while promoting
+              responsible gaming. We believe in empowering players with data-driven insights and
               maintaining the highest standards of integrity and transparency.
             </p>
           </div>
@@ -228,20 +273,21 @@ const About = () => {
           <h3 className="text-lg font-semibold text-gray-900 mb-3">Important Disclaimer</h3>
           <div className="text-sm text-gray-700 space-y-2">
             <p>
-              UK49s Results is an independent information website. We are not affiliated with or endorsed by 
+              UK49s Results is an independent information website. We are not affiliated with or endorsed by
               the official UK49s lottery operators or any betting companies.
             </p>
             <p>
-              All information provided is for entertainment and educational purposes only. 
+              All information provided is for entertainment and educational purposes only.
               Gambling can be addictive - please play responsibly and within your means.
             </p>
             <p>
-              You must be 18 years or older to participate in lottery games. 
+              You must be 18 years or older to participate in lottery games.
               If you have a gambling problem, please seek professional help.
             </p>
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

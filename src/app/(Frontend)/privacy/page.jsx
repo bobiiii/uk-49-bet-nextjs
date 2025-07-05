@@ -2,12 +2,50 @@
 import React from 'react';
 
 import { Shield, Eye, Lock, FileText, Mail, Calendar } from 'lucide-react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
-function Privacy  () {
+
+
+export const metadata = {
+  title: "Privacy Policy - UK49s Results",
+  description: "Learn how UK49s Results protects your privacy and handles your personal information. Read our comprehensive privacy policy and data protection practices.",
+
+  openGraph: {
+    title: 'Sample  OG Title',
+    description: 'Sample  Og Desc',
+    url: process.env.NEXT_PUBLIC_BASEURL,
+    type: "website",
+    images: [
+      {
+        url: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        secureUrl: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Preview image for Sample Site',
+      }
+    ],
+
+
+
+    site_name: process.env.NEXT_PUBLIC_SITENAME,
+  },
+  keywords:
+    [
+      "privacy policy, data protection, UK49s Results privacy, personal information, cookies, data collection"
+    ],
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_BASEURL + "/privacy",
+  },
+
+};
+
+
+
+function Privacy() {
   return (
     <>
-      
-      
+      <Header />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="text-center mb-12">
@@ -22,7 +60,7 @@ function Privacy  () {
         <div className="bg-blue-50 rounded-lg p-6 mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Your Privacy Matters</h2>
           <p className="text-gray-700">
-            At UK49s Results, we are committed to protecting your privacy and ensuring the security of your personal information. 
+            At UK49s Results, we are committed to protecting your privacy and ensuring the security of your personal information.
             This Privacy Policy explains how we collect, use, and safeguard your data when you visit our website.
           </p>
         </div>
@@ -33,7 +71,7 @@ function Privacy  () {
             <Eye className="h-6 w-6 text-blue-600 mr-3" />
             <h2 className="text-2xl font-bold text-gray-900">Information We Collect</h2>
           </div>
-          
+
           <div className="space-y-6">
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-3">Automatically Collected Information</h3>
@@ -64,7 +102,7 @@ function Privacy  () {
             <FileText className="h-6 w-6 text-green-600 mr-3" />
             <h2 className="text-2xl font-bold text-gray-900">How We Use Your Information</h2>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow-md p-6">
             <ul className="list-disc list-inside text-gray-700 space-y-2">
               <li>To provide and improve our UK49s results service</li>
@@ -83,7 +121,7 @@ function Privacy  () {
             <Lock className="h-6 w-6 text-purple-600 mr-3" />
             <h2 className="text-2xl font-bold text-gray-900">Cookies and Tracking Technologies</h2>
           </div>
-          
+
           <div className="space-y-4">
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-3">Essential Cookies</h3>
@@ -107,7 +145,7 @@ function Privacy  () {
             <Shield className="h-6 w-6 text-red-600 mr-3" />
             <h2 className="text-2xl font-bold text-gray-900">Data Security</h2>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow-md p-6">
             <p className="text-gray-700 mb-4">
               We implement appropriate technical and organizational measures to protect your personal information against:
@@ -127,7 +165,7 @@ function Privacy  () {
             <FileText className="h-6 w-6 text-orange-600 mr-3" />
             <h2 className="text-2xl font-bold text-gray-900">Your Rights</h2>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow-md p-6">
             <p className="text-gray-700 mb-4">You have the right to:</p>
             <ul className="list-disc list-inside text-gray-700 space-y-2">
@@ -147,10 +185,10 @@ function Privacy  () {
             <Eye className="h-6 w-6 text-gray-600 mr-3" />
             <h2 className="text-2xl font-bold text-gray-900">Third-Party Services</h2>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow-md p-6">
             <p className="text-gray-700 mb-4">
-              Our website may contain links to third-party websites or use third-party services. 
+              Our website may contain links to third-party websites or use third-party services.
               We are not responsible for the privacy practices of these external services.
             </p>
             <p className="text-gray-700">
@@ -165,7 +203,7 @@ function Privacy  () {
             <Mail className="h-6 w-6 text-blue-600 mr-3" />
             <h2 className="text-2xl font-bold text-gray-900">Contact Us</h2>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow-md p-6">
             <p className="text-gray-700 mb-4">
               If you have any questions about this Privacy Policy or our data practices, please contact us:
@@ -183,10 +221,10 @@ function Privacy  () {
             <Calendar className="h-6 w-6 text-green-600 mr-3" />
             <h2 className="text-2xl font-bold text-gray-900">Policy Updates</h2>
           </div>
-          
+
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
             <p className="text-gray-700">
-              We may update this Privacy Policy from time to time. Any changes will be posted on this page 
+              We may update this Privacy Policy from time to time. Any changes will be posted on this page
               with an updated "Last modified" date. We encourage you to review this policy periodically.
             </p>
           </div>
@@ -196,11 +234,12 @@ function Privacy  () {
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-3">Important Notice</h3>
           <p className="text-sm text-gray-700">
-            This website is for informational purposes only. We are not affiliated with the official UK49s lottery. 
+            This website is for informational purposes only. We are not affiliated with the official UK49s lottery.
             Please gamble responsibly and only if you are 18 years or older.
           </p>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

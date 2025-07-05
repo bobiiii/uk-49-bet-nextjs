@@ -3,6 +3,44 @@ import React from 'react';
 import LotteryBalls from '@/components/LotteryBalls';
 import { TrendingUp, Calendar, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+
+
+
+export const metadata = {
+  title: "Hot Balls - Most Frequent UK49s Numbers",
+  description: 'Discover the hottest UK49s numbers that appear most frequently in recent draws. Analyze trends and patterns to improve your lottery strategy.',
+
+  openGraph: {
+    title: 'Sample  OG Title',
+    description: 'Sample  Og Desc',
+    url: process.env.NEXT_PUBLIC_BASEURL,
+    type: "website",
+    images: [
+      {
+        url: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        secureUrl: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Preview image for Sample Site',
+      }
+    ],
+
+
+
+    site_name: process.env.NEXT_PUBLIC_SITENAME,
+  },
+  keywords:
+    [
+      "UK49s hot numbers, frequent numbers, lottery trends, hot balls, number analysis"
+    ],
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_BASEURL + "/hot-balls",
+  },
+
+};
+
 
 const HotBalls = () => {
   // Mock data for hot numbers
@@ -23,8 +61,7 @@ const HotBalls = () => {
 
   return (
     <>
-     
-      
+      <Header />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -57,7 +94,7 @@ const HotBalls = () => {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex items-center">
               <TrendingUp className="h-8 w-8 text-red-500 mr-3" />
@@ -146,6 +183,7 @@ const HotBalls = () => {
           </Link>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

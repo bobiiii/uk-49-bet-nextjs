@@ -2,9 +2,48 @@
 import React from 'react';
 import LotteryBalls from '@/components/LotteryBalls';
 import { Clock, Calendar, BarChart3 } from 'lucide-react';
-import Link  from 'next/link';
+import Link from 'next/link';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
-function OverdueBalls  ()  {
+
+
+export const metadata = {
+  title: "Overdue Balls - Long Absent UK49s Numbers",
+  description: "Track overdue UK49s numbers that haven't appeared in recent draws. Analyze patterns and identify potential comeback numbers.",
+
+  openGraph: {
+    title: 'Sample  OG Title',
+    description: 'Sample  Og Desc',
+    url: process.env.NEXT_PUBLIC_BASEURL,
+    type: "website",
+    images: [
+      {
+        url: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        secureUrl: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Preview image for Sample Site',
+      }
+    ],
+
+
+
+    site_name: process.env.NEXT_PUBLIC_SITENAME,
+  },
+  keywords:
+    [
+      "UK49s overdue numbers, long absent numbers, lottery tracking, overdue balls, number analysis"
+    ],
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_BASEURL + "/overdue-balls",
+  },
+
+};
+
+
+
+function OverdueBalls() {
   // Mock data for overdue numbers
   const overdueNumbers = [
     { number: 13, daysSinceLastSeen: 45, lastSeen: '2024-05-16' },
@@ -23,7 +62,7 @@ function OverdueBalls  ()  {
 
   return (
     <>
-      
+      <Header />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -56,7 +95,7 @@ function OverdueBalls  ()  {
               </div>
             </div>
           </div>
-          
+
           <div className="bg-white rounded-lg shadow-md p-6">
             <div className="flex items-center">
               <Clock className="h-8 w-8 text-purple-500 mr-3" />
@@ -112,13 +151,12 @@ function OverdueBalls  ()  {
                       {item.lastSeen}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        item.daysSinceLastSeen > 40 ? 'bg-red-100 text-red-800' :
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${item.daysSinceLastSeen > 40 ? 'bg-red-100 text-red-800' :
                         item.daysSinceLastSeen > 30 ? 'bg-orange-100 text-orange-800' :
-                        'bg-purple-100 text-purple-800'
-                      }`}>
+                          'bg-purple-100 text-purple-800'
+                        }`}>
                         {item.daysSinceLastSeen > 40 ? '🚨 Critical' :
-                         item.daysSinceLastSeen > 30 ? '⚠️ High' : '⏰ Overdue'}
+                          item.daysSinceLastSeen > 30 ? '⚠️ High' : '⏰ Overdue'}
                       </span>
                     </td>
                   </tr>
@@ -150,6 +188,7 @@ function OverdueBalls  ()  {
           </Link>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

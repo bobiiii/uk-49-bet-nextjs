@@ -2,10 +2,46 @@
 import React, { useState, useEffect } from 'react';
 // import LotteryBalls from '@/components/LotteryBalls';
 import { Calendar, Clock, User, TrendingUp, Award, AlertCircle, Loader2 } from 'lucide-react';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 
 
-function News  ()  {
+export const metadata = {
+  title: "news",
+  description: 'news',
+
+  openGraph: {
+    title: 'Sample  OG Title',
+    description: 'Sample  Og Desc',
+    url: process.env.NEXT_PUBLIC_BASEURL,
+    type: "website",
+    images: [
+      {
+        url: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        secureUrl: 'https://infusiontechnologies.co/ogImages/homepageOg.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Preview image for Sample Site',
+      }
+    ],
+
+
+
+    site_name: process.env.NEXT_PUBLIC_SITENAME,
+  },
+  keywords:
+    [
+      "news"
+    ],
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_BASEURL + "/news",
+  },
+
+};
+
+
+function News() {
   const [allArticles, setAllArticles] = useState([]);
   const [displayedArticles, setDisplayedArticles] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,122 +59,122 @@ function News  ()  {
         setAllArticles(publishedArticles);
         // Show first page of articles
         setDisplayedArticles(publishedArticles.slice(0, articlesPerPage));
-    } else {
-      // Keep default articles if no saved articles
-      const defaultArticles = [
-        {
-          id: '1',
-          slug: 'record-breaking-uk49s-jackpot-reached-this-week',
-          title: "Record-Breaking UK49s Jackpot Reached This Week",
-          excerpt: "The UK49s lottery sees its highest jackpot in months as rollover continues to build excitement among players nationwide.",
-          date: "2024-06-30",
-          time: "09:30",
-          author: "Sarah Johnson",
-          category: "Jackpot News",
-          featured: true,
-          status: 'published',
-          content: '',
-          createdAt: ''
-        },
-        {
-          id: '2',
-          slug: 'hot-numbers-analysis-june-2024-statistics',
-          title: "Hot Numbers Analysis: June 2024 Statistics",
-          excerpt: "Our monthly analysis reveals surprising trends in number frequency, with some unexpected changes in the most drawn numbers.",
-          date: "2024-06-29",  
-          time: "14:15",
-          author: "Mike Thompson",
-          category: "Analysis",
-          featured: false,
-          status: 'published',
-          content: '',
-          createdAt: ''
-        },
-        {
-          id: '3',
-          slug: 'local-syndicate-wins-50000-with-strategic-play',
-          title: "Local Syndicate Wins £50,000 with Strategic Play",
-          excerpt: "A group of 12 work colleagues from Manchester share their winning strategy that led to their recent teatime draw success.",
-          date: "2024-06-28",
-          time: "16:45",
-          author: "Emma Davies",
-          category: "Winner Stories",
-          featured: false,
-          status: 'published',
-          content: '',
-          createdAt: ''
-        },
-        {
-          id: '4',
-          slug: 'new-mobile-app-features-for-uk49s-players',
-          title: "New Mobile App Features for UK49s Players",
-          excerpt: "Enhanced prediction algorithms and real-time notifications now available to help players stay updated with the latest draws.",
-          date: "2024-06-27",
-          time: "11:20",
-          author: "Tech Team",
-          category: "Technology",
-          featured: false,
-          status: 'published',
-          content: '',
-          createdAt: ''
-        },
-        {
-          id: '5',
-          slug: 'summer-playing-patterns-what-to-expect',
-          title: "Summer Playing Patterns: What to Expect",
-          excerpt: "Historical data shows interesting seasonal variations in UK49s draws. Learn how summer months typically affect number patterns.",
-          date: "2024-06-26",
-          time: "13:30",
-          author: "Dr. Patricia Mills",
-          category: "Analysis",
-          featured: false,
-          status: 'published',
-          content: '',
-          createdAt: ''
-        },
-        {
-          id: '6',
-          slug: 'weekly-draw-results-show-surprising-patterns',
-          title: "Weekly Draw Results Show Surprising Patterns",
-          excerpt: "This week's UK49s draws revealed some interesting number combinations that statisticians are analyzing for future predictions.",
-          date: "2024-06-25",
-          time: "10:15",
-          author: "Statistical Team",
-          category: "Analysis",
-          featured: false,
-          status: 'published',
-          content: '',
-          createdAt: ''
-        },
-        {
-          id: '7',
-          slug: 'player-tips-maximizing-your-winning-chances',
-          title: "Player Tips: Maximizing Your Winning Chances",
-          excerpt: "Expert advice on how to approach UK49s betting strategies, including syndicate play and number selection techniques.",
-          date: "2024-06-24",
-          time: "15:30",
-          author: "Gaming Expert",
-          category: "Tips",
-          featured: false,
-          status: 'published',
-          content: '',
-          createdAt: ''
-        },
-        {
-          id: '8',
-          slug: 'monthly-winners-spotlight-june-2024',
-          title: "Monthly Winners Spotlight: June 2024",
-          excerpt: "Meet this month's biggest winners and learn about their winning strategies and lucky number choices.",
-          date: "2024-06-23",
-          time: "12:45",
-          author: "Winner Stories Team",
-          category: "Winner Stories",
-          featured: false,
-          status: 'published',
-          content: '',
-          createdAt: ''
-        }
-      ];
+      } else {
+        // Keep default articles if no saved articles
+        const defaultArticles = [
+          {
+            id: '1',
+            slug: 'record-breaking-uk49s-jackpot-reached-this-week',
+            title: "Record-Breaking UK49s Jackpot Reached This Week",
+            excerpt: "The UK49s lottery sees its highest jackpot in months as rollover continues to build excitement among players nationwide.",
+            date: "2024-06-30",
+            time: "09:30",
+            author: "Sarah Johnson",
+            category: "Jackpot News",
+            featured: true,
+            status: 'published',
+            content: '',
+            createdAt: ''
+          },
+          {
+            id: '2',
+            slug: 'hot-numbers-analysis-june-2024-statistics',
+            title: "Hot Numbers Analysis: June 2024 Statistics",
+            excerpt: "Our monthly analysis reveals surprising trends in number frequency, with some unexpected changes in the most drawn numbers.",
+            date: "2024-06-29",
+            time: "14:15",
+            author: "Mike Thompson",
+            category: "Analysis",
+            featured: false,
+            status: 'published',
+            content: '',
+            createdAt: ''
+          },
+          {
+            id: '3',
+            slug: 'local-syndicate-wins-50000-with-strategic-play',
+            title: "Local Syndicate Wins £50,000 with Strategic Play",
+            excerpt: "A group of 12 work colleagues from Manchester share their winning strategy that led to their recent teatime draw success.",
+            date: "2024-06-28",
+            time: "16:45",
+            author: "Emma Davies",
+            category: "Winner Stories",
+            featured: false,
+            status: 'published',
+            content: '',
+            createdAt: ''
+          },
+          {
+            id: '4',
+            slug: 'new-mobile-app-features-for-uk49s-players',
+            title: "New Mobile App Features for UK49s Players",
+            excerpt: "Enhanced prediction algorithms and real-time notifications now available to help players stay updated with the latest draws.",
+            date: "2024-06-27",
+            time: "11:20",
+            author: "Tech Team",
+            category: "Technology",
+            featured: false,
+            status: 'published',
+            content: '',
+            createdAt: ''
+          },
+          {
+            id: '5',
+            slug: 'summer-playing-patterns-what-to-expect',
+            title: "Summer Playing Patterns: What to Expect",
+            excerpt: "Historical data shows interesting seasonal variations in UK49s draws. Learn how summer months typically affect number patterns.",
+            date: "2024-06-26",
+            time: "13:30",
+            author: "Dr. Patricia Mills",
+            category: "Analysis",
+            featured: false,
+            status: 'published',
+            content: '',
+            createdAt: ''
+          },
+          {
+            id: '6',
+            slug: 'weekly-draw-results-show-surprising-patterns',
+            title: "Weekly Draw Results Show Surprising Patterns",
+            excerpt: "This week's UK49s draws revealed some interesting number combinations that statisticians are analyzing for future predictions.",
+            date: "2024-06-25",
+            time: "10:15",
+            author: "Statistical Team",
+            category: "Analysis",
+            featured: false,
+            status: 'published',
+            content: '',
+            createdAt: ''
+          },
+          {
+            id: '7',
+            slug: 'player-tips-maximizing-your-winning-chances',
+            title: "Player Tips: Maximizing Your Winning Chances",
+            excerpt: "Expert advice on how to approach UK49s betting strategies, including syndicate play and number selection techniques.",
+            date: "2024-06-24",
+            time: "15:30",
+            author: "Gaming Expert",
+            category: "Tips",
+            featured: false,
+            status: 'published',
+            content: '',
+            createdAt: ''
+          },
+          {
+            id: '8',
+            slug: 'monthly-winners-spotlight-june-2024',
+            title: "Monthly Winners Spotlight: June 2024",
+            excerpt: "Meet this month's biggest winners and learn about their winning strategies and lucky number choices.",
+            date: "2024-06-23",
+            time: "12:45",
+            author: "Winner Stories Team",
+            category: "Winner Stories",
+            featured: false,
+            status: 'published',
+            content: '',
+            createdAt: ''
+          }
+        ];
         setAllArticles(defaultArticles);
         setDisplayedArticles(defaultArticles.slice(0, articlesPerPage));
       }
@@ -171,13 +207,13 @@ function News  ()  {
 
   const loadMoreArticles = () => {
     setLoading(true);
-    
+
     // Simulate loading delay
     setTimeout(() => {
       const nextPageStart = currentPage * articlesPerPage;
       const nextPageEnd = nextPageStart + articlesPerPage;
       const nextArticles = allArticles.slice(nextPageStart, nextPageEnd);
-      
+
       setDisplayedArticles(prev => [...prev, ...nextArticles]);
       setCurrentPage(prev => prev + 1);
       setLoading(false);
@@ -194,6 +230,7 @@ function News  ()  {
 
   return (
     <>
+      <Header />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -234,7 +271,7 @@ function News  ()  {
                       <User className="h-4 w-4 mr-1" />
                       <span>By {article.author}</span>
                     </div>
-                    <button 
+                    <button
                       onClick={() => handleReadMore(article)}
                       className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
                     >
@@ -250,13 +287,12 @@ function News  ()  {
               {displayedArticles.filter(article => !article.featured).map(article => (
                 <div key={article.id} className="bg-white rounded-lg shadow-md p-6">
                   <div className="flex items-center mb-3">
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${
-                      article.category === 'Analysis' ? 'bg-blue-100 text-blue-800' :
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${article.category === 'Analysis' ? 'bg-blue-100 text-blue-800' :
                       article.category === 'Winner Stories' ? 'bg-green-100 text-green-800' :
-                      article.category === 'Technology' ? 'bg-purple-100 text-purple-800' :
-                      article.category === 'Tips' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
+                        article.category === 'Technology' ? 'bg-purple-100 text-purple-800' :
+                          article.category === 'Tips' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-gray-100 text-gray-800'
+                      }`}>
                       {article.category}
                     </span>
                     <span className="mx-2 text-gray-400">•</span>
@@ -274,7 +310,7 @@ function News  ()  {
                       <User className="h-4 w-4 mr-1" />
                       <span>By {article.author}</span>
                     </div>
-                    <button 
+                    <button
                       onClick={() => handleReadMore(article)}
                       className="text-blue-600 hover:text-blue-800 font-medium"
                     >
@@ -288,7 +324,7 @@ function News  ()  {
             {/* Load More */}
             {hasMoreArticles && (
               <div className="text-center mt-8">
-                <button 
+                <button
                   onClick={loadMoreArticles}
                   disabled={loading}
                   className="bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center mx-auto"
@@ -357,6 +393,7 @@ function News  ()  {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };
