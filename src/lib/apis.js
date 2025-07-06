@@ -62,7 +62,6 @@ export const addMetaDataApiCall = async (data, type) => {
 };
 
 
-
 export const updateMetaDataApiCall = async (data, type, id) => {
     const Url = SERVER_URL + `metadata/update-metadata/${id}`;
     const formData = new FormData();
@@ -116,3 +115,80 @@ export const deleteMetaDataApiCall = async (id) => {
             return error;
         });
 };
+
+
+// Predications APis
+
+
+export const addPredictionApiCall = async (data) => {
+    const Url = SERVER_URL + 'predictions/create-prediction';
+
+    const payload = {
+        date: data?.date,
+        drawType: data?.drawType,
+        numbers: data?.numbers,
+        confidenceLevel: data?.confidence,
+        status: data?.status,
+    };
+
+    try {
+        const response = await fetch(Url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': `Bearer ${token}`, // Uncomment if needed
+            },
+            body: JSON.stringify(payload),
+        });
+
+        const result = await response.json();
+
+        return result;
+    } catch (error) {
+        return {
+            error: 'Network Error',
+            details: error.message || error,
+        };
+    }
+};
+
+
+export const getPredictionsApiCall = async () => {
+    const Url = SERVER_URL + `predictions/get-predictions/`;
+    try {
+        const res = await fetch(Url, {
+            method: 'GET',
+            cache: 'no-store',
+        })
+
+        const result = await res.json();
+        return result;
+    } catch (error) {
+        return {
+            error: 'Network error',
+            details: error.message,
+        };
+    }
+};
+
+
+export const DeletePredictionsApiCall = async (id) => {
+    const Url = SERVER_URL + `predictions/delete-prediction/${id}`;
+    try {
+        const res = await fetch(Url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+
+        const result = await res.json();
+        return result;
+    } catch (error) {
+        return {
+            error: 'Network error',
+            details: error.message,
+        };
+    }
+};
+
