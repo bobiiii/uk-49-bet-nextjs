@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export function middleware(request) {
     const isLogin = request.cookies.get("isLogin")?.value;
-    console.log("isLogin", isLogin);
+    // console.log("isLogin", isLogin);
 
     // List of routes that require login
     const protectedRoutes = [
@@ -20,7 +20,6 @@ export function middleware(request) {
 
     // Check if the current request is for a protected route
     const isProtectedRoute = protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route));
-    console.log("isProtectedRoute", isProtectedRoute);
 
     if (isProtectedRoute && isLogin !== 'true') {
         return NextResponse.redirect(new URL('/login', request.url));
