@@ -1,6 +1,5 @@
 
 import Results from '@/components/PagesComp/Result';
-import { getMetaData } from '@/lib/apis';
 import React from 'react';
 
 
@@ -41,7 +40,8 @@ import React from 'react';
 
 export async function generateMetadata() {
   // Replace this with your actual API call
-  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/metadata/get-metadata/results`
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}metadata/get-metadata/results`
+  console.log("url", url);
 
   const response = await fetch(url, {
     method: 'GET',

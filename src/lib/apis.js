@@ -3,7 +3,7 @@
 const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL
 
 export const getMetaData = async (type) => {
-    const Url = SERVER_URL + `/api/metadata/get-metadata/${type}`;
+    const Url = SERVER_URL + `metadata/get-metadata/${type}`;
     try {
 
         const response = await fetch(Url, {
@@ -29,7 +29,7 @@ export const getMetaData = async (type) => {
 
 
 export const addMetaDataApiCall = async (data, type) => {
-    const Url = SERVER_URL + '/api/metadata/create-metadata';
+    const Url = SERVER_URL + 'metadata/create-metadata';
     const formData = new FormData();
 
     formData?.append('entityType', type);
@@ -64,7 +64,7 @@ export const addMetaDataApiCall = async (data, type) => {
 
 
 export const updateMetaDataApiCall = async (data, type, id) => {
-    const Url = SERVER_URL + `/api/metadata/update-metadata/${id}`;
+    const Url = SERVER_URL + `metadata/update-metadata/${id}`;
     const formData = new FormData();
 
     formData?.append('entityType', type);
@@ -99,7 +99,7 @@ export const updateMetaDataApiCall = async (data, type, id) => {
 
 
 export const deleteMetaDataApiCall = async (id) => {
-    const Url = SERVER_URL + `/api/metadata/delete-metadata/${id}`;
+    const Url = SERVER_URL + `metadata/delete-metadata/${id}`;
 
     return fetch(Url, {
         method: 'DELETE',

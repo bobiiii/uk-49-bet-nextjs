@@ -3,7 +3,6 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LotteryBalls from "@/components/LotteryBalls";
-import { getMetaData } from '@/lib/apis';
 
 
 // export const metadata = {
@@ -42,7 +41,7 @@ import { getMetaData } from '@/lib/apis';
 
 // ✅ DYNAMIC METADATA FUNCTION
 export async function generateMetadata() {
-  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/metadata/get-metadata/home`
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}metadata/get-metadata/home`
 
   const response = await fetch(url, {
     method: 'GET',
