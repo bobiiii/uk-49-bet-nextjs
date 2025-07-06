@@ -102,10 +102,13 @@ const PredictionsAdmin = () => {
 
     return (
         <div className="min-h-screen bg-gray-100">
-            <header className="bg-white shadow-sm border-b">
+            <header className="bg-white shadow-sm border-b sm:py-0 py-6">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-16">
-                        <h1 className="text-xl font-semibold text-gray-900">Predictions Management</h1>
+
+                    <div className="flex sm:flex-row flex-col gap-y-3 justify-between items-center h-16">
+                        <div>
+                            <h1 className="text-xl font-semibold text-gray-900">Predictions Management</h1>
+                        </div>
                         <div className="flex items-center gap-2">
                             <Button onClick={handleBackToDashboard} variant="outline" size="sm">
                                 <ArrowLeft className="h-4 w-4 mr-2" />
