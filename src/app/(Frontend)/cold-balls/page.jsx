@@ -4,39 +4,45 @@ import { TrendingDown, Calendar, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
 
 
+export async function generateMetadata() {
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}metadata/get-metadata/cold-balls`
 
-export const metadata = {
-  title: "Cold Balls - Least Frequent UK49s Numbers",
-  description: 'Explore the coldest UK49s numbers that appear least frequently in recent draws. Find patterns and opportunities in number selection.',
+  const response = await fetch(url, {
+    method: 'GET',
+    cache: 'no-store',
+  })
 
-  openGraph: {
-    title: 'Sample  OG Title Cold Balls',
-    description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL + "/cold-balls",
-    type: "website",
-    images: [
-      {
-        url: 'https://lovable.dev/opengraph-image-p98pqg.png',
-        secureUrl: 'https://lovable.dev/opengraph-image-p98pqg.png',
-        width: 1200,
-        height: 630,
-        alt: 'Preview image for Sample Site',
-      }
-    ],
+  let data = null
+
+  const result = await response.json()
+  data = result?.data
 
 
-
-    site_name: process.env.NEXT_PUBLIC_SITENAME,
-  },
-  keywords:
-    [
-      "UK49s cold numbers, rare numbers, lottery analysis, cold balls, number patterns"
-    ],
-  alternates: {
-    canonical: process.env.NEXT_PUBLIC_BASEURL + "/cold-balls",
-  },
-
-};
+  return {
+    title: data?.title || "Cold Balls",
+    description: data?.description || "Cold Balls",
+    keywords: data?.keywords || ["Cold Balls"],
+    openGraph: {
+      title: data?.ogTitle || "Cold Balls",
+      description: data?.ogDescription || "Cold Balls",
+      url: process.env.NEXT_PUBLIC_BASEURL + "cold-balls",
+      type: "website",
+      images: [
+        {
+          url: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          secureUrl: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          width: 1200,
+          height: 630,
+          alt: data?.ogImageAlt || "Cold Balls",
+        },
+      ],
+      site_name: process.env.NEXT_PUBLIC_SITENAME || "Cold Balls",
+    },
+    alternates: {
+      canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL,
+    },
+  }
+}
 
 
 function ColdBalls() {

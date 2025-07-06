@@ -3,43 +3,47 @@ import React from 'react';
 import LotteryBalls from '@/components/LotteryBalls';
 import { TrendingUp, Calendar, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 
 
+export async function generateMetadata() {
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}metadata/get-metadata/hot-balls`
 
-export const metadata = {
-  title: "Hot Balls - Most Frequent UK49s Numbers",
-  description: 'Discover the hottest UK49s numbers that appear most frequently in recent draws. Analyze trends and patterns to improve your lottery strategy.',
+  const response = await fetch(url, {
+    method: 'GET',
+    cache: 'no-store',
+  })
 
-  openGraph: {
-    title: 'Sample  OG Title Hot Balls',
-    description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL + "/hot-balls",
-    type: "website",
-    images: [
-      {
-        url: 'https://lovable.dev/opengraph-image-p98pqg.png',
-        secureUrl: 'https://lovable.dev/opengraph-image-p98pqg.png',
-        width: 1200,
-        height: 630,
-        alt: 'Preview image for Sample Site',
-      }
-    ],
+  let data = null
+
+  const result = await response.json()
+  data = result?.data
 
 
-
-    site_name: process.env.NEXT_PUBLIC_SITENAME,
-  },
-  keywords:
-    [
-      "UK49s hot numbers, frequent numbers, lottery trends, hot balls, number analysis"
-    ],
-  alternates: {
-    canonical: process.env.NEXT_PUBLIC_BASEURL + "/hot-balls",
-  },
-
-};
+  return {
+    title: data?.title || "Hot Balls",
+    description: data?.description || "Hot Balls",
+    keywords: data?.keywords || ["Hot Balls"],
+    openGraph: {
+      title: data?.ogTitle || "Hot Balls",
+      description: data?.ogDescription || "Hot Balls",
+      url: process.env.NEXT_PUBLIC_BASEURL + "hot-balls",
+      type: "website",
+      images: [
+        {
+          url: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          secureUrl: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          width: 1200,
+          height: 630,
+          alt: data?.ogImageAlt || "Hot Balls",
+        },
+      ],
+      site_name: process.env.NEXT_PUBLIC_SITENAME || "Hot Balls",
+    },
+    alternates: {
+      canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL,
+    },
+  }
+}
 
 
 const HotBalls = () => {

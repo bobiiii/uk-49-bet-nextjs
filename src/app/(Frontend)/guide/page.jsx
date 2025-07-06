@@ -5,38 +5,45 @@ import Link from 'next/link';
 
 
 
-export const metadata = {
-  title: "Sample title guide",
-  description: 'Sample Desc guide',
+export async function generateMetadata() {
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}metadata/get-metadata/guide`
 
-  openGraph: {
-    title: 'Sample  OG Title Guide',
-    description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL + "/guide",
-    type: "website",
-    images: [
-      {
-        url: 'https://lovable.dev/opengraph-image-p98pqg.png',
-        secureUrl: 'https://lovable.dev/opengraph-image-p98pqg.png',
-        width: 1200,
-        height: 630,
-        alt: 'Preview image for Sample Site',
-      }
-    ],
+  const response = await fetch(url, {
+    method: 'GET',
+    cache: 'no-store',
+  })
+
+  let data = null
+
+  const result = await response.json()
+  data = result?.data
 
 
-
-    site_name: process.env.NEXT_PUBLIC_SITENAME,
-  },
-  keywords:
-    [
-      "guide"
-    ],
-  alternates: {
-    canonical: process.env.NEXT_PUBLIC_BASEURL + "/guide",
-  },
-
-};
+  return {
+    title: data?.title || "Guide",
+    description: data?.description || "Guide",
+    keywords: data?.keywords || ["Guide"],
+    openGraph: {
+      title: data?.ogTitle || "Guide",
+      description: data?.ogDescription || "Guide",
+      url: process.env.NEXT_PUBLIC_BASEURL + "guide",
+      type: "website",
+      images: [
+        {
+          url: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          secureUrl: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          width: 1200,
+          height: 630,
+          alt: data?.ogImageAlt || "Guide",
+        },
+      ],
+      site_name: process.env.NEXT_PUBLIC_SITENAME || "Guide",
+    },
+    alternates: {
+      canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL,
+    },
+  }
+}
 
 
 

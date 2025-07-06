@@ -42,7 +42,7 @@ export async function generateMetadata() {
       site_name: process.env.NEXT_PUBLIC_SITENAME || "About",
     },
     alternates: {
-      canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL || "https://your-default-domain.com",
+      canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL,
     },
   }
 }

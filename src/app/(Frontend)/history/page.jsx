@@ -3,38 +3,45 @@ import React from 'react';
 
 
 
-export const metadata = {
-  title: "Complete UK49s Results History & Archive",
-  description: "Browse the complete UK49s lottery history archive with advanced search and filtering options. Find historical results by date, draw type, and more from our comprehensive database.",
+export async function generateMetadata() {
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}metadata/get-metadata/history`
 
-  openGraph: {
-    title: 'Sample  OG Title history',
-    description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL + "/history",
-    type: "website",
-    images: [
-      {
-        url: 'https://lovable.dev/opengraph-image-p98pqg.png',
-        secureUrl: 'https://lovable.dev/opengraph-image-p98pqg.png',
-        width: 1200,
-        height: 630,
-        alt: 'Preview image for Sample Site',
-      }
-    ],
+  const response = await fetch(url, {
+    method: 'GET',
+    cache: 'no-store',
+  })
+
+  let data = null
+
+  const result = await response.json()
+  data = result?.data
 
 
-
-    site_name: process.env.NEXT_PUBLIC_SITENAME,
-  },
-  keywords:
-    [
-      "UK49s history, lottery archive, historical results, search results, filter results, complete history, UK49s database, past draws"
-    ],
-  alternates: {
-    canonical: process.env.NEXT_PUBLIC_BASEURL + "/history",
-  },
-
-};
+  return {
+    title: data?.title || "History",
+    description: data?.description || "History",
+    keywords: data?.keywords || ["History"],
+    openGraph: {
+      title: data?.ogTitle || "History",
+      description: data?.ogDescription || "History",
+      url: process.env.NEXT_PUBLIC_BASEURL + "history",
+      type: "website",
+      images: [
+        {
+          url: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          secureUrl: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          width: 1200,
+          height: 630,
+          alt: data?.ogImageAlt || "History",
+        },
+      ],
+      site_name: process.env.NEXT_PUBLIC_SITENAME || "History",
+    },
+    alternates: {
+      canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL,
+    },
+  }
+}
 
 
 
