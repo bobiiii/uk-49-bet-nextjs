@@ -48,8 +48,9 @@ export async function generateMetadata() {
     cache: 'no-store',
   })
 
+  let data = null
   const result = await response.json()
-  const data = result?.data
+  data = result?.data
 
   return {
     title: data?.title || "UK49s Results & Predictions",
