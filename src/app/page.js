@@ -42,9 +42,16 @@ import { getMetaData } from '@/lib/apis';
 
 // ✅ DYNAMIC METADATA FUNCTION
 export async function generateMetadata() {
-  // Replace this with your actual API call
-  const res = await getMetaData("home")
-  const data = res?.data
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/metadata/get-metadata/home`
+
+  const response = await fetch(url, {
+    method: 'GET',
+    cache: 'no-store',
+  })
+
+  const result = await response.json()
+  const data = result?.data
+
 
   return {
     title: data.title,

@@ -1,10 +1,11 @@
 import React from 'react'
+import PredictionsAdmin from '@/components/dashboard/PredictionsAdmin';
 
 function page() {
     return (
-        <div>
-
-        </div>
+        <>
+            <PredictionsAdmin />
+        </>
     )
 }
 

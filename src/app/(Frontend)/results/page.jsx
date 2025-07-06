@@ -41,9 +41,15 @@ import React from 'react';
 
 export async function generateMetadata() {
   // Replace this with your actual API call
-  const res = await getMetaData("results")
-  
-  const data = res?.data
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/metadata/get-metadata/results`
+
+  const response = await fetch(url, {
+    method: 'GET',
+    cache: 'no-store',
+  })
+
+  const result = await response.json()
+  const data = result?.data
 
   return {
     title: data.title,
