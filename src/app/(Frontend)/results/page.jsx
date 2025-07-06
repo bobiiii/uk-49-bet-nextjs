@@ -53,12 +53,12 @@ export async function generateMetadata() {
   data = result?.data
 
   return {
-    title: data?.title || "UK49s Results & Predictions",
-    description: data?.description || "Check latest Lunchtime and Teatime UK49s draws, hot and cold numbers, and predictions.",
-    keywords: data?.keywords || ["UK49s", "lottery results", "UK predictions", "hot numbers"],
+    title: data?.title || "Results",
+    description: data?.description || "Results",
+    keywords: data?.keywords || ["Results"],
     openGraph: {
-      title: data?.ogTitle || "UK49s - Free Predictions",
-      description: data?.ogDescription || "Explore the latest UK49s results and smart number picks.",
+      title: data?.ogTitle || "Results",
+      description: data?.ogDescription || "Results",
       url: process.env.NEXT_PUBLIC_BASEURL + "results",
       type: "website",
       images: [
@@ -67,10 +67,10 @@ export async function generateMetadata() {
           secureUrl: 'https://lovable.dev/opengraph-image-p98pqg.png',
           width: 1200,
           height: 630,
-          alt: data?.ogImageAlt || "UK49s Image",
+          alt: data?.ogImageAlt || "Results",
         },
       ],
-      site_name: process.env.NEXT_PUBLIC_SITENAME || "UK49s",
+      site_name: process.env.NEXT_PUBLIC_SITENAME || "Results",
     },
     alternates: {
       canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL,

@@ -3,43 +3,48 @@ import React from 'react';
 import LotteryBalls from '@/components/LotteryBalls';
 import { Clock, Calendar, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 
 
 
-export const metadata = {
-  title: "Overdue Balls - Long Absent UK49s Numbers",
-  description: "Track overdue UK49s numbers that haven't appeared in recent draws. Analyze patterns and identify potential comeback numbers.",
+export async function generateMetadata() {
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}metadata/get-metadata/overdue-balls`
 
-  openGraph: {
-    title: 'Sample  OG Title Overdue balls',
-    description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL + "/overdue-balls",
-    type: "website",
-    images: [
-      {
-        url: 'hhttps://lovable.dev/opengraph-image-p98pqg.png',
-        secureUrl: 'hhttps://lovable.dev/opengraph-image-p98pqg.png',
-        width: 1200,
-        height: 630,
-        alt: 'Preview image for Sample Site',
-      }
-    ],
+  const response = await fetch(url, {
+    method: 'GET',
+    cache: 'no-store',
+  })
+
+  let data = null
+
+  const result = await response.json()
+  data = result?.data
 
 
-
-    site_name: process.env.NEXT_PUBLIC_SITENAME,
-  },
-  keywords:
-    [
-      "UK49s overdue numbers, long absent numbers, lottery tracking, overdue balls, number analysis"
-    ],
-  alternates: {
-    canonical: process.env.NEXT_PUBLIC_BASEURL + "/overdue-balls",
-  },
-
-};
+  return {
+    title: data?.title || "Overdue Balls",
+    description: data?.description || "Overdue Balls",
+    keywords: data?.keywords || ["Overdue Balls"],
+    openGraph: {
+      title: data?.ogTitle || "Overdue Balls",
+      description: data?.ogDescription || "Overdue Balls",
+      url: process.env.NEXT_PUBLIC_BASEURL + "overdue-balls",
+      type: "website",
+      images: [
+        {
+          url: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          secureUrl: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          width: 1200,
+          height: 630,
+          alt: data?.ogImageAlt || "Overdue Balls",
+        },
+      ],
+      site_name: process.env.NEXT_PUBLIC_SITENAME || "Overdue Balls",
+    },
+    alternates: {
+      canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL,
+    },
+  }
+}
 
 
 

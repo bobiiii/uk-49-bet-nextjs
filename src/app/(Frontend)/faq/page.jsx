@@ -4,38 +4,45 @@ import React from 'react';
 
 
 
-export const metadata = {
-  title: "faq",
-  description: 'faq',
+export async function generateMetadata() {
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}metadata/get-metadata/faq`
 
-  openGraph: {
-    title: 'Sample  OG Title FAQ',
-    description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL + "/faq",
-    type: "website",
-    images: [
-      {
-        url: 'https://lovable.dev/opengraph-image-p98pqg.png',
-        secureUrl: 'https://lovable.dev/opengraph-image-p98pqg.png',
-        width: 1200,
-        height: 630,
-        alt: 'Preview image for Sample Site',
-      }
-    ],
+  const response = await fetch(url, {
+    method: 'GET',
+    cache: 'no-store',
+  })
+
+  let data = null
+
+  const result = await response.json()
+  data = result?.data
 
 
-
-    site_name: process.env.NEXT_PUBLIC_SITENAME,
-  },
-  keywords:
-    [
-      "faq"
-    ],
-  alternates: {
-    canonical: process.env.NEXT_PUBLIC_BASEURL + "/faq",
-  },
-
-};
+  return {
+    title: data?.title || "Faq",
+    description: data?.description || "Faq",
+    keywords: data?.keywords || ["Faq"],
+    openGraph: {
+      title: data?.ogTitle || "Faq",
+      description: data?.ogDescription || "Faq",
+      url: process.env.NEXT_PUBLIC_BASEURL + "faq",
+      type: "website",
+      images: [
+        {
+          url: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          secureUrl: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          width: 1200,
+          height: 630,
+          alt: data?.ogImageAlt || "Faq",
+        },
+      ],
+      site_name: process.env.NEXT_PUBLIC_SITENAME || "Faq",
+    },
+    alternates: {
+      canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL,
+    },
+  }
+}
 
 
 

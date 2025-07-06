@@ -12,7 +12,7 @@ import {
     AlertDialogTitle,
     AlertDialogDescription
 } from "@/components/ui/alert-dialog";
-import { LogOut, User, ExternalLink, FileText, CheckCircle, Newspaper, Home, Archive, History, TrendingUp, BarChart3, Calculator, BookOpen, Info, HelpCircle, Phone, Shield, Settings, Type } from 'lucide-react';
+import { LogOut, User, ExternalLink, FileText, CheckCircle, Newspaper, Home, Archive, History, TrendingUp, BarChart3, Calculator, BookOpen, Info, HelpCircle, Phone, Shield, Type, SquarePlus, SquarePen } from 'lucide-react';
 import UserProfileDialog from './UserProfileDialog';
 import { useRouter } from 'next/navigation';
 import { useToast } from '../ui/use-toast';
@@ -274,7 +274,7 @@ const AdminDashboard = () => {
                                                 <Icon className="h-5 w-5 text-blue-600 mr-2" />
                                                 <span className="font-medium text-gray-900">{page.label}</span>
                                             </div>
-                                            <div className='flex flex-col gap-y-2'>
+                                            <div className='flex flex-row justify-center gap-x-2'>
 
                                                 <Button
                                                     variant="outline"
@@ -283,26 +283,26 @@ const AdminDashboard = () => {
                                                         setSelectedPage(page);
                                                         setIsAddMetaData(true);
                                                     }}
-                                                    className="w-full "
+                                                    className="w-max "
                                                 >
-                                                    Add MetaData
+                                                    <SquarePlus size={32} />
                                                 </Button>
                                                 <Button
                                                     variant="outline"
                                                     size="sm"
                                                     onClick={() => handleUpdateMetaData(page)}
-                                                    className="w-full"
+                                                    className="w-max"
                                                 >
-                                                    Update MetaData
+                                                    <SquarePen size={32} />
                                                 </Button>
-                                                <Button
+                                                {/* <Button
                                                     variant="outline"
                                                     size="sm"
                                                     onClick={() => handleDelete(page)}
                                                     className="w-full"
                                                 >
                                                     Delete MetaData
-                                                </Button>
+                                                </Button> */}
 
                                             </div>
                                         </div>

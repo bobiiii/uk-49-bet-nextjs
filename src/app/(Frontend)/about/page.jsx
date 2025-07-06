@@ -6,39 +6,46 @@ import { Users, Target, Award, Shield, TrendingUp, Clock, Heart, Star } from 'lu
 
 
 
-export const metadata = {
-  title: "About UK49s Results - Your Trusted Lottery Information Hub",
-  description: 'Learn about UK49s Results, your trusted source for accurate lottery information, analysis, and predictions since 2020. Meet our team and discover our mission.',
 
-  openGraph: {
-    title: 'Sample  OG Title About',
-    description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL + "/about",
-    type: "website",
-    images: [
-      {
-        url: 'https://lovable.dev/opengraph-image-p98pqg.png',
-        secureUrl: 'https://lovable.dev/opengraph-image-p98pqg.png',
-        width: 1200,
-        height: 630,
-        alt: 'Preview image for Sample Site',
-      }
-    ],
+export async function generateMetadata() {
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}metadata/get-metadata/about`
+
+  const response = await fetch(url, {
+    method: 'GET',
+    cache: 'no-store',
+  })
+
+  let data = null
+
+  const result = await response.json()
+  data = result?.data
 
 
-
-    site_name: process.env.NEXT_PUBLIC_SITENAME,
-  },
-  keywords:
-    [
-      "about UK49s Results, lottery information, team, mission, UK49s analysis, lottery statistics"
-    ],
-  alternates: {
-    canonical: process.env.NEXT_PUBLIC_BASEURL + "/about",
-  },
-
-};
-
+  return {
+    title: data?.title || "About",
+    description: data?.description || "About",
+    keywords: data?.keywords || ["About"],
+    openGraph: {
+      title: data?.ogTitle || "About",
+      description: data?.ogDescription || "About",
+      url: process.env.NEXT_PUBLIC_BASEURL + "about",
+      type: "website",
+      images: [
+        {
+          url: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          secureUrl: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          width: 1200,
+          height: 630,
+          alt: data?.ogImageAlt || "About",
+        },
+      ],
+      site_name: process.env.NEXT_PUBLIC_SITENAME || "About",
+    },
+    alternates: {
+      canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL,
+    },
+  }
+}
 
 
 

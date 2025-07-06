@@ -6,10 +6,21 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogDescription
+} from "@/components/ui/alert-dialog";
 import { Plus, LogOut, Edit, Trash2, Calendar, Clock, ArrowLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import AddPredictionDialog from '@/components/admin/AddPredictionDialog';
 import EditPredictionDialog from '@/components/admin/EditPredictionDialog';
+import { DeletePredictionsApiCall, getPredictionsApiCall } from '@/lib/apis';
 
 const PredictionsAdmin = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -17,6 +28,8 @@ const PredictionsAdmin = () => {
     const [showAddDialog, setShowAddDialog] = useState(false);
     const [showEditDialog, setShowEditDialog] = useState(false);
     const [editingPrediction, setEditingPrediction] = useState(null);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [predictionId, setPredictionId] = useState(0);
     const router = useRouter();
     const { toast } = useToast();
 
@@ -30,11 +43,15 @@ const PredictionsAdmin = () => {
         }
     }, [router]);
 
-    const loadPredictions = () => {
-        const savedPredictions = localStorage.getItem('adminPredictions');
-        if (savedPredictions) {
-            setPredictions(JSON.parse(savedPredictions));
-        }
+    const loadPredictions = async () => {
+        // const savedPredictions = localStorage.getItem('adminPredictions');
+        // if (savedPredictions) {
+        //     setPredictions(JSON.parse(savedPredictions));
+        // }
+
+        const data = await getPredictionsApiCall()
+        setPredictions(data?.data || [])
+
     };
 
     const handleLogout = () => {
@@ -51,20 +68,22 @@ const PredictionsAdmin = () => {
     };
 
     const handleAddPrediction = (prediction) => {
-        const newPrediction = {
-            ...prediction,
-            id: Date.now().toString(),
-            createdAt: new Date().toISOString(),
-        };
+        // setPredictions(prev => [...prev, prediction]);
+        // const newPrediction = {
+        //     ...prediction,
+        //     id: Date.now().toString(),
+        //     createdAt: new Date().toISOString(),
+        // };
 
-        const updatedPredictions = [...predictions, newPrediction];
-        setPredictions(updatedPredictions);
-        localStorage.setItem('adminPredictions', JSON.stringify(updatedPredictions));
+        // const updatedPredictions = [...predictions, newPrediction];
+        // setPredictions(updatedPredictions);
 
-        toast({
-            title: 'Prediction Added',
-            description: 'New prediction has been added successfully',
-        });
+        // localStorage.setItem('adminPredictions', JSON.stringify(updatedPredictions));
+
+        // toast({
+        //     title: 'Prediction Added',
+        //     description: 'New prediction has been added successfully',
+        // });
     };
 
     const handleEditPrediction = (id, updatedData) => {
@@ -81,15 +100,34 @@ const PredictionsAdmin = () => {
     };
 
     const handleDeletePrediction = (id) => {
-        const updatedPredictions = predictions.filter(p => p.id !== id);
-        setPredictions(updatedPredictions);
-        localStorage.setItem('adminPredictions', JSON.stringify(updatedPredictions));
+        setShowDeleteDialog(true)
+        setPredictionId(id)
 
-        toast({
-            title: 'Prediction Deleted',
-            description: 'Prediction has been removed successfully',
-        });
+
+
+
+        // const updatedPredictions = predictions.filter(p => p.id !== id);
+        // setPredictions(updatedPredictions);
+        // localStorage.setItem('adminPredictions', JSON.stringify(updatedPredictions));
+
+        // toast({
+        //     title: 'Prediction Deleted',
+        //     description: 'Prediction has been removed successfully',
+        // });
     };
+
+    const handleConfirmDelete = async () => {
+        console.log("predictionId", predictionId);
+
+        const res = await DeletePredictionsApiCall(predictionId)
+
+        if (res?.status === "Success") {
+            const updatedPredictions = predictions?.filter(item => item?._id !== predictionId)
+            console.log("updatedPredictions", updatedPredictions);
+            setPredictions(updatedPredictions)
+
+        }
+    }
 
     const openEditDialog = (prediction) => {
         setEditingPrediction(prediction);
@@ -102,10 +140,13 @@ const PredictionsAdmin = () => {
 
     return (
         <div className="min-h-screen bg-gray-100">
-            <header className="bg-white shadow-sm border-b">
+            <header className="bg-white shadow-sm border-b sm:py-0 py-6">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-16">
-                        <h1 className="text-xl font-semibold text-gray-900">Predictions Management</h1>
+
+                    <div className="flex sm:flex-row flex-col gap-y-3 justify-between items-center h-16">
+                        <div>
+                            <h1 className="text-xl font-semibold text-gray-900">Predictions Management</h1>
+                        </div>
                         <div className="flex items-center gap-2">
                             <Button onClick={handleBackToDashboard} variant="outline" size="sm">
                                 <ArrowLeft className="h-4 w-4 mr-2" />
@@ -128,7 +169,7 @@ const PredictionsAdmin = () => {
                             <Calendar className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{predictions.length}</div>
+                            <div className="text-2xl font-bold">{predictions?.length}</div>
                         </CardContent>
                     </Card>
                     <Card>
@@ -138,7 +179,7 @@ const PredictionsAdmin = () => {
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
-                                {predictions.filter(p => p.status === 'active').length}
+                                {predictions?.filter(p => p.status === 'active')?.length}
                             </div>
                         </CardContent>
                     </Card>
@@ -149,7 +190,7 @@ const PredictionsAdmin = () => {
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
-                                {predictions.filter(p => p.drawType === 'lunchtime').length}
+                                {predictions?.filter(p => p.drawType === 'lunchtime')?.length}
                             </div>
                         </CardContent>
                     </Card>
@@ -160,7 +201,7 @@ const PredictionsAdmin = () => {
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
-                                {predictions.filter(p => p.drawType === 'teatime').length}
+                                {predictions?.filter(p => p.drawType === 'teatime')?.length}
                             </div>
                         </CardContent>
                     </Card>
@@ -168,10 +209,10 @@ const PredictionsAdmin = () => {
 
                 <Card>
                     <CardHeader>
-                        <div className="flex justify-between items-center">
+                        <div className="flex sm:flex-row flex-col gap-y-3 justify-between sm:items-center items-start">
                             <div>
                                 <CardTitle>Predictions Management</CardTitle>
-                                <CardDescription>Manage UK49s predictions for both draws (3 numbers each)</CardDescription>
+                                <CardDescription className='mt-2'>Manage UK49s predictions for both draws (3 numbers each)</CardDescription>
                             </div>
                             <Button onClick={() => setShowAddDialog(true)}>
                                 <Plus className="h-4 w-4 mr-2" />
@@ -180,7 +221,7 @@ const PredictionsAdmin = () => {
                         </div>
                     </CardHeader>
                     <CardContent>
-                        {predictions.length === 0 ? (
+                        {predictions?.length === 0 ? (
                             <div className="text-center py-8 text-gray-500">
                                 No predictions found. Add your first prediction to get started.
                             </div>
@@ -198,9 +239,9 @@ const PredictionsAdmin = () => {
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                        {predictions.map((prediction) => (
-                                            <TableRow key={prediction.id}>
-                                                <TableCell>{prediction.date}</TableCell>
+                                        {predictions?.map((prediction) => (
+                                            <TableRow key={prediction._id}>
+                                                <TableCell>{prediction.date.split('T')[0]}</TableCell>
                                                 <TableCell className="capitalize">{prediction.drawType}</TableCell>
                                                 <TableCell>
                                                     <div className="flex gap-1 flex-wrap">
@@ -211,7 +252,7 @@ const PredictionsAdmin = () => {
                                                         ))}
                                                     </div>
                                                 </TableCell>
-                                                <TableCell>{prediction.confidence}%</TableCell>
+                                                <TableCell>{prediction.confidenceLevel}%</TableCell>
                                                 <TableCell>
                                                     <Badge variant={prediction.status === 'active' ? 'default' : 'secondary'}>
                                                         {prediction.status}
@@ -225,7 +266,7 @@ const PredictionsAdmin = () => {
                                                         <Button
                                                             variant="outline"
                                                             size="sm"
-                                                            onClick={() => handleDeletePrediction(prediction.id)}
+                                                            onClick={() => handleDeletePrediction(prediction._id)}
                                                             className="text-red-600 hover:text-red-700"
                                                         >
                                                             <Trash2 className="h-4 w-4" />
@@ -242,8 +283,23 @@ const PredictionsAdmin = () => {
                 </Card>
             </div>
 
-            <AddPredictionDialog open={showAddDialog} onOpenChange={setShowAddDialog} onAdd={handleAddPrediction} />
+            <AddPredictionDialog open={showAddDialog} onOpenChange={setShowAddDialog} onAdd={handleAddPrediction} setPredictions={setPredictions} />
             <EditPredictionDialog open={showEditDialog} onOpenChange={setShowEditDialog} prediction={editingPrediction} onEdit={handleEditPrediction} />
+
+            <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action will permanently delete Prediction.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleConfirmDelete}>Delete</AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 };

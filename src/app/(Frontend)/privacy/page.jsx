@@ -2,43 +2,47 @@
 import React from 'react';
 
 import { Shield, Eye, Lock, FileText, Mail, Calendar } from 'lucide-react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 
 
+export async function generateMetadata() {
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}metadata/get-metadata/privacy`
 
-export const metadata = {
-  title: "Privacy Policy - UK49s Results",
-  description: "Learn how UK49s Results protects your privacy and handles your personal information. Read our comprehensive privacy policy and data protection practices.",
+  const response = await fetch(url, {
+    method: 'GET',
+    cache: 'no-store',
+  })
 
-  openGraph: {
-    title: 'Sample  OG Title Privacy',
-    description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL + "/privacy",
-    type: "website",
-    images: [
-      {
-        url: 'https://lovable.dev/opengraph-image-p98pqg.png',
-        secureUrl: 'https://lovable.dev/opengraph-image-p98pqg.png',
-        width: 1200,
-        height: 630,
-        alt: 'Preview image for Sample Site',
-      }
-    ],
+  let data = null
+
+  const result = await response.json()
+  data = result?.data
 
 
-
-    site_name: process.env.NEXT_PUBLIC_SITENAME,
-  },
-  keywords:
-    [
-      "privacy policy, data protection, UK49s Results privacy, personal information, cookies, data collection"
-    ],
-  alternates: {
-    canonical: process.env.NEXT_PUBLIC_BASEURL + "/privacy",
-  },
-
-};
+  return {
+    title: data?.title || "Privacy",
+    description: data?.description || "Privacy",
+    keywords: data?.keywords || ["Privacy"],
+    openGraph: {
+      title: data?.ogTitle || "Privacy",
+      description: data?.ogDescription || "Privacy",
+      url: process.env.NEXT_PUBLIC_BASEURL + "privacy",
+      type: "website",
+      images: [
+        {
+          url: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          secureUrl: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          width: 1200,
+          height: 630,
+          alt: data?.ogImageAlt || "Privacy",
+        },
+      ],
+      site_name: process.env.NEXT_PUBLIC_SITENAME || "Privacy",
+    },
+    alternates: {
+      canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL,
+    },
+  }
+}
 
 
 

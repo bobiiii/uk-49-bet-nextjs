@@ -5,40 +5,45 @@ import { TrendingUp, TrendingDown, Clock } from 'lucide-react';
 import Link from 'next/link';
 
 
+export async function generateMetadata() {
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}metadata/get-metadata/statistics`
 
-export const metadata = {
-  title: "Statistics - UK49s Number Analysis & Trends",
-  description: "Comprehensive UK49s lottery statistics including hot numbers, cold numbers, frequency analysis, and historical patterns to improve your winning chances.",
+  const response = await fetch(url, {
+    method: 'GET',
+    cache: 'no-store',
+  })
 
-  openGraph: {
-    title: 'Sample  OG Title Statistics',
-    description: 'Sample  Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL + "/statistics",
-    type: "website",
-    images: [
-      {
-        url: 'https://lovable.dev/opengraph-image-p98pqg.png',
-        secureUrl: 'https://lovable.dev/opengraph-image-p98pqg.png',
-        width: 1200,
-        height: 630,
-        alt: 'Preview image for Sample Site',
-      }
-    ],
+  let data = null
+
+  const result = await response.json()
+  data = result?.data
 
 
-
-    site_name: process.env.NEXT_PUBLIC_SITENAME,
-  },
-  keywords:
-    [
-      "UK49s statistics, lottery analysis, hot numbers, cold numbers, frequency analysis, number patterns, lottery trends"
-    ],
-  alternates: {
-    canonical: process.env.NEXT_PUBLIC_BASEURL + "/statistics",
-  },
-
-};
-
+  return {
+    title: data?.title || "Statistics",
+    description: data?.description || "Statistics",
+    keywords: data?.keywords || ["Statistics"],
+    openGraph: {
+      title: data?.ogTitle || "Statistics",
+      description: data?.ogDescription || "Statistics",
+      url: process.env.NEXT_PUBLIC_BASEURL + "statistics",
+      type: "website",
+      images: [
+        {
+          url: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          secureUrl: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          width: 1200,
+          height: 630,
+          alt: data?.ogImageAlt || "Statistics",
+        },
+      ],
+      site_name: process.env.NEXT_PUBLIC_SITENAME || "Statistics",
+    },
+    alternates: {
+      canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL,
+    },
+  }
+}
 
 function Statistics() {
   // Mock data for statistics
