@@ -48,34 +48,36 @@ export async function generateMetadata() {
     cache: 'no-store',
   })
 
+  let data = null
+
   const result = await response.json()
-  const data = result?.data
+  data = result?.data
 
 
   return {
-    title: data.title,
-    description: data.description,
-    keywords: data.keywords,
+    title: data?.title || "Home - Latest UK49s Results & Predictions",
+    description: data?.description || "Get the latest UK49s lottery results, expert predictions, and number analysis. View Lunchtime & Teatime draws updated daily.",
+    keywords: data?.keywords || ["UK49s", "lottery", "results", "predictions", "hot numbers", "teatime", "lunchtime"],
     openGraph: {
-      title: data.ogTitle,
-      description: data.ogDescription,
+      title: data?.ogTitle || "UK49s Results & Winning Strategies - Home",
+      description: data?.ogDescription || "Explore today's UK49s Lunchtime and Teatime results with tips and predictions.",
       url: process.env.NEXT_PUBLIC_BASEURL,
       type: "website",
       images: [
         {
-          url: 'https://lovable.dev/opengraph-image-p98pqg.png',
-          secureUrl: 'https://lovable.dev/opengraph-image-p98pqg.png',
+          url: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          secureUrl: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
           width: 1200,
           height: 630,
-          alt: data.ogImageAlt || "Preview image",
+          alt: data?.ogImageAlt || "UK49s Predictions and Results",
         },
       ],
-      site_name: process.env.NEXT_PUBLIC_SITENAME,
+      site_name: process.env.NEXT_PUBLIC_SITENAME || "UK49s",
     },
     alternates: {
-      canonical: data?.canonical,
+      canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL || "https://your-default-domain.com",
     },
-  };
+  }
 }
 
 
