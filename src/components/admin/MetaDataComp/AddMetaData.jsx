@@ -142,13 +142,13 @@ export function AddMetaData({ setIsAddMetaData, selectedPage }) {
                     </div>
 
                     <div className="grid gap-2">
-                        <Label htmlFor="ogImageId">Graph Image ID</Label>
+                        <Label htmlFor="ogImageId">Graph Image </Label>
                         <Input
                             id="ogImageId"
                             name="ogImageId"
                             value={form.ogImageId}
                             onChange={handleChange}
-                            placeholder="Image ID or URL"
+                            placeholder="Image Feature will be added later"
                         />
                     </div>
 
