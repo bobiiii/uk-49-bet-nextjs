@@ -5,41 +5,10 @@ import Footer from "@/components/Footer";
 import LotteryBalls from "@/components/LotteryBalls";
 
 
-// export const metadata = {
-//   title: "Home - Latest UK49s Results & Predictions",
-//   description: "Get the latest UK49s lottery results, expert predictions, and winning strategies. View today's Lunchtime and Teatime draws with comprehensive analysis.",
-
-//   openGraph: {
-//     title: 'Sample Homepage OG Title',
-//     description: 'Sample Homepage Og Desc',
-//     url: process.env.NEXT_PUBLIC_BASEURL,
-//     type: "website",
-//     images: [
-//       {
-//         url: 'https://lovable.dev/opengraph-image-p98pqg.png',
-//         secureUrl: 'https://lovable.dev/opengraph-image-p98pqg.png',
-//         width: 1200,
-//         height: 630,
-//         alt: 'Preview image for Sample Site',
-//       }
-//     ],
-//     site_name: process.env.NEXT_PUBLIC_SITENAME,
-//   },
-//   keywords:
-//     [
-//       "about UK49s Results, lottery information, team, mission, UK49s analysis, lottery statistics"
-//     ],
-
-//   alternates: {
-//     canonical: process.env.NEXT_PUBLIC_BASEURL,
-//   },
-
-// };
-
-
 
 
 // ✅ DYNAMIC METADATA FUNCTION
+
 export async function generateMetadata() {
   const url = `${process.env.NEXT_PUBLIC_SERVER_URL}metadata/get-metadata/home`
 
@@ -55,12 +24,12 @@ export async function generateMetadata() {
 
 
   return {
-    title: data?.title || "Home - Latest UK49s Results & Predictions",
-    description: data?.description || "Get the latest UK49s lottery results, expert predictions, and number analysis. View Lunchtime & Teatime draws updated daily.",
-    keywords: data?.keywords || ["UK49s", "lottery", "results", "predictions", "hot numbers", "teatime", "lunchtime"],
+    title: data?.title || "Home",
+    description: data?.description || "Home",
+    keywords: data?.keywords || ["Home"],
     openGraph: {
-      title: data?.ogTitle || "UK49s Results & Winning Strategies - Home",
-      description: data?.ogDescription || "Explore today's UK49s Lunchtime and Teatime results with tips and predictions.",
+      title: data?.ogTitle || "Home",
+      description: data?.ogDescription || "Home",
       url: process.env.NEXT_PUBLIC_BASEURL,
       type: "website",
       images: [
@@ -69,13 +38,13 @@ export async function generateMetadata() {
           secureUrl: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
           width: 1200,
           height: 630,
-          alt: data?.ogImageAlt || "UK49s Predictions and Results",
+          alt: data?.ogImageAlt || "Home",
         },
       ],
-      site_name: process.env.NEXT_PUBLIC_SITENAME || "UK49s",
+      site_name: process.env.NEXT_PUBLIC_SITENAME || "home",
     },
     alternates: {
-      canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL || "https://your-default-domain.com",
+      canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL,
     },
   }
 }
