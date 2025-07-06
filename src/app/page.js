@@ -3,38 +3,75 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LotteryBalls from "@/components/LotteryBalls";
+import { getMetaData } from '@/lib/apis';
 
 
-export const metadata = {
-  title: "Home - Latest UK49s Results & Predictions",
-  description: "Get the latest UK49s lottery results, expert predictions, and winning strategies. View today's Lunchtime and Teatime draws with comprehensive analysis.",
+// export const metadata = {
+//   title: "Home - Latest UK49s Results & Predictions",
+//   description: "Get the latest UK49s lottery results, expert predictions, and winning strategies. View today's Lunchtime and Teatime draws with comprehensive analysis.",
 
-  openGraph: {
-    title: 'Sample Homepage OG Title',
-    description: 'Sample Homepage Og Desc',
-    url: process.env.NEXT_PUBLIC_BASEURL,
-    type: "website",
-    images: [
-      {
-        url: 'https://lovable.dev/opengraph-image-p98pqg.png',
-        secureUrl: 'https://lovable.dev/opengraph-image-p98pqg.png',
-        width: 1200,
-        height: 630,
-        alt: 'Preview image for Sample Site',
-      }
-    ],
-    site_name: process.env.NEXT_PUBLIC_SITENAME,
-  },
-  keywords:
-    [
-      "about UK49s Results, lottery information, team, mission, UK49s analysis, lottery statistics"
-    ],
+//   openGraph: {
+//     title: 'Sample Homepage OG Title',
+//     description: 'Sample Homepage Og Desc',
+//     url: process.env.NEXT_PUBLIC_BASEURL,
+//     type: "website",
+//     images: [
+//       {
+//         url: 'https://lovable.dev/opengraph-image-p98pqg.png',
+//         secureUrl: 'https://lovable.dev/opengraph-image-p98pqg.png',
+//         width: 1200,
+//         height: 630,
+//         alt: 'Preview image for Sample Site',
+//       }
+//     ],
+//     site_name: process.env.NEXT_PUBLIC_SITENAME,
+//   },
+//   keywords:
+//     [
+//       "about UK49s Results, lottery information, team, mission, UK49s analysis, lottery statistics"
+//     ],
 
-  alternates: {
-    canonical: process.env.NEXT_PUBLIC_BASEURL,
-  },
+//   alternates: {
+//     canonical: process.env.NEXT_PUBLIC_BASEURL,
+//   },
 
-};
+// };
+
+
+
+
+// ✅ DYNAMIC METADATA FUNCTION
+export async function generateMetadata() {
+  // Replace this with your actual API call
+  const res = await getMetaData("home")
+  const data = res?.data
+
+  return {
+    title: data.title,
+    description: data.description,
+    keywords: data.keywords,
+    openGraph: {
+      title: data.ogTitle,
+      description: data.ogDescription,
+      url: process.env.NEXT_PUBLIC_BASEURL,
+      type: "website",
+      images: [
+        {
+          url: 'https://lovable.dev/opengraph-image-p98pqg.png',
+          secureUrl: 'https://lovable.dev/opengraph-image-p98pqg.png',
+          width: 1200,
+          height: 630,
+          alt: data.ogImageAlt || "Preview image",
+        },
+      ],
+      site_name: process.env.NEXT_PUBLIC_SITENAME,
+    },
+    alternates: {
+      canonical: data?.canonical,
+    },
+  };
+}
+
 
 export default function Home() {
   const latestResults = {
