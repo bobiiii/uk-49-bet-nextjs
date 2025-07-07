@@ -17,10 +17,11 @@ import {
     AlertDialogDescription
 } from "@/components/ui/alert-dialog";
 import { Plus, LogOut, Edit, Trash2, Calendar, Clock, ArrowLeft } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+
 import AddPredictionDialog from '@/components/admin/AddPredictionDialog';
 import EditPredictionDialog from '@/components/admin/EditPredictionDialog';
 import { DeletePredictionsApiCall, getPredictionsApiCall } from '@/lib/apis';
+import { useToast } from '../ui/use-toast';
 
 const PredictionsAdmin = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -88,15 +89,10 @@ const PredictionsAdmin = () => {
 
     const handleEditPrediction = (id, updatedData) => {
         const updatedPredictions = predictions.map(p =>
-            p.id === id ? { ...p, ...updatedData } : p
+            p._id === id ? { ...p, ...updatedData } : p
         );
-        setPredictions(updatedPredictions);
-        localStorage.setItem('adminPredictions', JSON.stringify(updatedPredictions));
 
-        toast({
-            title: 'Prediction Updated',
-            description: 'Prediction has been updated successfully',
-        });
+        setPredictions(updatedPredictions);
     };
 
     const handleDeletePrediction = (id) => {
@@ -117,15 +113,26 @@ const PredictionsAdmin = () => {
     };
 
     const handleConfirmDelete = async () => {
-        console.log("predictionId", predictionId);
 
         const res = await DeletePredictionsApiCall(predictionId)
-
+        
         if (res?.status === "Success") {
             const updatedPredictions = predictions?.filter(item => item?._id !== predictionId)
-            console.log("updatedPredictions", updatedPredictions);
             setPredictions(updatedPredictions)
+            toast({
+                title: "Prediction Deleted ✅",
+                description: `${res?.message}`,
+                variant: "default",
+                duration: 3000,
+            });
 
+        } else {
+            toast({
+                title: "Failed to Delete ❌",
+                description: res?.message || "Something went wrong while Deleting Prediction.",
+                variant: "destructive",
+                duration: 3000,
+            });
         }
     }
 
@@ -179,7 +186,7 @@ const PredictionsAdmin = () => {
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
-                                {predictions?.filter(p => p.status === 'active')?.length}
+                                {predictions?.filter(p => p.status === 'Active')?.length}
                             </div>
                         </CardContent>
                     </Card>
@@ -190,7 +197,7 @@ const PredictionsAdmin = () => {
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
-                                {predictions?.filter(p => p.drawType === 'lunchtime')?.length}
+                                {predictions?.filter(p => p.drawType === 'Lunchtime')?.length}
                             </div>
                         </CardContent>
                     </Card>
@@ -201,7 +208,7 @@ const PredictionsAdmin = () => {
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">
-                                {predictions?.filter(p => p.drawType === 'teatime')?.length}
+                                {predictions?.filter(p => p.drawType === 'Teatime')?.length}
                             </div>
                         </CardContent>
                     </Card>

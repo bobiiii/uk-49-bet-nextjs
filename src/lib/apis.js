@@ -192,3 +192,36 @@ export const DeletePredictionsApiCall = async (id) => {
     }
 };
 
+
+
+export const updatePredictionApiCall = async (data, id) => {
+    const Url = SERVER_URL + `predictions/update-prediction/${id}`;
+
+    const payload = {
+        date: data?.date,
+        drawType: data?.drawType,
+        numbers: data?.numbers,
+        confidenceLevel: data?.confidence,
+        status: data?.status,
+    };
+
+    try {
+        const response = await fetch(Url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': `Bearer ${token}`, // Uncomment if needed
+            },
+            body: JSON.stringify(payload),
+        });
+
+        const result = await response.json();
+
+        return result;
+    } catch (error) {
+        return {
+            error: 'Network Error',
+            details: error.message || error,
+        };
+    }
+};

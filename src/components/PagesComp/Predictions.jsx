@@ -4,42 +4,7 @@ import Link from 'next/link';
 import LotteryBalls from '@/components/LotteryBalls';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Brain, TrendingUp, Target, Lightbulb, RefreshCw, Star, Calendar, Trophy } from 'lucide-react';
-
-
-
-export const metadata = {
-    title: "UK49s Predictions & Number Analysis - AI Powered",
-    description: "Get expert UK49s predictions using advanced AI algorithms and statistical analysis. View hot numbers, cold numbers, pattern analysis and number generation tools for better lottery picks.",
-
-    openGraph: {
-        title: 'Sample  OG Title',
-        description: 'Sample  Og Desc',
-        url: process.env.NEXT_PUBLIC_BASEURL,
-        type: "website",
-        images: [
-            {
-                url: 'https://lovable.dev/opengraph-image-p98pqg.png',
-                secureUrl: 'https://lovable.dev/opengraph-image-p98pqg.png',
-                width: 1200,
-                height: 630,
-                alt: 'Preview image for Sample Site',
-            }
-        ],
-
-
-
-        site_name: process.env.NEXT_PUBLIC_SITENAME,
-    },
-    keywords:
-        [
-            "UK49s predictions, lottery predictions, AI predictions, hot numbers, cold numbers, lottery analysis, number patterns, UK49s tips, lottery strategy"
-        ],
-    alternates: {
-        canonical: process.env.NEXT_PUBLIC_BASEURL + "/predictions",
-    },
-
-};
-
+import { getPredictionsApiCall } from '@/lib/apis';
 
 
 function Predictions() {
@@ -54,34 +19,39 @@ function Predictions() {
 
     useEffect(() => {
         // Load admin predictions from localStorage
-        const savedPredictions = localStorage.getItem('adminPredictions');
-        console.log('Raw localStorage data:', savedPredictions);
-        if (savedPredictions) {
-            const parsedPredictions = JSON.parse(savedPredictions);
-            console.log('Parsed predictions:', parsedPredictions);
-            setAdminPredictions(parsedPredictions);
-        } else {
-            console.log('No admin predictions found in localStorage');
+        // const savedPredictions = localStorage.getItem('adminPredictions');
+        // if (savedPredictions) {
+        //     const parsedPredictions = JSON.parse(savedPredictions);
+        //     setAdminPredictions(parsedPredictions);
+        // } else {
+        //     console.log('No admin predictions found in localStorage');
+        // }
+
+        const fetchPredictions = async () => {
+
+            const res = await getPredictionsApiCall()
+            const data = res?.data
+            setAdminPredictions(data)
+
         }
+        fetchPredictions()
     }, []);
+
+    console.log("adminPredictions", adminPredictions);
 
     // Get today's predictions
     const today = new Date().toISOString().split('T')[0];
-    console.log('Today date:', today);
     const todaysPredictions = adminPredictions.filter(pred =>
-        pred.date === today && pred.status === 'active'
+        pred.date === today && pred.status === 'Active'
     );
-    console.log('Today\'s predictions:', todaysPredictions);
 
     // Get latest predictions if no predictions for today
-    const latestLunchtime = todaysPredictions.find(pred => pred.drawType === 'lunchtime') ||
-        adminPredictions.filter(pred => pred.drawType === 'lunchtime' && pred.status === 'active').slice(-1)[0];
+    const latestLunchtime = todaysPredictions.find(pred => pred.drawType === 'Lunchtime') ||
+        adminPredictions.filter(pred => pred.drawType === 'Lunchtime' && pred.status === 'Active').slice(-1)[0];
 
-    const latestTeatime = todaysPredictions.find(pred => pred.drawType === 'teatime') ||
-        adminPredictions.filter(pred => pred.drawType === 'teatime' && pred.status === 'active').slice(-1)[0];
+    const latestTeatime = todaysPredictions.find(pred => pred.drawType === 'Teatime') ||
+        adminPredictions.filter(pred => pred.drawType === 'Teatime' && pred.status === 'Active').slice(-1)[0];
 
-    console.log('Latest lunchtime prediction:', latestLunchtime);
-    console.log('Latest teatime prediction:', latestTeatime);
 
     // Get published time from the latest prediction
     const latestPrediction = latestLunchtime || latestTeatime;
@@ -95,7 +65,6 @@ function Predictions() {
             minute: '2-digit'
         }) : 'No predictions available';
 
-    console.log('Latest prediction:', latestPrediction);
 
     // Mock prediction data - reduced to 3 numbers
     const hotColdPredictions = {
@@ -155,7 +124,7 @@ function Predictions() {
                                         <div className="flex items-center justify-center mb-2">
                                             <Star className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500 mr-2" />
                                             <span className="font-medium text-sm sm:text-base">
-                                                Confidence: {latestLunchtime.confidence}%
+                                                Confidence: {latestLunchtime.confidenceLevel}%
                                             </span>
                                         </div>
                                     </div>

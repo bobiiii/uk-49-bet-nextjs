@@ -13,7 +13,7 @@ import { generateUniqueSlug } from '@/utils/slugify';
 
 
 
-const NewsManager = () => {
+const AdminNews = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [articles, setArticles] = useState([]);
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -302,4 +302,4 @@ const handleBackToDashboard = () => {
   );
 };
 
-export default NewsManager;
+export default AdminNews;

@@ -1,59 +1,48 @@
+'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle
+} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 
-interface NewsArticle {
-  id: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  date: string;
-  time: string;
-  author: string;
-  category: string;
-  featured: boolean;
-  status: 'published' | 'draft';
-  createdAt: string;
-}
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
+import { Quill } from 'react-quill-new';
 
-interface EditNewsDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  article: NewsArticle | null;
-  onEdit: (id: string, article: {
-    title: string;
-    excerpt: string;
-    content: string;
-    date: string;
-    time: string;
-    author: string;
-    category: string;
-    featured: boolean;
-    status: 'published' | 'draft';
-  }) => void;
-}
+// ✅ Properly register 'list' format once
+const List = Quill.import('formats/list');
+Quill.register('formats/list', List, true);
 
-const EditNewsDialog = ({ open, onOpenChange, article, onEdit }: EditNewsDialogProps) => {
+export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
   const [formData, setFormData] = useState({
     title: '',
     excerpt: '',
     content: '',
-    date: '',
-    time: '',
+    date: new Date().toISOString().split('T')[0],
+    time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
     author: '',
     category: '',
     featured: false,
-    status: 'published' as 'published' | 'draft'
+    status: 'published'
   });
+
   const { toast } = useToast();
 
   const categories = [
@@ -68,117 +57,101 @@ const EditNewsDialog = ({ open, onOpenChange, article, onEdit }: EditNewsDialogP
 
   const quillModules = {
     toolbar: [
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
       ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'script': 'sub'}, { 'script': 'super' }],
-      [{ 'indent': '-1'}, { 'indent': '+1' }],
-      [{ 'direction': 'rtl' }],
-      [{ 'size': ['small', false, 'large', 'huge'] }],
-      [{ 'color': [] }, { 'background': [] }],
-      [{ 'font': [] }],
-      [{ 'align': [] }],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ script: 'sub' }, { script: 'super' }],
+      [{ indent: '-1' }, { indent: '+1' }],
+      [{ direction: 'rtl' }],
+      [{ size: ['small', false, 'large', 'huge'] }],
+      [{ color: [] }, { background: [] }],
+      [{ font: [] }],
+      [{ align: [] }],
       ['link', 'image'],
       ['clean']
-    ],
+    ]
   };
 
   const quillFormats = [
     'header', 'font', 'size',
     'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
+    'list', 'indent',
     'link', 'image', 'color', 'background',
     'align', 'script'
   ];
 
-  useEffect(() => {
-    if (article) {
-      setFormData({
-        title: article.title,
-        excerpt: article.excerpt,
-        content: article.content,
-        date: article.date,
-        time: article.time,
-        author: article.author,
-        category: article.category,
-        featured: article.featured,
-        status: article.status
-      });
-    }
-  }, [article]);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    
-    if (!article) return;
-
     if (!formData.title || !formData.excerpt || !formData.content || !formData.author || !formData.category) {
       toast({
         title: 'Error',
         description: 'Please fill in all required fields',
-        variant: 'destructive',
+        variant: 'destructive'
       });
       return;
     }
 
-    onEdit(article.id, formData);
+    onAdd(formData);
+    setFormData({
+      title: '',
+      excerpt: '',
+      content: '',
+      date: new Date().toISOString().split('T')[0],
+      time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+      author: '',
+      category: '',
+      featured: false,
+      status: 'published'
+    });
     onOpenChange(false);
   };
 
-  const handleInputChange = (field: string, value: string | boolean) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  const handleInputChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
-
-  if (!article) return null;
 
   return (
     <>
-      <style>
-        {`
-          .ql-editor {
-            min-height: 300px !important;
-            max-height: 300px !important;
-            overflow-y: auto !important;
-            line-height: 1.6 !important;
-            font-family: inherit !important;
-            word-wrap: break-word !important;
-            white-space: normal !important;
-            width: 100% !important;
-          }
-          .ql-container {
-            font-family: inherit !important;
-            width: 800px !important;
-            max-width: none !important;
-          }
-          .ql-toolbar {
-            border-top: 1px solid #ccc !important;
-            border-left: 1px solid #ccc !important;
-            border-right: 1px solid #ccc !important;
-            width: 800px !important;
-            max-width: none !important;
-          }
-          .ql-container {
-            border-bottom: 1px solid #ccc !important;
-            border-left: 1px solid #ccc !important;
-            border-right: 1px solid #ccc !important;
-          }
-          .quill-container-wrapper {
-            width: 800px !important;
-            max-width: none !important;
-            overflow-x: auto !important;
-          }
-        `}
-      </style>
+      <style>{`
+        .ql-editor {
+          min-height: 300px;
+          max-height: 300px;
+          overflow-y: auto;
+          line-height: 1.6;
+          font-family: inherit;
+          word-wrap: break-word;
+          white-space: normal;
+          width: 100%;
+        }
+        .ql-container {
+          font-family: inherit;
+          width: 800px;
+          max-width: none;
+        }
+        .ql-toolbar {
+          border-top: 1px solid #ccc;
+          border-left: 1px solid #ccc;
+          border-right: 1px solid #ccc;
+          width: 800px;
+          max-width: none;
+        }
+        .ql-container {
+          border-bottom: 1px solid #ccc;
+          border-left: 1px solid #ccc;
+          border-right: 1px solid #ccc;
+        }
+        .quill-container-wrapper {
+          width: 800px;
+          max-width: none;
+          overflow-x: auto;
+        }
+      `}</style>
+
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="w-[900px] max-w-none max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Edit Article</DialogTitle>
-            <DialogDescription>
-              Update the SEO-optimized news article information
-            </DialogDescription>
+            <DialogTitle>Add New Article</DialogTitle>
+            <DialogDescription>Create a new SEO-optimized news article for the UK49s website</DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -206,7 +179,7 @@ const EditNewsDialog = ({ open, onOpenChange, article, onEdit }: EditNewsDialogP
             </div>
 
             <div>
-              <Label htmlFor="content">Content * (Rich Text Editor)</Label>
+              <Label htmlFor="content">Content *</Label>
               <div className="quill-container-wrapper border rounded-md overflow-hidden">
                 <ReactQuill
                   theme="snow"
@@ -214,7 +187,7 @@ const EditNewsDialog = ({ open, onOpenChange, article, onEdit }: EditNewsDialogP
                   onChange={(value) => handleInputChange('content', value)}
                   modules={quillModules}
                   formats={quillFormats}
-                  placeholder="Write your SEO article content here. Use headings, bold text, lists, and formatting to create engaging content..."
+                  placeholder="Write your SEO article content here..."
                 />
               </div>
               <p className="text-sm text-gray-500 mt-1">
@@ -274,7 +247,7 @@ const EditNewsDialog = ({ open, onOpenChange, article, onEdit }: EditNewsDialogP
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="status">Status</Label>
-                <Select value={formData.status} onValueChange={(value: 'published' | 'draft') => handleInputChange('status', value)}>
+                <Select value={formData.status} onValueChange={(value) => handleInputChange('status', value)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -288,7 +261,7 @@ const EditNewsDialog = ({ open, onOpenChange, article, onEdit }: EditNewsDialogP
                 <Checkbox
                   id="featured"
                   checked={formData.featured}
-                  onCheckedChange={(checked) => handleInputChange('featured', checked as boolean)}
+                  onCheckedChange={(checked) => handleInputChange('featured', checked)}
                 />
                 <Label htmlFor="featured">Featured Article</Label>
               </div>
@@ -298,15 +271,11 @@ const EditNewsDialog = ({ open, onOpenChange, article, onEdit }: EditNewsDialogP
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Cancel
               </Button>
-              <Button type="submit">
-                Update Article
-              </Button>
+              <Button type="submit">Add Article</Button>
             </div>
           </form>
         </DialogContent>
       </Dialog>
     </>
   );
-};
-
-export default EditNewsDialog;
+}
