@@ -37,7 +37,7 @@ module.exports = {
     ],
     additionalSitemaps: [
         // This file will be generated from above static paths
-      `${process.env.NEXT_PUBLIC_BASEURL}dynamic-urls.xml`,      // Manually or programmatically generated
+      `${process.env.NEXT_PUBLIC_BASEURL}dynamic-sitemap.xml`,      // Manually or programmatically generated
     ],
   },
 };
