@@ -1,0 +1,18 @@
+# *
+User-agent: *
+Allow: /
+
+# *
+User-agent: *
+Disallow: /admin
+
+# *
+User-agent: *
+Disallow: /admin/login
+
+# Host
+Host: https://uk-49-bet-nextjs.vercel.app/
+
+# Sitemaps
+Sitemap: https://uk-49-bet-nextjs.vercel.app/sitemap.xml
+Sitemap: https://uk-49-bet-nextjs.vercel.app/dynamic-urls.xml

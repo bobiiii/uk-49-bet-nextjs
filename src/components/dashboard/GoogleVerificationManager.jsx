@@ -25,13 +25,22 @@ const GoogleVerificationManager = () => {
         }
     }, [navigate]);
 
-    useEffect(() => {
-        // Load verification code from localStorage
-        const savedCode = localStorage.getItem('google_verification_code');
-        if (savedCode) {
-            setVerificationCode(savedCode);
-        }
-    }, []);
+useEffect(() => {
+  const fetchVerificationCode = async () => {
+    try {
+      const res = await fetch('/api/verification-code/get', { cache: 'no-store' });
+      const result = await res.json();
+
+      if (res.ok && result.googleVerificationCode) {
+        setVerificationCode(result.googleVerificationCode);
+      }
+    } catch (error) {
+      console.error('Error fetching verification code:', error);
+    }
+  };
+
+  fetchVerificationCode();
+}, []);
 
     const handleLogout = () => {
         localStorage.removeItem('adminAuthenticated');
@@ -50,14 +59,43 @@ const GoogleVerificationManager = () => {
         navigate?.push('/admin');
     };
 
-    const handleSave = () => {
-        localStorage.setItem('google_verification_code', verificationCode);
-        setIsEditing(false);
-        toast({
-            title: 'Verification Code Updated',
-            description: 'Your Google verification code has been saved successfully',
-        });
-    };
+const handleSave = async () => {
+  try {
+    const res = await fetch('/api/verification-code/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        google: verificationCode, // You can also include bing or yandex if available
+      }),
+    });
+
+    const result = await res.json();
+
+    if (res.ok && result.success) {
+      toast({
+        title: 'Verification Code Saved',
+        description: 'Your Google verification code has been saved to the server.',
+      });
+      setIsEditing(false);
+    } else {
+      toast({
+        title: 'Error',
+        description: result.message || 'Something went wrong while saving.',
+        variant: 'destructive',
+      });
+    }
+  } catch (error) {
+    console.error('Error saving verification code:', error);
+    toast({
+      title: 'Server Error',
+      description: 'Could not connect to the server.',
+      variant: 'destructive',
+    });
+  }
+};
+
 
     const handleCopyCode = () => {
         const fullMetaTag = `<meta name="google-site-verification" content="${verificationCode}" />`;
