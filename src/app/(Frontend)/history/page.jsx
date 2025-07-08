@@ -1,4 +1,8 @@
+export const dynamic = "force-dynamic";
+
 import History from '@/components/PagesComp/History';
+import { getLunchtimeApiCall, getTeatimeApiCall } from '@/lib/apis';
+import { formatResult, parseDMYtoDate } from '@/utils/functions';
 import React from 'react';
 
 
@@ -45,11 +49,31 @@ export async function generateMetadata() {
 
 
 
-const page = () => {
+async function page  ()  {
+const lunchData = await getLunchtimeApiCall();
+  const teaData = await getTeatimeApiCall();
 
+  const lunchResults = lunchData.map((item) => formatResult(item, "Lunchtime"));
+  const teaResults = teaData.map((item) => formatResult(item, "Teatime"));
+
+  const sortedLunch = lunchResults.sort(
+    (a, b) => parseDMYtoDate(b.date) - parseDMYtoDate(a.date)
+  );
+
+  const sortedTea = teaResults.sort(
+    (a, b) => parseDMYtoDate(b.date) - parseDMYtoDate(a.date)
+  );
+  // Interleave tea and lunch
+  const maxLength = Math.max(sortedTea.length, sortedLunch.length);
+  const interleavedResults = [];
+
+  for (let i = 0; i < maxLength; i++) {
+    if (sortedTea[i]) interleavedResults.push(sortedTea[i]);
+    if (sortedLunch[i]) interleavedResults.push(sortedLunch[i]);
+  }
   return (
     <>
-      <History />
+      <History formattedResults={interleavedResults}/>
     </>
   );
 };
