@@ -10,6 +10,9 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LotteryBalls from "@/components/LotteryBalls";
+import { getLunchtimeApiCall, getTeatimeApiCall } from "@/lib/apis";
+import { number } from "zod";
+import { formatResult, parseDMYtoDate } from "@/utils/functions";
 
 // ✅ DYNAMIC METADATA FUNCTION
 
@@ -54,27 +57,31 @@ export async function generateMetadata() {
       canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL,
     },
     other: {
-      "google-site-verification":
-        verificationCode || "CODE_MISSING",
+      "google-site-verification": verificationCode || "CODE_MISSING",
     },
   };
 }
 
-export default function Home() {
-  const latestResults = {
-    lunchtime: {
-      date: "2024-06-30",
-      time: "12:49",
-      numbers: [7, 14, 23, 31, 42, 49],
-      boosterBall: 18,
-    },
-    teatime: {
-      date: "2024-06-30",
-      time: "17:49",
-      numbers: [3, 15, 27, 34, 41, 46],
-      boosterBall: 22,
-    },
-  };
+export default async function Home() {
+  const lunchData = await getLunchtimeApiCall();
+  const teaData = await getTeatimeApiCall();
+
+
+
+const lunchFormatted = lunchData[0] ? formatResult(lunchData[0], "Lunchtime") : null;
+const teaFormatted = teaData[0] ? formatResult(teaData[0], "Teatime") : null;
+
+const latestResults = {
+  lunchtime: lunchFormatted,
+  teatime:
+    teaFormatted &&
+    lunchFormatted &&
+    parseDMYtoDate(teaFormatted.date) >= parseDMYtoDate(lunchFormatted.date)
+      ? teaFormatted
+      : "Waiting For Results",
+};
+
+
 
   const hotNumbers = [7, 14, 23, 31, 42];
   const coldNumbers = [1, 8, 19, 25, 38];
@@ -102,22 +109,25 @@ export default function Home() {
                 <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
                   Lunchtime Results
                 </h3>
+
+
+
                 <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-sm sm:text-base">
                   <div className="flex items-center text-gray-600">
                     <Calendar className="h-4 w-4 mr-1 sm:mr-2" />
                     <span className="text-xs sm:text-sm font-medium">
-                      {latestResults.lunchtime.date}
+                      {latestResults?.lunchtime ?  latestResults?.lunchtime.date : null}
                     </span>
                   </div>
                   <div className="flex items-center text-gray-600">
                     <Clock className="h-4 w-4 mr-1 sm:mr-2" />
                     <span className="text-xs sm:text-sm">
-                      {latestResults.lunchtime.time}
+                      {latestResults.lunchtime ? latestResults.lunchtime.time : null}
                     </span>
                   </div>
                 </div>
               </div>
-              <div className="flex justify-center mb-4 sm:mb-6">
+              {/* <div className="flex justify-center mb-4 sm:mb-6">
                 <LotteryBalls
                   numbers={latestResults.lunchtime.numbers}
                   boosterBall={latestResults.lunchtime.boosterBall}
@@ -125,6 +135,25 @@ export default function Home() {
                   mobileLayout={true}
                 />
               </div>
+ */}
+
+
+{ latestResults.lunchtime ? (
+              <div className="flex justify-center mb-4 sm:mb-6">
+<LotteryBalls
+                  numbers={latestResults.lunchtime.numbers}
+                  boosterBall={latestResults.lunchtime.boosterBall}
+                  size="medium"
+                  mobileLayout={true}
+                />
+                              </div>
+                ) : (
+                  <div className="flex justify-center items-center text-gray-600 text-base sm:text-2xl font-semibold">
+"loading..."
+                  </div>
+                )}
+
+
               <Link
                 href="/results"
                 className="block text-center bg-blue-600 text-white py-2 sm:py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm sm:text-base"
@@ -134,7 +163,7 @@ export default function Home() {
             </div>
 
             {/* Teatime Draw */}
-            <div className="card-gradient-purple rounded-xl p-4 sm:p-8 border-2 border-purple-100">
+            <div className="card-gradient-purple rounded-xl p-4 sm:p-8 border-2 border-purple-100 flex flex-col justify-between ">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-2 sm:gap-4">
                 <h3 className="text-xl sm:text-2xl font-bold text-gray-900">
                   Teatime Results
@@ -146,6 +175,7 @@ export default function Home() {
                       {latestResults.teatime.date}
                     </span>
                   </div>
+
                   <div className="flex items-center text-gray-600">
                     <Clock className="h-4 w-4 mr-1 sm:mr-2" />
                     <span className="text-xs sm:text-sm">
@@ -154,13 +184,19 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="flex justify-center mb-4 sm:mb-6">
-                <LotteryBalls
-                  numbers={latestResults.teatime.numbers}
-                  boosterBall={latestResults.teatime.boosterBall}
-                  size="medium"
-                  mobileLayout={true}
-                />
+              <div className="flex flex-grow justify-center mb-4 sm:mb-6">
+                {typeof latestResults.teatime === "object" ? (
+                  <LotteryBalls
+                    numbers={latestResults.teatime.numbers}
+                    boosterBall={latestResults.teatime.boosterBall}
+                    size="medium"
+                    mobileLayout={true}
+                  />
+                ) : (
+                  <div className="flex justify-center items-center text-gray-600 text-base sm:text-2xl font-semibold">
+                    {latestResults.teatime}
+                  </div>
+                )}
               </div>
               <Link
                 href="/results"

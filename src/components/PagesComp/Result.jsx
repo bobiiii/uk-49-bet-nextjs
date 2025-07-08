@@ -4,84 +4,13 @@ import LotteryBalls from '@/components/LotteryBalls';
 import { Calendar, Clock } from 'lucide-react';
 import Link from 'next/link';
 
-// Optional: if you want to reuse mock generation logic
-const generateMockResults = () => {
-  return Array.from({ length: 50 }, (_, index) => {
-    const date = new Date('2024-06-27');
-    date.setDate(date.getDate() - Math.floor(index / 2));
-    const isLunchtime = index % 2 === 1;
 
-    return {
-      id: index + 7,
-      date: date.toISOString().split('T')[0],
-      draw: isLunchtime ? 'Lunchtime' : 'Teatime',
-      time: isLunchtime ? '12:49' : '17:49',
-      numbers: Array.from({ length: 6 }, () => Math.floor(Math.random() * 49) + 1).sort((a, b) => a - b),
-      boosterBall: Math.floor(Math.random() * 49) + 1,
-    };
-  });
-};
 
-function Results() {
+function Results({formattedResults}) {
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [displayCount, setDisplayCount] = useState(30);
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState(formattedResults);
 
-  useEffect(() => {
-    const staticResults = [
-      {
-        id: 1,
-        date: '2024-06-30',
-        draw: 'Teatime',
-        time: '17:49',
-        numbers: [3, 15, 27, 34, 41, 46],
-        boosterBall: 22
-      },
-      {
-        id: 2,
-        date: '2024-06-30',
-        draw: 'Lunchtime',
-        time: '12:49',
-        numbers: [7, 14, 23, 31, 42, 49],
-        boosterBall: 18
-      },
-      {
-        id: 3,
-        date: '2024-06-29',
-        draw: 'Teatime',
-        time: '17:49',
-        numbers: [5, 19, 28, 35, 44, 47],
-        boosterBall: 12
-      },
-      {
-        id: 4,
-        date: '2024-06-29',
-        draw: 'Lunchtime',
-        time: '12:49',
-        numbers: [2, 11, 20, 33, 40, 48],
-        boosterBall: 25
-      },
-      {
-        id: 5,
-        date: '2024-06-28',
-        draw: 'Teatime',
-        time: '17:49',
-        numbers: [6, 16, 24, 36, 43, 45],
-        boosterBall: 9
-      },
-      {
-        id: 6,
-        date: '2024-06-28',
-        draw: 'Lunchtime',
-        time: '12:49',
-        numbers: [1, 13, 26, 32, 39, 44],
-        boosterBall: 17
-      },
-    ];
-
-    const extended = generateMockResults();
-    setResults([...staticResults, ...extended]);
-  }, []);
 
   const filteredResults = results.filter(result => {
     if (selectedFilter === 'all') return true;
