@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 import Results from "@/components/PagesComp/Result";
 import { getLunchtimeApiCall, getTeatimeApiCall } from "@/lib/apis";
-import { formatResult } from "@/utils/functions";
+import { formatResult, parseDMYtoDate } from "@/utils/functions";
 import React from "react";
 
 export async function generateMetadata() {
