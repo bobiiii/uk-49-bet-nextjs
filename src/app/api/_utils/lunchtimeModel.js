@@ -13,7 +13,11 @@ const LunchtimeSchema = new mongoose.Schema({
     type: String, 
     required: true,
   },
-});
+},
+{
+  timestamps: true,
+ }
+);
 
 export const LunchtimeModel =
   mongoose.models.Lunchtime || mongoose.model("Lunchtime", LunchtimeSchema);

@@ -25,16 +25,32 @@ const AdsTxtManager = () => {
         }
     }, [navigate]);
 
-    useEffect(() => {
-        // Load ads.txt content from localStorage
-        const savedContent = localStorage.getItem('ads_txt_content');
-        if (savedContent) {
-            setAdsContent(savedContent);
-        } else {
-            // Default content with example
-            setAdsContent('# Add your Google AdSense publisher ID here\n# Example: google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0\n\n');
-        }
-    }, []);
+useEffect(() => {
+  const loadAdsTxt = async () => {
+    try {
+      const response = await fetch('/ads.txt', { cache: 'no-store' });
+      if (response.ok) {
+        const text = await response.text();
+        setAdsContent(text);
+      } else {
+        // fallback if ads.txt missing
+        setAdsContent(
+          '# Add your Google AdSense publisher ID here\n' +
+          '# Example: google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0\n\n'
+        );
+      }
+    } catch (error) {
+      console.error('Error loading ads.txt:', error);
+      setAdsContent(
+        '# Add your Google AdSense publisher ID here\n' +
+        '# Example: google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0\n\n'
+      );
+    }
+  };
+
+  loadAdsTxt();
+}, []);
+
 
     const handleLogout = () => {
         localStorage.removeItem('adminAuthenticated');
@@ -53,14 +69,39 @@ const AdsTxtManager = () => {
         navigate?.push('/admin');
     };
 
-    const handleSave = () => {
-        localStorage.setItem('ads_txt_content', adsContent);
-        setIsEditing(false);
-        toast({
-            title: 'Ads.txt Updated',
-            description: 'Your ads.txt file has been saved successfully',
-        });
-    };
+const handleSave = async () => {
+  try {
+    const res = await fetch('/api/ads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ adsContent }),
+    })
+
+    const data = await res.json()
+
+    if (data.success) {
+      toast({
+        title: 'Ads.txt Updated',
+        description: 'Your ads.txt file has been saved successfully',
+      })
+      setIsEditing(false)
+    } else {
+      toast({
+        title: 'Error',
+        description: data.error,
+        variant: 'destructive',
+      })
+    }
+  } catch (error) {
+    console.error(error)
+    toast({
+      title: 'Error',
+      description: 'Something went wrong while saving ads.txt',
+      variant: 'destructive',
+    })
+  }
+}
+
 
     const handlePreview = () => {
         window.open('/ads.txt', '_blank');

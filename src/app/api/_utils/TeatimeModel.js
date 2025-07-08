@@ -13,7 +13,10 @@ const TeatimeSchema = new mongoose.Schema({
     type: String, 
     required: true,
   },
-});
+},
+{
+  timestamps: true,
+ });
 
 export const TeatimeModel =
   mongoose.models.Teatime || mongoose.model("Teatime", TeatimeSchema);

@@ -1,27 +1,32 @@
-import { Calendar, Clock, TrendingUp, Users, Award, TrendingDown } from 'lucide-react';
+import {
+  Calendar,
+  Clock,
+  TrendingUp,
+  Users,
+  Award,
+  TrendingDown,
+} from "lucide-react";
 import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LotteryBalls from "@/components/LotteryBalls";
 
-
-
-
 // ✅ DYNAMIC METADATA FUNCTION
 
 export async function generateMetadata() {
-  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}metadata/get-metadata/home`
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}metadata/get-metadata/home`;
+  const verifyUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}verification-code/get`;
 
-  const response = await fetch(url, {
-    method: 'GET',
-    cache: 'no-store',
-  })
+  const response = await fetch(url, { cache: "no-store" });
+  const result = await response.json();
 
-  let data = null
+  const verifyRes = await fetch(verifyUrl, { cache: "no-store" });
+  const verifyResult = await verifyRes.json();
+  const verificationCode = verifyResult?.googleVerificationCode;
 
-  const result = await response.json()
-  data = result?.data
+  let data = null;
 
+  data = result?.data;
 
   return {
     title: data?.title || "Home",
@@ -34,8 +39,10 @@ export async function generateMetadata() {
       type: "website",
       images: [
         {
-          url: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
-          secureUrl: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          url:
+            data?.ogImage || "https://lovable.dev/opengraph-image-p98pqg.png",
+          secureUrl:
+            data?.ogImage || "https://lovable.dev/opengraph-image-p98pqg.png",
           width: 1200,
           height: 630,
           alt: data?.ogImageAlt || "Home",
@@ -46,24 +53,27 @@ export async function generateMetadata() {
     alternates: {
       canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL,
     },
-  }
+    other: {
+      "google-site-verification":
+        verificationCode || "CODE_MISSING",
+    },
+  };
 }
-
 
 export default function Home() {
   const latestResults = {
     lunchtime: {
-      date: '2024-06-30',
-      time: '12:49',
+      date: "2024-06-30",
+      time: "12:49",
       numbers: [7, 14, 23, 31, 42, 49],
-      boosterBall: 18
+      boosterBall: 18,
     },
     teatime: {
-      date: '2024-06-30',
-      time: '17:49',
+      date: "2024-06-30",
+      time: "17:49",
       numbers: [3, 15, 27, 34, 41, 46],
-      boosterBall: 22
-    }
+      boosterBall: 22,
+    },
   };
 
   const hotNumbers = [7, 14, 23, 31, 42];
@@ -297,10 +307,11 @@ export default function Home() {
               </p>
 
               <p>
-                <strong>Overdue Number Strategy:</strong> Numbers that haven&apos;t
-                appeared for extended periods statistically have higher chances
-                of being drawn. Monitor overdue balls and consider including 1-2
-                in your selection, but don&apos;t rely solely on this method.
+                <strong>Overdue Number Strategy:</strong> Numbers that
+                haven&apos;t appeared for extended periods statistically have
+                higher chances of being drawn. Monitor overdue balls and
+                consider including 1-2 in your selection, but don&apos;t rely
+                solely on this method.
               </p>
 
               <p>
