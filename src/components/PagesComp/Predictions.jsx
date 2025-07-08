@@ -13,6 +13,9 @@ function Predictions() {
     const [featurePrediction, setFeaturePrediction] = useState([]);
 
 
+
+
+
     useEffect(() => {
 
         const fetchPredictions = async () => {
@@ -26,12 +29,31 @@ function Predictions() {
     }, []);
 
 
+
+    const filterLatestPerDrawType = (predictions = []) => {
+        const latestMap = {};
+
+        predictions.forEach((prediction) => {
+            const draw = prediction.drawType;
+            if (
+
+                !latestMap[draw] ||
+                new Date(prediction.createdAt) > new Date(latestMap[draw].createdAt)
+            ) {
+                latestMap[draw] = prediction;
+            }
+        });
+
+        return Object.values(latestMap); // Only latest per drawType
+    };
+
+
     useEffect(() => {
         const today1 = new Date().toLocaleDateString("en-CA").split('T')[0]; // yyyy-mm-dd format
         const todayData = adminPredictions?.filter((item) =>
             item?.date?.split("T")[0] === today1 && item?.status === "Active"
         );
-        setTodayPredictions(todayData);
+        setTodayPredictions(filterLatestPerDrawType(todayData));
     }, [adminPredictions]);
 
 
@@ -44,18 +66,18 @@ function Predictions() {
             item?.date?.split('T')[0] === yesterday && item?.status === "Active"
         );
 
-        setYesterDayPredictions(yesterDayData)
+        setYesterDayPredictions(filterLatestPerDrawType(yesterDayData))
     }, [adminPredictions]);
 
 
     useEffect(() => {
         const today = new Date();
         const futureData = adminPredictions?.filter((item) => {
-            const itemDate = new Date(item?.date); // Convert to date object
+            const itemDate = new Date(item?.date);
             return itemDate > today && item?.status === "Active";
         });
 
-        setFeaturePrediction(futureData)
+        setFeaturePrediction(filterLatestPerDrawType(futureData))
     }, [adminPredictions]);
 
 
@@ -98,7 +120,7 @@ function Predictions() {
                 {/* Feature*/}
 
                 <h1 className='text-2xl sm:text-3xl font-bold text-gray-900 text-center '>
-                    Schedule Predictions
+                    Scheduled Predictions
                 </h1>
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4 mb-4">
 
@@ -276,7 +298,7 @@ function Predictions() {
 
                 {/* YesterDay */}
                 <h1 className='text-2xl sm:text-3xl font-bold text-gray-900 text-center '>
-                    YesterDay Predictions
+                    Yesterday Predictions
                 </h1>
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4 mb-4">
                     <div className="flex items-center justify-center">
