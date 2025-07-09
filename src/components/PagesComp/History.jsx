@@ -8,33 +8,28 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 
 
 
-const History = () => {
+function History  ({formattedResults})  {
     const [selectedFilter, setSelectedFilter] = useState('all');
     const [currentPage, setCurrentPage] = useState(1);
     const [searchDate, setSearchDate] = useState('');
     const resultsPerPage = 20;
 
     // Mock historical results data - extended for history
-    const allResults = Array.from({ length: 200 }, (_, index) => {
-        const date = new Date('2024-06-30');
-        date.setDate(date.getDate() - Math.floor(index / 2));
-        const isLunchtime = index % 2 === 1;
+    const allResults = formattedResults ;
 
-        return {
-            id: index + 1,
-            date: date.toISOString().split('T')[0],
-            draw: isLunchtime ? 'Lunchtime' : 'Teatime',
-            time: isLunchtime ? '12:49' : '17:49',
-            numbers: Array.from({ length: 6 }, () => Math.floor(Math.random() * 49) + 1).sort((a, b) => a - b),
-            boosterBall: Math.floor(Math.random() * 49) + 1
-        };
-    });
+const formatSearchDate = (isoDate) => {
+  const [yyyy, mm, dd] = isoDate.split("-");
+  return `${dd}-${mm}-${yyyy}`;
+};
 
-    const filteredResults = allResults.filter(result => {
-        const matchesFilter = selectedFilter === 'all' || result.draw.toLowerCase() === selectedFilter;
-        const matchesDate = !searchDate || result.date.includes(searchDate);
-        return matchesFilter && matchesDate;
-    });
+const formattedSearchDate = searchDate ? formatSearchDate(searchDate) : null;
+
+const filteredResults = allResults.filter((result) => {
+  const matchesFilter = selectedFilter === "all" || result.draw.toLowerCase() === selectedFilter;
+  const matchesDate = !formattedSearchDate || result.date === formattedSearchDate;
+  return matchesFilter && matchesDate;
+});
+
 
     const totalPages = Math.ceil(filteredResults.length / resultsPerPage);
     const startIndex = (currentPage - 1) * resultsPerPage;

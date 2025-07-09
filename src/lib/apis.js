@@ -225,3 +225,41 @@ export const updatePredictionApiCall = async (data, id) => {
         };
     }
 };
+
+
+export const getLunchtimeApiCall = async (data) => {
+    const Url = SERVER_URL + `results/lunchtime/get`;
+    try {
+        const res = await fetch(Url, {
+            method: 'GET',
+            cache: 'no-store',
+        })
+
+        const result = await res.json();
+        return result;
+    } catch (error) {
+        return {
+            error: 'Network error',
+            details: error.message,
+        };
+    }
+}
+
+export const getTeatimeApiCall = async (data) => {
+    const Url = SERVER_URL + `results/teatime/get`;
+    try {
+        const res = await fetch(Url, {
+            method: 'GET',
+            cache: 'no-store',
+        })
+
+        const result = await res.json();
+        return result;
+    } catch (error) {
+        return {
+            error: 'Network error',
+            details: error.message,
+        };
+    }
+}
+
