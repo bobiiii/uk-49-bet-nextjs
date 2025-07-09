@@ -55,15 +55,24 @@ export const formatResult = (result, drawType) => {
 
 
 export function getHotColdOverdueNumbers(draws) {
-  // Get the last 100 draws (assuming draws are already sorted newest first)
-  const recentDraws = draws.slice(0, 100);
+  // Sort draws by date (newest first using d_date)
+  const sortedDraws = [...draws].sort((a, b) => {
+    const dateA = new Date(formatDrawDate(a.d_date));
+    const dateB = new Date(formatDrawDate(b.d_date));
+    return dateB - dateA;
+  });
+
+  // Take only the latest 100 draws
+  const recentDraws = sortedDraws.slice(0, 100);
 
   const frequencyMap = {};
   const seenNumbers = new Set();
 
+  // Analyze each draw
   recentDraws.forEach((draw) => {
-    const mainBalls = draw.balls; 
-    mainBalls.forEach((num) => {
+    const balls = draw.balls; // include all 7 balls
+
+    balls.forEach((num) => {
       const n = parseInt(num, 10);
       if (!isNaN(n)) {
         frequencyMap[n] = (frequencyMap[n] || 0) + 1;
@@ -72,27 +81,37 @@ export function getHotColdOverdueNumbers(draws) {
     });
   });
 
-  // Sort numbers by frequency
+  // Convert frequency map to sorted array
   const sorted = Object.entries(frequencyMap)
     .map(([num, freq]) => ({ num: parseInt(num, 10), freq }))
     .sort((a, b) => b.freq - a.freq);
 
+  // Hot = most frequent
   const hotNumbers = sorted.slice(0, 5).map((entry) => entry.num);
+
+  // Cold = least frequent
   const coldNumbers = sorted.slice(-5).map((entry) => entry.num);
 
-  const overdueNumbers = [];
+  // Overdue = numbers from 1 to 49 not seen at all
+  const topOverdueNumbers = [];
   for (let i = 1; i <= 49; i++) {
     if (!seenNumbers.has(i)) {
-      overdueNumbers.push(i);
+      topOverdueNumbers.push(i);
     }
   }
+const overdueNumbers = topOverdueNumbers.slice(0, 5);
+
 
   return {
     hotNumbers,
     coldNumbers,
-    overdueNumbers: overdueNumbers.slice(0, 5), // limit to 5
+    overdueNumbers, // full list of overdue numbers (not just top 5)
   };
 }
+
+
+
+
 
 
 
@@ -206,57 +225,34 @@ export function getColdNumbersDetailed(draws) {
 
 export function getOverdueNumbersDetailed(draws) {
   const recentDraws = draws.slice(0, 100);
-  const lastSeenMap = {};
+  const seenNumbers = new Set();
 
-  // Format the draw date
-  function formatDrawDate(rawDate) {
-    const cleaned = rawDate
-      .replace(/^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)/i, '')
-      .replace(/(\d+)(st|nd|rd|th)/, '$1')
-      .trim();
-
-    const date = new Date(cleaned);
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, '0');
-    const dd = String(date.getDate()).padStart(2, '0');
-    return `${yyyy}-${mm}-${dd}`;
-  }
-
-  // Track last seen date for each number
+  // Track all numbers that appeared in last 100 draws
   recentDraws.forEach((draw) => {
     const mainBalls = draw.balls;
-    const formattedDate = formatDrawDate(draw.d_date);
-
     mainBalls.forEach((num) => {
       const n = parseInt(num, 10);
-      if (isNaN(n) || n < 1 || n > 49) return;
-
-      if (!lastSeenMap[n] || formattedDate > lastSeenMap[n]) {
-        lastSeenMap[n] = formattedDate;
+      if (!isNaN(n) && n >= 1 && n <= 49) {
+        seenNumbers.add(n);
       }
     });
   });
 
-  // Calculate how long ago each number was last seen
-  const today = new Date();
-  const allNumbers = Array.from({ length: 49 }, (_, i) => i + 1);
+  // Get numbers from 1 to 49 that were never seen
+  const overdue = [];
+  for (let i = 1; i <= 49; i++) {
+    if (!seenNumbers.has(i)) {
+      overdue.push({
+        number: i,
+        status: "Never appeared in last 100 draws"
+      });
+    }
+  }
 
-  const overdue = allNumbers
-    .filter((n) => lastSeenMap[n])
-    .map((n) => {
-      const lastSeenDate = new Date(lastSeenMap[n]);
-      const daysSince = Math.floor((today - lastSeenDate) / (1000 * 60 * 60 * 24));
-      return {
-        number: n,
-        lastSeen: lastSeenMap[n],
-        daysSinceLastSeen: daysSince,
-      };
-    })
-    .sort((a, b) => b.daysSinceLastSeen - a.daysSinceLastSeen) // most overdue first
-    .slice(0, 10);
-
-  return overdue;
+  // Return up to 10 overdue numbers
+  return overdue.slice(0, 10);
 }
+
 
 
 
