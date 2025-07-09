@@ -18,21 +18,21 @@ export async function POST(request) {
 
         // Check if user exists
         const user = await UserModel.findOne({ email }).select('+password');
-        
+
         if (!user) {
             return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
         }
 
         // Verify password
         const isPasswordValid = await bcrypt.compare(password, user.password);
-        
+
         if (!isPasswordValid) {
             return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
         }
 
         // Create token payload
         const tokenPayload = {
-            
+
             email: user.email,
 
         };
@@ -41,7 +41,7 @@ export async function POST(request) {
         const token = jwt.sign(
             tokenPayload,
             process.env.JWT_SECRET,
-            { expiresIn:  '30d' }
+            { expiresIn: '30d' }
         );
 
         // Remove password from user data
@@ -53,13 +53,13 @@ export async function POST(request) {
             status: "Success",
             message: "Login successful",
             token,
-            
+
         });
 
         // You can set the token as a cookie if needed
         response.cookies.set('token', token, {
             httpOnly: true,
-            secure: process.env.ENVIRONMENT_TYPE === 'DEVELOPMENT' ,
+            secure: process.env.ENVIRONMENT_TYPE === 'DEVELOPMENT',
             sameSite: 'strict',
             maxAge: 60 * 60 * 24 * 30 // 30 days
         });

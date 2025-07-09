@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Save, Copy, LogOut, ExternalLink, CheckCircle } from 'lucide-react';
 import { useToast } from '../ui/use-toast';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 const GoogleVerificationManager = () => {
     const [verificationCode, setVerificationCode] = useState('');
@@ -16,39 +17,39 @@ const GoogleVerificationManager = () => {
     const { toast } = useToast();
     const navigate = useRouter();
 
+
     useEffect(() => {
-        const auth = localStorage.getItem('adminAuthenticated');
-        if (auth !== 'true') {
-            navigate('/admin/login');
-        } else {
+        const auth = Cookies.get('isLogin');
+
+        if (auth == 'true') {
             setIsAuthenticated(true);
         }
-    }, [navigate]);
+    }, []);
 
-useEffect(() => {
-  const fetchVerificationCode = async () => {
-    try {
-      const res = await fetch('/api/verification-code/get', { cache: 'no-store' });
-      const result = await res.json();
+    useEffect(() => {
+        const fetchVerificationCode = async () => {
+            try {
+                const res = await fetch('/api/verification-code/get', { cache: 'no-store' });
+                const result = await res.json();
 
-      if (res.ok && result.googleVerificationCode) {
-        setVerificationCode(result.googleVerificationCode);
-      }
-    } catch (error) {
-      console.error('Error fetching verification code:', error);
-    }
-  };
+                if (res.ok && result.googleVerificationCode) {
+                    setVerificationCode(result.googleVerificationCode);
+                }
+            } catch (error) {
+                console.error('Error fetching verification code:', error);
+            }
+        };
 
-  fetchVerificationCode();
-}, []);
+        fetchVerificationCode();
+    }, []);
 
     const handleLogout = () => {
-        localStorage.removeItem('adminAuthenticated');
+        Cookies.remove('isLogin');
         toast({
             title: 'Logged Out',
             description: 'You have been logged out successfully',
         });
-        navigate?.push('/admin/login');
+        navigate?.push('/login');
     };
 
     const handleVisitWebsite = () => {
@@ -59,42 +60,42 @@ useEffect(() => {
         navigate?.push('/admin');
     };
 
-const handleSave = async () => {
-  try {
-    const res = await fetch('/api/verification-code/create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        google: verificationCode, // You can also include bing or yandex if available
-      }),
-    });
+    const handleSave = async () => {
+        try {
+            const res = await fetch('/api/verification-code/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    google: verificationCode, // You can also include bing or yandex if available
+                }),
+            });
 
-    const result = await res.json();
+            const result = await res.json();
 
-    if (res.ok && result.success) {
-      toast({
-        title: 'Verification Code Saved',
-        description: 'Your Google verification code has been saved to the server.',
-      });
-      setIsEditing(false);
-    } else {
-      toast({
-        title: 'Error',
-        description: result.message || 'Something went wrong while saving.',
-        variant: 'destructive',
-      });
-    }
-  } catch (error) {
-    console.error('Error saving verification code:', error);
-    toast({
-      title: 'Server Error',
-      description: 'Could not connect to the server.',
-      variant: 'destructive',
-    });
-  }
-};
+            if (res.ok && result.success) {
+                toast({
+                    title: 'Verification Code Saved',
+                    description: 'Your Google verification code has been saved to the server.',
+                });
+                setIsEditing(false);
+            } else {
+                toast({
+                    title: 'Error',
+                    description: result.message || 'Something went wrong while saving.',
+                    variant: 'destructive',
+                });
+            }
+        } catch (error) {
+            console.error('Error saving verification code:', error);
+            toast({
+                title: 'Server Error',
+                description: 'Could not connect to the server.',
+                variant: 'destructive',
+            });
+        }
+    };
 
 
     const handleCopyCode = () => {

@@ -22,6 +22,7 @@ import AddPredictionDialog from '@/components/admin/AddPredictionDialog';
 import EditPredictionDialog from '@/components/admin/EditPredictionDialog';
 import { DeletePredictionsApiCall, getPredictionsApiCall } from '@/lib/apis';
 import { useToast } from '../ui/use-toast';
+import Cookies from 'js-cookie';
 
 const PredictionsAdmin = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -35,33 +36,29 @@ const PredictionsAdmin = () => {
     const { toast } = useToast();
 
     useEffect(() => {
-        const auth = localStorage.getItem('adminAuthenticated');
-        if (auth !== 'true') {
-            router.push('/admin/login');
-        } else {
+        const auth = Cookies.get('isLogin');
+
+        if (auth == 'true') {
             setIsAuthenticated(true);
             loadPredictions();
         }
-    }, [router]);
+    }, []);
 
     const loadPredictions = async () => {
-        // const savedPredictions = localStorage.getItem('adminPredictions');
-        // if (savedPredictions) {
-        //     setPredictions(JSON.parse(savedPredictions));
-        // }
 
         const data = await getPredictionsApiCall()
         setPredictions(data?.data || [])
 
     };
 
+
     const handleLogout = () => {
-        localStorage.removeItem('adminAuthenticated');
+        Cookies.remove('isLogin');
         toast({
             title: 'Logged Out',
             description: 'You have been logged out successfully',
         });
-        router.push('/admin/login');
+        router.push('/login');
     };
 
     const handleBackToDashboard = () => {
@@ -115,7 +112,7 @@ const PredictionsAdmin = () => {
     const handleConfirmDelete = async () => {
 
         const res = await DeletePredictionsApiCall(predictionId)
-        
+
         if (res?.status === "Success") {
             const updatedPredictions = predictions?.filter(item => item?._id !== predictionId)
             setPredictions(updatedPredictions)

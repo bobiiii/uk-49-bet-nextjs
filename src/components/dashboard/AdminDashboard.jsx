@@ -21,6 +21,7 @@ import Cookies from 'js-cookie';
 import { AddMetaData } from '../admin/MetaDataComp/AddMetaData';
 import { UpdateMetaData } from '../admin/MetaDataComp/UpdateMetaData';
 import { deleteMetaDataApiCall, getMetaData } from '@/lib/apis';
+import Link from 'next/link';
 
 const AdminDashboard = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -61,22 +62,20 @@ const AdminDashboard = () => {
 
 
     useEffect(() => {
-        const auth = localStorage.getItem('adminAuthenticated');
-        if (auth !== 'true') {
-            navigate?.push('/admin/login');
-        } else {
+        const auth = Cookies.get('isLogin');
+
+        if (auth == 'true') {
             setIsAuthenticated(true);
         }
-    }, [navigate]);
+    }, []);
 
     const handleLogout = () => {
-        localStorage.removeItem('adminAuthenticated');
         Cookies.remove('isLogin');
         toast({
             title: 'Logged Out',
             description: 'You have been logged out successfully',
         });
-        navigate?.push('/admin/login');
+        navigate?.push('/login');
     };
 
     const handleVisitWebsite = () => {
@@ -97,6 +96,9 @@ const AdminDashboard = () => {
 
     const handleManagePredictions = () => {
         navigate?.push('/admin/predictions');
+    };
+    const handleUser = () => {
+        navigate?.push('/admin/users');
     };
 
     const handleManagePageMeta = (page) => {
@@ -244,6 +246,14 @@ const AdminDashboard = () => {
                                 <Type className="h-8 w-8" />
                                 <span>Text Logo</span>
                             </Button>
+
+                            <Button
+                                onClick={handleUser}
+                                variant="outline" className="h-auto p-6 flex flex-col items-center gap-2">
+                                <User className="h-8 w-8" />
+                                <span>Users</span>
+                            </Button>
+
                         </div>
                     </CardContent>
                 </Card>

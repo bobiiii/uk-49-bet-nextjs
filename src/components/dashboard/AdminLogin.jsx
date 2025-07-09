@@ -12,9 +12,10 @@ import { Lock, User } from 'lucide-react';
 import { useToast } from '../ui/use-toast';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { LoginApiCall } from '@/lib/apis';
 
 const loginSchema = z.object({
-    username: z.string().min(1, 'Username is required'),
+    email: z.string().min(1, 'Username is required'),
     password: z.string().min(1, 'Password is required'),
 });
 
@@ -28,27 +29,25 @@ const AdminLogin = () => {
     const form = useForm({
         resolver: zodResolver(loginSchema),
         defaultValues: {
-            username: '',
+            email: '',
             password: '',
         },
     });
 
     const onSubmit = async (data) => {
         setIsLoading(true);
-
-        // Simple authentication - in production, this should be handled by a proper backend
-        if (data.username === 'admin' && data.password === 'admin123') {
-            localStorage.setItem('adminAuthenticated', 'true');
+        const res = await LoginApiCall(data)
+        if (res?.status === "Success") {
             toast({
-                title: 'Login Successful',
+                title: `${res?.message}`,
                 description: 'Welcome to the admin panel',
             });
             Cookies.set("isLogin", true);
-            navigate.push('/admin');
+            navigate.push('/admin');    
         } else {
             toast({
                 title: 'Login Failed',
-                description: 'Invalid username or password',
+                description: `${res?.error}`,
                 variant: 'destructive',
             });
         }
@@ -68,14 +67,14 @@ const AdminLogin = () => {
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                             <FormField
                                 control={form.control}
-                                name="username"
+                                name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Username</FormLabel>
+                                        <FormLabel>Email</FormLabel>
                                         <FormControl>
                                             <div className="relative">
                                                 <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                                                <Input {...field} className="pl-10" placeholder="Enter username" />
+                                                <Input {...field} className="pl-10" placeholder="Enter Email" />
                                             </div>
                                         </FormControl>
                                         <FormMessage />
@@ -105,7 +104,7 @@ const AdminLogin = () => {
                     </Form>
                     <div className="mt-4 text-sm text-gray-600 text-center">
                         <p>Demo credentials:</p>
-                        <p>Username: admin | Password: admin123</p>
+                        <p>email: babar1@gmail.com | Password: 123</p>
                     </div>
                 </CardContent>
             </Card>
