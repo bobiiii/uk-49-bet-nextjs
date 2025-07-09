@@ -102,10 +102,7 @@ const AdminLogin = () => {
                             </Button>
                         </form>
                     </Form>
-                    <div className="mt-4 text-sm text-gray-600 text-center">
-                        <p>Demo credentials:</p>
-                        <p>email: babar1@gmail.com | Password: 123</p>
-                    </div>
+
                 </CardContent>
             </Card>
         </div>

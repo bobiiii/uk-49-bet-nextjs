@@ -62,7 +62,7 @@ export function getHotColdOverdueNumbers(draws) {
   const seenNumbers = new Set();
 
   recentDraws.forEach((draw) => {
-    const mainBalls = draw.balls.slice(0, 6); // exclude booster ball
+    const mainBalls = draw.balls; 
     mainBalls.forEach((num) => {
       const n = parseInt(num, 10);
       if (!isNaN(n)) {
