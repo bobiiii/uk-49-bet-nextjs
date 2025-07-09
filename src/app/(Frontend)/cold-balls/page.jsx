@@ -1,7 +1,10 @@
+export const dynamic = "force-dynamic";
 import React from 'react';
 import LotteryBalls from '@/components/LotteryBalls';
 import { TrendingDown, Calendar, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
+import { getColdNumbersDetailed, getHotNumbersDetailed, parseDrawDate } from '@/utils/functions';
+import { getLunchtimeApiCall, getTeatimeApiCall } from '@/lib/apis';
 
 
 export async function generateMetadata() {
@@ -45,20 +48,20 @@ export async function generateMetadata() {
 }
 
 
-function ColdBalls() {
-  // Mock data for cold numbers
-  const coldNumbers = [
-    { number: 1, frequency: 3, lastSeen: '2024-06-15' },
-    { number: 8, frequency: 4, lastSeen: '2024-06-18' },
-    { number: 19, frequency: 5, lastSeen: '2024-06-20' },
-    { number: 25, frequency: 6, lastSeen: '2024-06-22' },
-    { number: 38, frequency: 6, lastSeen: '2024-06-16' },
-    { number: 44, frequency: 7, lastSeen: '2024-06-24' },
-    { number: 2, frequency: 8, lastSeen: '2024-06-25' },
-    { number: 33, frequency: 8, lastSeen: '2024-06-19' },
-    { number: 47, frequency: 9, lastSeen: '2024-06-26' },
-    { number: 11, frequency: 10, lastSeen: '2024-06-27' }
-  ];
+async function page() {
+
+
+    const lunchData = await getLunchtimeApiCall();
+    const teaData = await getTeatimeApiCall();
+  
+    const allDraws = [...lunchData, ...teaData];
+    const sortedResults = allDraws.sort((a, b) => {
+        const dateA = parseDrawDate(a.d_date);
+        const dateB = parseDrawDate(b.d_date);
+        return dateB - dateA; // Newest first
+      });
+    const coldNumbers = getColdNumbersDetailed(sortedResults);
+  
 
   const topColdNumbers = coldNumbers.slice(0, 6).map(item => item.number);
 
@@ -189,4 +192,4 @@ function ColdBalls() {
   );
 };
 
-export default ColdBalls;
+export default page;

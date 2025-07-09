@@ -1,23 +1,24 @@
-import React from 'react';
+export const dynamic = "force-dynamic";
+import React from "react";
 
-import LotteryBalls from '@/components/LotteryBalls';
-import { TrendingUp, Calendar, BarChart3 } from 'lucide-react';
-import Link from 'next/link';
-
+import LotteryBalls from "@/components/LotteryBalls";
+import { TrendingUp, Calendar, BarChart3 } from "lucide-react";
+import Link from "next/link";
+import { getHotNumbersDetailed, parseDrawDate } from "@/utils/functions";
+import { getLunchtimeApiCall, getTeatimeApiCall } from "@/lib/apis";
 
 export async function generateMetadata() {
-  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}metadata/get-metadata/hot-balls`
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}metadata/get-metadata/hot-balls`;
 
   const response = await fetch(url, {
-    method: 'GET',
-    cache: 'no-store',
-  })
+    method: "GET",
+    cache: "no-store",
+  });
 
-  let data = null
+  let data = null;
 
-  const result = await response.json()
-  data = result?.data
-
+  const result = await response.json();
+  data = result?.data;
 
   return {
     title: data?.title || "Hot Balls",
@@ -30,8 +31,10 @@ export async function generateMetadata() {
       type: "website",
       images: [
         {
-          url: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
-          secureUrl: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          url:
+            data?.ogImage || "https://lovable.dev/opengraph-image-p98pqg.png",
+          secureUrl:
+            data?.ogImage || "https://lovable.dev/opengraph-image-p98pqg.png",
           width: 1200,
           height: 630,
           alt: data?.ogImageAlt || "Hot Balls",
@@ -42,26 +45,24 @@ export async function generateMetadata() {
     alternates: {
       canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL,
     },
-  }
+  };
 }
 
-
-const HotBalls = () => {
+async function page() {
   // Mock data for hot numbers
-  const hotNumbers = [
-    { number: 7, frequency: 28, lastSeen: '2024-06-30' },
-    { number: 14, frequency: 26, lastSeen: '2024-06-29' },
-    { number: 23, frequency: 24, lastSeen: '2024-06-30' },
-    { number: 31, frequency: 23, lastSeen: '2024-06-28' },
-    { number: 42, frequency: 22, lastSeen: '2024-06-30' },
-    { number: 15, frequency: 21, lastSeen: '2024-06-29' },
-    { number: 35, frequency: 20, lastSeen: '2024-06-27' },
-    { number: 9, frequency: 19, lastSeen: '2024-06-30' },
-    { number: 28, frequency: 18, lastSeen: '2024-06-28' },
-    { number: 41, frequency: 17, lastSeen: '2024-06-29' }
-  ];
+  const lunchData = await getLunchtimeApiCall();
+  const teaData = await getTeatimeApiCall();
 
-  const topHotNumbers = hotNumbers.slice(0, 6).map(item => item.number);
+  const allDraws = [...lunchData, ...teaData];
+const sortedResults = allDraws.sort((a, b) => {
+        const dateA = parseDrawDate(a.d_date);
+        const dateB = parseDrawDate(b.d_date);
+        return dateB - dateA; // Newest first
+      });
+
+  const hotNumbers = getHotNumbersDetailed(sortedResults);
+
+  const topHotNumbers = hotNumbers.slice(0, 6).map((item) => item.number);
 
   return (
     <>
@@ -72,12 +73,16 @@ const HotBalls = () => {
             <TrendingUp className="h-8 w-8 text-red-500 mr-3" />
             <h1 className="text-3xl font-bold text-gray-900">Hot Balls</h1>
           </div>
-          <p className="text-xl text-gray-600">Most frequently drawn numbers in recent UK49s draws</p>
+          <p className="text-xl text-gray-600">
+            Most frequently drawn numbers in recent UK49s draws
+          </p>
         </div>
 
         {/* Top Hot Numbers Display */}
         <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-xl p-8 mb-8 border-2 border-red-100">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Top 6 Hot Numbers</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+            Top 6 Hot Numbers
+          </h2>
           <div className="flex justify-center mb-6">
             <LotteryBalls numbers={topHotNumbers} size="large" />
           </div>
@@ -122,17 +127,29 @@ const HotBalls = () => {
         {/* Hot Numbers Table */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="px-6 py-4 bg-red-50 border-b">
-            <h3 className="text-xl font-bold text-gray-900">Complete Hot Numbers List</h3>
+            <h3 className="text-xl font-bold text-gray-900">
+              Complete Hot Numbers List
+            </h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Number</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Frequency</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Seen</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Temperature</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Rank
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Number
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Frequency
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Last Seen
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Temperature
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -188,6 +205,6 @@ const HotBalls = () => {
       </div>
     </>
   );
-};
+}
 
-export default HotBalls;
+export default page;

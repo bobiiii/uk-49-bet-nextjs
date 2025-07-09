@@ -13,6 +13,14 @@
 # testing
 /coverage
 
+
+# Ignore sitemap and robots
+sitemap-0.xml
+sitemap.xml
+robots.txt
+
+
+
 # next.js
 /.next/
 /out/

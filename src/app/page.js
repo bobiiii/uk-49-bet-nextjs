@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import {
   Calendar,
   Clock,
@@ -12,7 +13,7 @@ import Footer from "@/components/Footer";
 import LotteryBalls from "@/components/LotteryBalls";
 import { getLunchtimeApiCall, getTeatimeApiCall } from "@/lib/apis";
 import { number } from "zod";
-import { formatResult, parseDMYtoDate } from "@/utils/functions";
+import { formatResult, getHotColdOverdueNumbers, parseDMYtoDate, parseDrawDate } from "@/utils/functions";
 
 // ✅ DYNAMIC METADATA FUNCTION
 
@@ -82,10 +83,17 @@ const latestResults = {
 };
 
 
+const allResults = [...lunchData, ...teaData]; // Combine both
+const sortedResults = allResults.sort((a, b) => {
+  const dateA = parseDrawDate(a.d_date);
+  const dateB = parseDrawDate(b.d_date);
+  return dateB - dateA; // Newest first
+});
 
-  const hotNumbers = [7, 14, 23, 31, 42];
-  const coldNumbers = [1, 8, 19, 25, 38];
-  const overdueNumbers = [13, 29, 6, 22, 37];
+
+  const { hotNumbers, coldNumbers, overdueNumbers } = getHotColdOverdueNumbers(sortedResults);
+
+
   return (
     <>
       <Header />

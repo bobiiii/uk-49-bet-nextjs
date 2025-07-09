@@ -1,8 +1,11 @@
+export const dynamic = "force-dynamic";
 
 import React from 'react';
 import LotteryBalls from '@/components/LotteryBalls';
 import { Clock, Calendar, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
+import { getLunchtimeApiCall, getTeatimeApiCall } from '@/lib/apis';
+import { getOverdueNumbersDetailed, parseDrawDate } from '@/utils/functions';
 
 
 
@@ -48,20 +51,18 @@ export async function generateMetadata() {
 
 
 
-function OverdueBalls() {
+async function page() {
   // Mock data for overdue numbers
-  const overdueNumbers = [
-    { number: 13, daysSinceLastSeen: 45, lastSeen: '2024-05-16' },
-    { number: 29, daysSinceLastSeen: 42, lastSeen: '2024-05-19' },
-    { number: 6, daysSinceLastSeen: 38, lastSeen: '2024-05-23' },
-    { number: 22, daysSinceLastSeen: 35, lastSeen: '2024-05-26' },
-    { number: 37, daysSinceLastSeen: 33, lastSeen: '2024-05-28' },
-    { number: 45, daysSinceLastSeen: 30, lastSeen: '2024-05-31' },
-    { number: 4, daysSinceLastSeen: 28, lastSeen: '2024-06-02' },
-    { number: 18, daysSinceLastSeen: 25, lastSeen: '2024-06-05' },
-    { number: 34, daysSinceLastSeen: 23, lastSeen: '2024-06-07' },
-    { number: 48, daysSinceLastSeen: 20, lastSeen: '2024-06-10' }
-  ];
+   const lunchData = await getLunchtimeApiCall();
+   const teaData = await getTeatimeApiCall();
+
+  const allDraws = [...lunchData, ...teaData]; // Combined
+  const sortedResults = allDraws.sort((a, b) => {
+        const dateA = parseDrawDate(a.d_date);
+        const dateB = parseDrawDate(b.d_date);
+        return dateB - dateA; // Newest first
+      });
+const overdueNumbers = getOverdueNumbersDetailed(sortedResults);
 
   const topOverdueNumbers = overdueNumbers.slice(0, 6).map(item => item.number);
 
@@ -196,4 +197,4 @@ function OverdueBalls() {
   );
 };
 
-export default OverdueBalls;
+export default page;

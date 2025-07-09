@@ -1,8 +1,10 @@
-
+export const dynamic = "force-dynamic";
 import React from 'react';
 import LotteryBalls from '@/components/LotteryBalls';
 import { TrendingUp, TrendingDown, Clock } from 'lucide-react';
 import Link from 'next/link';
+import { getAdditionalStats, getDrawPatternStats, getHotColdOverdueNumbers, getNumberFrequencyStats, parseDrawDate } from '@/utils/functions';
+import { getLunchtimeApiCall, getTeatimeApiCall } from '@/lib/apis';
 
 
 export async function generateMetadata() {
@@ -45,13 +47,26 @@ export async function generateMetadata() {
   }
 }
 
-function Statistics() {
-  // Mock data for statistics
-  const mostFrequent = [7, 23, 31, 42, 14];
-  const leastFrequent = [1, 8, 19, 25, 38];
-  const hotNumbers = [7, 14, 23, 31, 42];
-  const coldNumbers = [1, 8, 19, 25, 38];
-  const overdueNumbers = [13, 29, 6, 22, 37];
+async function page() {
+
+  const lunchData = await getLunchtimeApiCall();
+  const teaData = await getTeatimeApiCall();
+
+    const allResults = [...lunchData, ...teaData]; // Combine both
+    const sortedResults = allResults.sort((a, b) => {
+      const dateA = parseDrawDate(a.d_date);
+      const dateB = parseDrawDate(b.d_date);
+      return dateB - dateA; // Newest first
+    });
+    const { hotNumbers, coldNumbers, overdueNumbers } = getHotColdOverdueNumbers(sortedResults);
+  
+  
+
+const topFrequencies = getNumberFrequencyStats(sortedResults); // Last 50 allResults
+const stats = getAdditionalStats(sortedResults);
+const patternStats = getDrawPatternStats(sortedResults);
+
+
 
   return (
     <>
@@ -117,13 +132,7 @@ function Statistics() {
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-xl font-bold text-gray-900 mb-6">Number Frequency (Last 50 Draws)</h3>
               <div className="space-y-3">
-                {[
-                  { number: 7, count: 12, percentage: 24 },
-                  { number: 23, count: 11, percentage: 22 },
-                  { number: 31, count: 10, percentage: 20 },
-                  { number: 42, count: 9, percentage: 18 },
-                  { number: 14, count: 8, percentage: 16 }
-                ].map((item) => (
+                {topFrequencies.map((item) => (
                   <div key={item.number} className="flex items-center justify-between">
                     <div className="flex items-center">
                       <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">
@@ -151,19 +160,19 @@ function Statistics() {
               <div className="space-y-4">
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                   <span className="font-medium">Most Common Sum Range</span>
-                  <span className="text-blue-600 font-bold">140-180</span>
+   <span className="text-blue-600 font-bold">{patternStats.mostCommonRange}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                   <span className="font-medium">Average Draw Sum</span>
-                  <span className="text-blue-600 font-bold">147</span>
+<span className="text-blue-600 font-bold">{patternStats.averageDrawSum}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                   <span className="font-medium">Consecutive Numbers</span>
-                  <span className="text-blue-600 font-bold">2.3 avg</span>
+<span className="text-blue-600 font-bold">{patternStats.avgConsecutive} avg</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                   <span className="font-medium">High/Low Split</span>
-                  <span className="text-blue-600 font-bold">3/3</span>
+<span className="text-blue-600 font-bold">{patternStats.avgHighLowSplit}</span>
                 </div>
               </div>
             </div>
@@ -175,19 +184,23 @@ function Statistics() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="text-center">
                 <p className="text-sm text-gray-600">Total Draws</p>
-                <p className="text-2xl font-bold text-gray-900">1,247</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.totalDraws}</p>
+
+
               </div>
               <div className="text-center">
                 <p className="text-sm text-gray-600">Most Drawn</p>
-                <p className="text-2xl font-bold text-gray-900">7</p>
+<p className="text-2xl font-bold text-gray-900">{stats.mostDrawn}</p>
+
               </div>
               <div className="text-center">
                 <p className="text-sm text-gray-600">Least Drawn</p>
-                <p className="text-2xl font-bold text-gray-900">1</p>
+<p className="text-2xl font-bold text-gray-900">{stats.leastDrawn}</p>
+
               </div>
               <div className="text-center">
                 <p className="text-sm text-gray-600">Odd/Even</p>
-                <p className="text-2xl font-bold text-gray-900">52/48</p>
+<p className="text-2xl font-bold text-gray-900">{stats.oddEvenRatio}</p>
               </div>
             </div>
           </div>
@@ -197,4 +210,4 @@ function Statistics() {
   );
 };
 
-export default Statistics;
+export default page;
