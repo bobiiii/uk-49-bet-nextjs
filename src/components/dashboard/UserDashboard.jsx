@@ -61,7 +61,7 @@ const UserDashboard = () => {
     };
 
     const handleAddUser = (newUser) => {
-        setUsers((prev) => [newUser, ...prev]);
+        // setUsers((prev) => [newUser, ...prev]);
     };
 
     const handleDeleteUser = (id) => {
@@ -169,7 +169,7 @@ const UserDashboard = () => {
                 </Card>
             </div>
 
-            <AddUserModel open={showAddDialog} onOpenChange={setShowAddDialog} onAdd={handleAddUser} />
+            <AddUserModel open={showAddDialog} onOpenChange={setShowAddDialog} onAdd={handleAddUser} loadUserData={loadUserData} />
 
             <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
                 <AlertDialogContent>

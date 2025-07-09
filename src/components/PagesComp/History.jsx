@@ -83,10 +83,10 @@ const filteredResults = allResults.filter((result) => {
                             </span>
                         </div>
 
-                        <button className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                        {/* <button className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
                             <Download className="h-4 w-4 mr-2" />
                             Export
-                        </button>
+                        </button> */}
                     </div>
                 </div>
 

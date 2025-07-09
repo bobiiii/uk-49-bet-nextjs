@@ -35,7 +35,7 @@ const userSchema = z.object({
         .min(3, 'Password must be at least 3 characters long'),
 });
 
-export default function AddUserModel({ open, onOpenChange, onAdd, setPrediction }) {
+export default function AddUserModel({ open, onOpenChange, onAdd, loadUserData}) {
     const [isLoading, setIsLoading] = useState(false);
     const { toast } = useToast();
 
@@ -51,6 +51,7 @@ export default function AddUserModel({ open, onOpenChange, onAdd, setPrediction 
         setIsLoading(true);
 
         const res = await addUserApiCall(data)
+
         if (res?.status === "Success") {
 
             toast({
@@ -60,6 +61,7 @@ export default function AddUserModel({ open, onOpenChange, onAdd, setPrediction 
                 duration: 3000,
             });
             setIsLoading(false);
+            loadUserData()
             onAdd && onAdd(data);
             onOpenChange(false);
             form.reset();

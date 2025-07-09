@@ -21,7 +21,6 @@ import Cookies from 'js-cookie';
 import { AddMetaData } from '../admin/MetaDataComp/AddMetaData';
 import { UpdateMetaData } from '../admin/MetaDataComp/UpdateMetaData';
 import { deleteMetaDataApiCall, getMetaData } from '@/lib/apis';
-import Link from 'next/link';
 
 const AdminDashboard = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -242,10 +241,10 @@ const AdminDashboard = () => {
                                 <CheckCircle className="h-8 w-8" />
                                 <span>Google Verification</span>
                             </Button>
-                            <Button onClick={() => setShowTextLogoDialog(true)} variant="outline" className="h-auto p-6 flex flex-col items-center gap-2">
+                            {/* <Button onClick={() => setShowTextLogoDialog(true)} variant="outline" className="h-auto p-6 flex flex-col items-center gap-2">
                                 <Type className="h-8 w-8" />
                                 <span>Text Logo</span>
-                            </Button>
+                            </Button> */}
 
                             <Button
                                 onClick={handleUser}
