@@ -2,8 +2,9 @@
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { Calendar, BarChart3, TrendingUp, Calculator, HelpCircle, Phone, Newspaper, BookOpen, Home, Archive, Menu, X, History, Info, Star } from 'lucide-react';
+import { Calendar, BarChart3, TrendingUp, Calculator, HelpCircle, Phone, Newspaper, BookOpen, Home, Archive, Menu, X, History, Info} from 'lucide-react';
 import PredictionsMenu from './PredictionsMenu';
+import Image from 'next/image';
 
 function Header() {
   const pathname = usePathname();
@@ -74,8 +75,14 @@ function Header() {
                   }}
                   className="flex gap-x-2 items-center text-lg sm:text-2xl font-bold text-gray-900"
                 >
-                  {/* {logoText} */}
-                  <Star fill='yellow'  stroke="yellow"/> Star49s
+                  <Image
+                    src={'/icons/star1.png'}
+                    width={25}
+                    height={24}
+                    alt='star'
+
+                  />
+                  Star49s
 
                 </h1>
                 <p className="text-xs sm:text-sm text-gray-600 hidden sm:block">Your trusted lottery companion</p>
