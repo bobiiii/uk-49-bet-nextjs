@@ -99,7 +99,7 @@ function Predictions() {
     return (
         <>
             <main className='page-gradient'>
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 ">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-0 sm:pt-8 sm:pb-1 ">
                     {/* Header */}
                     <div className="text-center mb-6 sm:mb-8">
                         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-4">UK49s Predictions</h1>
@@ -112,7 +112,7 @@ function Predictions() {
                     <h1 className='text-2xl sm:text-3xl font-bold text-gray-900 text-center '>
                         Today's Predictions
                     </h1>
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4 mb-4">
+                    {/* <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4 mb-4">
                         <div className="flex items-center justify-center">
                             <Calendar className="h-6 w-6 mr-3 text-blue-600" />
                             <span className="text-xl font-semibold text-blue-900">
@@ -120,10 +120,10 @@ function Predictions() {
 
                             </span>
                         </div>
-                    </div>
+                    </div> */}
 
                     {todayPredictions?.length > 0 ? (
-                        <div className="bg-white rounded-lg shadow-md mb-6 sm:mb-8 p-4 sm:p-6">
+                        <div className="bg-white rounded-lg shadow-md mb-6 sm:mb-8 p-4 sm:p-6 sm:mt-5 mt-4">
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-3">
                                 <h3 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center">
                                     <Brain className="h-6 w-6 mr-2 text-blue-600" />
@@ -149,6 +149,20 @@ function Predictions() {
                                                         mobileLayout={true}
                                                     />
                                                 </div>
+                                                <div className="text-center mb-1">
+                                                    <div className="flex items-center justify-center mb-2">
+                                                        <Calendar className="h-4 w-4 sm:h-5 sm:w-5  mr-2" />
+                                                        <span className="font-medium text-sm sm:text-base">
+                                                            {new Date(item?.date).toLocaleDateString('en-GB').replaceAll('/', '-')}{" "}
+                                                            at{" "}
+                                                            {new Date(item?.createdAt).toLocaleTimeString('en-GB', {
+                                                                hour: '2-digit',
+                                                                minute: '2-digit',
+                                                                hour12: true,
+                                                            })}
+                                                        </span>
+                                                    </div>
+                                                </div>
                                                 <div className="text-center">
                                                     <div className="flex items-center justify-center mb-2">
                                                         <Star className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500 mr-2" />
@@ -164,7 +178,7 @@ function Predictions() {
                             </div>
                         </div>
                     ) : (
-                        <div className="bg-white rounded-lg shadow-md mb-6 sm:mb-8 p-4 sm:p-6">
+                        <div className="bg-white rounded-lg shadow-md mb-6 sm:mb-8 p-4 sm:p-6 sm:mt-5 mt-4">
                             <div className="text-center py-8">
                                 <Brain className="h-12 w-12 mx-auto text-gray-400 mb-4" />
                                 <h3 className="text-xl font-semibold text-gray-900 mb-2">No Predictions Available</h3>
@@ -177,7 +191,7 @@ function Predictions() {
                     <h1 className='text-2xl sm:text-3xl font-bold text-gray-900 text-center '>
                         Yesterday's Predictions
                     </h1>
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4 mb-4">
+                    {/* <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4 mb-4">
                         <div className="flex items-center justify-center">
                             <Calendar className="h-6 w-6 mr-3 text-blue-600" />
                             <span className="text-xl font-semibold text-blue-900">
@@ -185,10 +199,10 @@ function Predictions() {
 
                             </span>
                         </div>
-                    </div>
+                    </div> */}
 
                     {yesterDayPredictions?.length > 0 ? (
-                        <div className="bg-white rounded-lg shadow-md mb-6 sm:mb-8 p-4 sm:p-6">
+                        <div className="bg-white rounded-lg shadow-md mb-6 sm:mb-8 p-4 sm:p-6 sm:mt-5 mt-4">
                             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-3">
                                 <h3 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center">
                                     <Brain className="h-6 w-6 mr-2 text-blue-600" />
@@ -213,6 +227,20 @@ function Predictions() {
                                                         mobileLayout={true}
                                                     />
                                                 </div>
+                                                <div className="text-center mb-1">
+                                                    <div className="flex items-center justify-center mb-2">
+                                                        <Calendar className="h-4 w-4 sm:h-5 sm:w-5  mr-2" />
+                                                        <span className="font-medium text-sm sm:text-base">
+                                                            {new Date(item?.date).toLocaleDateString('en-GB').replaceAll('/', '-')}{" "}
+                                                            at{" "}
+                                                            {new Date(item?.createdAt).toLocaleTimeString('en-GB', {
+                                                                hour: '2-digit',
+                                                                minute: '2-digit',
+                                                                hour12: true,
+                                                            })}
+                                                        </span>
+                                                    </div>
+                                                </div>
                                                 <div className="text-center">
                                                     <div className="flex items-center justify-center mb-2">
                                                         <Star className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-500 mr-2" />
@@ -229,7 +257,7 @@ function Predictions() {
                             </div>
                         </div>
                     ) : (
-                        <div className="bg-white rounded-lg shadow-md mb-6 sm:mb-8 p-4 sm:p-6">
+                        <div className="bg-white rounded-lg shadow-md mb-6 sm:mb-8 p-4 sm:p-6 sm:mt-5 mt-4">
                             <div className="text-center py-8">
                                 <Brain className="h-12 w-12 mx-auto text-gray-400 mb-4" />
                                 <h3 className="text-xl font-semibold text-gray-900 mb-2"> No Predictions Available</h3>
@@ -238,8 +266,8 @@ function Predictions() {
                         </div>
                     )}
                 </div>
+                <PredictionRestUI />
             </main>
-            <PredictionRestUI />
         </>
     );
 };
