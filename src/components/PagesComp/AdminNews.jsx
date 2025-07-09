@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import AddNewsDialog from '@/components/admin/AddNewsDialog';
 import EditNewsDialog from '@/components/admin/EditNewsDialog';
 import { generateUniqueSlug } from '@/utils/slugify';
+import Cookies from 'js-cookie';
 
 
 
@@ -22,19 +23,13 @@ const AdminNews = () => {
   const { toast } = useToast();
   const router = useRouter();
 
-  // Ensure all client-side code runs only after mount
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const auth = window.localStorage.getItem('adminAuthenticated');
-      if (auth !== 'true') {
-        router.push('/admin/login');
-      } else {
-        setIsAuthenticated(true);
-        loadArticles();
-      }
+    const auth = Cookies.get('isLogin');
+
+    if (auth == 'true') {
+      setIsAuthenticated(true);
     }
-    // eslint-disable-next-line
-  }, [router]);
+  }, []);
 
   const loadArticles = () => {
     if (typeof window !== 'undefined') {
@@ -45,20 +40,18 @@ const AdminNews = () => {
     }
   };
 
-const handleLogout = () => {
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem('adminAuthenticated');
+  const handleLogout = () => {
+    Cookies.remove('isLogin');
     toast({
       title: 'Logged Out',
       description: 'You have been logged out successfully',
     });
-    router.push('/admin/login'); // Fixed: Use router instead of navigate
-  }
-};
+    router.push('/login');
+  };
 
-const handleBackToDashboard = () => {
-  router.push('/admin'); // Fixed
-};
+  const handleBackToDashboard = () => {
+    router.push('/admin'); // Fixed
+  };
 
   const handleAddArticle = (articleData) => {
     const slug = generateUniqueSlug(articleData.title, articles);
@@ -72,10 +65,10 @@ const handleBackToDashboard = () => {
     const updatedArticles = [...articles, newArticle];
     setArticles(updatedArticles);
     localStorage.setItem('newsArticles', JSON.stringify(updatedArticles));
-    
+
     // Trigger event to notify News page of changes
     window.dispatchEvent(new CustomEvent('newsArticlesUpdated'));
-    
+
     toast({
       title: 'Article Added',
       description: 'News article has been added successfully',
@@ -86,7 +79,7 @@ const handleBackToDashboard = () => {
     const updatedArticles = articles.map(article => {
       if (article.id === id) {
         // Generate new slug if title changed
-        const slug = article.title !== updatedData.title 
+        const slug = article.title !== updatedData.title
           ? generateUniqueSlug(updatedData.title, articles.filter(a => a.id !== id))
           : article.slug;
         return { ...article, ...updatedData, slug };
@@ -95,10 +88,10 @@ const handleBackToDashboard = () => {
     });
     setArticles(updatedArticles);
     localStorage.setItem('newsArticles', JSON.stringify(updatedArticles));
-    
+
     // Trigger event to notify News page of changes
     window.dispatchEvent(new CustomEvent('newsArticlesUpdated'));
-    
+
     toast({
       title: 'Article Updated',
       description: 'News article has been updated successfully',
@@ -109,10 +102,10 @@ const handleBackToDashboard = () => {
     const updatedArticles = articles.filter(article => article.id !== id);
     setArticles(updatedArticles);
     localStorage.setItem('newsArticles', JSON.stringify(updatedArticles));
-    
+
     // Trigger event to notify News page of changes
     window.dispatchEvent(new CustomEvent('newsArticlesUpdated'));
-    
+
     toast({
       title: 'Article Deleted',
       description: 'News article has been removed successfully',
@@ -258,16 +251,16 @@ const handleBackToDashboard = () => {
                         </TableCell>
                         <TableCell>
                           <div className="flex gap-2">
-                            <Button 
-                              variant="outline" 
+                            <Button
+                              variant="outline"
                               size="sm"
                               onClick={() => openEditDialog(article)}
                             >
                               <Edit className="h-4 w-4" />
                             </Button>
-                            <Button 
-                              variant="outline" 
-                              size="sm" 
+                            <Button
+                              variant="outline"
+                              size="sm"
                               onClick={() => handleDeleteArticle(article.id)}
                               className="text-red-600 hover:text-red-700"
                             >

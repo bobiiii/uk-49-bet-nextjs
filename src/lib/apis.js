@@ -263,3 +263,109 @@ export const getTeatimeApiCall = async (data) => {
     }
 }
 
+
+
+// Auth
+export const LoginApiCall = async (data) => {
+    const Url = SERVER_URL + 'auth/login';
+
+    const payload = {
+        email: data?.email,
+        password: data?.password,
+    };
+
+    try {
+        const response = await fetch(Url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': `Bearer ${token}`, // Uncomment if needed
+            },
+            body: JSON.stringify(payload),
+        });
+
+        const result = await response.json();
+
+        return result;
+    } catch (error) {
+        return {
+            error: 'Network Error',
+            details: error.message || error,
+        };
+    }
+};
+
+// Users
+export const getUserApiCall = async () => {
+    const Url = SERVER_URL + `auth/get-users`;
+    try {
+        const res = await fetch(Url, {
+            method: 'GET',
+            cache: 'no-store',
+        })
+
+        const result = await res.json();
+        return result;
+    } catch (error) {
+        return {
+            error: 'Network error',
+            details: error.message,
+        };
+    }
+}
+
+export const addUserApiCall = async (data) => {
+    const Url = SERVER_URL + 'auth/add-user';
+
+    const payload = {
+        email: data?.email,
+        password: data?.password,
+    };
+
+    try {
+        const response = await fetch(Url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': `Bearer ${token}`, // Uncomment if needed
+            },
+            body: JSON.stringify(payload),
+        });
+
+        const result = await response.json();
+
+        return result;
+    } catch (error) {
+        return {
+            error: 'Network Error',
+            details: error.message || error,
+        };
+    }
+};
+
+
+export const DeleteUserApiCall = async (id) => {
+    const Url = SERVER_URL + `auth/delete-user/${id}`;
+    try {
+        const res = await fetch(Url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+
+        const result = await res.json();
+        return result;
+    } catch (error) {
+        return {
+            error: 'Network error',
+            details: error.message,
+        };
+    }
+};
+
+
+
+
+
+

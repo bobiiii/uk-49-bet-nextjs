@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Save, Eye, Copy, LogOut, ExternalLink, User } from 'lucide-react';
 import { useToast } from '../ui/use-toast';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 const AdsTxtManager = () => {
     const [adsContent, setAdsContent] = useState('');
@@ -16,49 +17,49 @@ const AdsTxtManager = () => {
     const { toast } = useToast();
     const navigate = useRouter();
 
+
     useEffect(() => {
-        const auth = localStorage.getItem('adminAuthenticated');
-        if (auth !== 'true') {
-            navigate?.push('/admin/login');
-        } else {
+        const auth = Cookies.get('isLogin');
+
+        if (auth == 'true') {
             setIsAuthenticated(true);
         }
-    }, [navigate]);
+    }, []);
 
-useEffect(() => {
-  const loadAdsTxt = async () => {
-    try {
-      const response = await fetch('/ads.txt', { cache: 'no-store' });
-      if (response.ok) {
-        const text = await response.text();
-        setAdsContent(text);
-      } else {
-        // fallback if ads.txt missing
-        setAdsContent(
-          '# Add your Google AdSense publisher ID here\n' +
-          '# Example: google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0\n\n'
-        );
-      }
-    } catch (error) {
-      console.error('Error loading ads.txt:', error);
-      setAdsContent(
-        '# Add your Google AdSense publisher ID here\n' +
-        '# Example: google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0\n\n'
-      );
-    }
-  };
+    useEffect(() => {
+        const loadAdsTxt = async () => {
+            try {
+                const response = await fetch('/ads.txt', { cache: 'no-store' });
+                if (response.ok) {
+                    const text = await response.text();
+                    setAdsContent(text);
+                } else {
+                    // fallback if ads.txt missing
+                    setAdsContent(
+                        '# Add your Google AdSense publisher ID here\n' +
+                        '# Example: google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0\n\n'
+                    );
+                }
+            } catch (error) {
+                console.error('Error loading ads.txt:', error);
+                setAdsContent(
+                    '# Add your Google AdSense publisher ID here\n' +
+                    '# Example: google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0\n\n'
+                );
+            }
+        };
 
-  loadAdsTxt();
-}, []);
+        loadAdsTxt();
+    }, []);
 
 
     const handleLogout = () => {
-        localStorage.removeItem('adminAuthenticated');
+        Cookies.remove('isLogin');
         toast({
             title: 'Logged Out',
             description: 'You have been logged out successfully',
         });
-        navigate?.push('/admin/login');
+        navigate?.push('/login');
     };
 
     const handleVisitWebsite = () => {
@@ -69,38 +70,38 @@ useEffect(() => {
         navigate?.push('/admin');
     };
 
-const handleSave = async () => {
-  try {
-    const res = await fetch('/api/ads', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ adsContent }),
-    })
+    const handleSave = async () => {
+        try {
+            const res = await fetch('/api/ads', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ adsContent }),
+            })
 
-    const data = await res.json()
+            const data = await res.json()
 
-    if (data.success) {
-      toast({
-        title: 'Ads.txt Updated',
-        description: 'Your ads.txt file has been saved successfully',
-      })
-      setIsEditing(false)
-    } else {
-      toast({
-        title: 'Error',
-        description: data.error,
-        variant: 'destructive',
-      })
+            if (data.success) {
+                toast({
+                    title: 'Ads.txt Updated',
+                    description: 'Your ads.txt file has been saved successfully',
+                })
+                setIsEditing(false)
+            } else {
+                toast({
+                    title: 'Error',
+                    description: data.error,
+                    variant: 'destructive',
+                })
+            }
+        } catch (error) {
+            console.error(error)
+            toast({
+                title: 'Error',
+                description: 'Something went wrong while saving ads.txt',
+                variant: 'destructive',
+            })
+        }
     }
-  } catch (error) {
-    console.error(error)
-    toast({
-      title: 'Error',
-      description: 'Something went wrong while saving ads.txt',
-      variant: 'destructive',
-    })
-  }
-}
 
 
     const handlePreview = () => {
