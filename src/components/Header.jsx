@@ -63,9 +63,9 @@ function Header() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 sm:p-3 rounded-full">
+              {/* <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-2 sm:p-3 rounded-full">
                 <Calendar className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
-              </div>
+              </div> */}
               <div>
                 <h1
                   style={{
@@ -77,15 +77,15 @@ function Header() {
                 >
                   <Image
                     src={'/icons/star1.png'}
-                    width={25}
-                    height={24}
+                    width={45}
+                    height={40}
                     alt='star'
 
                   />
                   Star49s
 
                 </h1>
-                <p className="text-xs sm:text-sm text-gray-600 hidden sm:block">Your trusted lottery companion</p>
+                <p className="text-xs sm:text-sm text-gray-600 hidden sm:block ps-2">Your trusted lottery companion</p>
               </div>
             </Link>
 

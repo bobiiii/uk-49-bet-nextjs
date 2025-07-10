@@ -179,7 +179,7 @@ const patternStats = getDrawPatternStats(sortedResults);
           </div>
 
           {/* Additional Statistics */}
-          <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          {/* <div className="bg-white rounded-lg shadow-md p-6 mb-8">
             <h3 className="text-xl font-bold text-gray-900 mb-6">Additional Statistics</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="text-center">
@@ -203,7 +203,7 @@ const patternStats = getDrawPatternStats(sortedResults);
 <p className="text-2xl font-bold text-gray-900">{stats.oddEvenRatio}</p>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

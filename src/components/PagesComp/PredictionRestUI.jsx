@@ -85,55 +85,55 @@ function PredictionRestUI() {
                 </div>
 
                 {/* Hot & Cold Analysis */}
-                <div className="bg-white rounded-lg shadow-md mb-6 sm:mb-8 p-4 sm:p-6">
+                {/* <div className="bg-white rounded-lg shadow-md mb-6 sm:mb-8 p-4 sm:p-6">
                     <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 flex items-center">
                         <TrendingUp className="h-6 w-6 mr-2 text-red-600" />
                         Hot & Cold Number Analysis
-                    </h3>
+                    </h3> */}
 
-                    <div className="grid md:grid-cols-3 gap-4 sm:gap-6">
-                        {/* Hot Numbers */}
-                        <div className="bg-red-50 rounded-lg p-4 sm:p-6">
+                {/* <div className="grid md:grid-cols-3 gap-4 sm:gap-6"> */}
+                {/* Hot Numbers */}
+                {/* <div className="bg-red-50 rounded-lg p-4 sm:p-6">
                             <h4 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4 text-center">Hot Numbers</h4>
                             <p className="text-sm text-gray-600 text-center mb-3 sm:mb-4">Most drawn in last 30 days</p>
                             <div className="flex justify-center mb-3 sm:mb-4">
                                 <LotteryBalls numbers={hotColdPredictions.hot} size="small" mobileLayout={true} />
                             </div>
                             <p className="text-xs text-center text-gray-500">Consider including these numbers</p>
-                        </div>
+                        </div> */}
 
-                        {/* Cold Numbers */}
-                        <div className="bg-blue-50 rounded-lg p-4 sm:p-6">
+                {/* Cold Numbers */}
+                {/* <div className="bg-blue-50 rounded-lg p-4 sm:p-6">
                             <h4 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4 text-center">Cold Numbers</h4>
                             <p className="text-sm text-gray-600 text-center mb-3 sm:mb-4">Least drawn in last 30 days</p>
                             <div className="flex justify-center mb-3 sm:mb-4">
                                 <LotteryBalls numbers={hotColdPredictions.cold} size="small" mobileLayout={true} />
                             </div>
                             <p className="text-xs text-center text-gray-500">Due for appearance</p>
-                        </div>
+                        </div> */}
 
-                        {/* Overdue Numbers */}
-                        <div className="bg-green-50 rounded-lg p-4 sm:p-6">
-                            <h4 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4 text-center">Overdue Numbers</h4>
-                            <p className="text-sm text-gray-600 text-center mb-3 sm:mb-4">Haven't appeared recently</p>
-                            <div className="flex justify-center mb-3 sm:mb-4">
-                                <LotteryBalls numbers={hotColdPredictions.overdue} size="small" mobileLayout={true} />
-                            </div>
-                            <p className="text-xs text-center text-gray-500">Statistically likely to appear</p>
-                        </div>
+                {/* Overdue Numbers */}
+                <div className="bg-green-50 rounded-lg p-4 sm:p-6">
+                    <h4 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4 text-center">Overdue Numbers</h4>
+                    <p className="text-sm text-gray-600 text-center mb-3 sm:mb-4">Haven't appeared recently</p>
+                    <div className="flex justify-center mb-3 sm:mb-4">
+                        <LotteryBalls numbers={hotColdPredictions.overdue} size="small" mobileLayout={true} />
                     </div>
+                    <p className="text-xs text-center text-gray-500">Statistically likely to appear</p>
                 </div>
+                {/* </div>
+                </div> */}
 
                 {/* Pattern Analysis */}
                 <div className="bg-white rounded-lg shadow-md mb-6 sm:mb-8 p-4 sm:p-6">
-                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 flex items-center">
+                    {/* <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 flex items-center">
                         <Target className="h-6 w-6 mr-2 text-green-600" />
                         Pattern Analysis
-                    </h3>
+                    </h3> */}
 
                     <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
                         {/* Number Patterns */}
-                        <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6">
+                        {/* <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6">
                             <h4 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Number Patterns</h4>
                             <div className="space-y-3 sm:space-y-4">
                                 <div className="flex justify-between items-center">
@@ -155,7 +155,7 @@ function PredictionRestUI() {
                                     <span className="font-medium text-sm sm:text-base">{patternPredictions.highLow}</span>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* Strategy Tips */}
                         <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4 sm:p-6">

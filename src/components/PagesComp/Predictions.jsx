@@ -80,17 +80,17 @@ function Predictions() {
     };
 
 
-    const getLatestPublishedTime = (predictions = []) => {
-        if (predictions.length === 0) return "No predictions available";
+    // const getLatestPublishedTime = (predictions = []) => {
+    //     if (predictions.length === 0) return "No predictions available";
 
-        const latest = [...predictions].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+    //     const latest = [...predictions].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
 
-        return `${formatDate(latest.date)} at ${new Date(latest.createdAt).toLocaleTimeString("en-GB", {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true
-        })}`;
-    };
+    //     return `${formatDate(latest.date)} at ${new Date(latest.createdAt).toLocaleTimeString("en-GB", {
+    //         hour: "2-digit",
+    //         minute: "2-digit",
+    //         hour12: true
+    //     })}`;
+    // };
 
 
 
@@ -152,14 +152,15 @@ function Predictions() {
                                                 <div className="text-center mb-1">
                                                     <div className="flex items-center justify-center mb-2">
                                                         <Calendar className="h-4 w-4 sm:h-5 sm:w-5  mr-2" />
-                                                        <span className="font-medium text-sm sm:text-base">
-                                                            {new Date(item?.date).toLocaleDateString('en-GB').replaceAll('/', '-')}{" "}
+                                                        <span className="font-extrabold text-sm sm:text-base ">
+                                                            {/* {new Date(item?.date).toLocaleDateString('en-GB').replaceAll('/', '-')}{" "}
                                                             at{" "}
                                                             {new Date(item?.createdAt).toLocaleTimeString('en-GB', {
                                                                 hour: '2-digit',
                                                                 minute: '2-digit',
                                                                 hour12: true,
-                                                            })}
+                                                            })} */}
+                                                            {item?.date?.split("T")[0]}
                                                         </span>
                                                     </div>
                                                 </div>
@@ -230,14 +231,15 @@ function Predictions() {
                                                 <div className="text-center mb-1">
                                                     <div className="flex items-center justify-center mb-2">
                                                         <Calendar className="h-4 w-4 sm:h-5 sm:w-5  mr-2" />
-                                                        <span className="font-medium text-sm sm:text-base">
-                                                            {new Date(item?.date).toLocaleDateString('en-GB').replaceAll('/', '-')}{" "}
+                                                        <span className="font-extrabold text-sm sm:text-base">
+                                                            {/* {new Date(item?.date).toLocaleDateString('en-GB').replaceAll('/', '-')}{" "}
                                                             at{" "}
                                                             {new Date(item?.createdAt).toLocaleTimeString('en-GB', {
                                                                 hour: '2-digit',
                                                                 minute: '2-digit',
                                                                 hour12: true,
-                                                            })}
+                                                            })} */}
+                                                            {item?.date?.split("T")[0]}
                                                         </span>
                                                     </div>
                                                 </div>
