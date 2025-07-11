@@ -113,14 +113,14 @@ function PredictionRestUI() {
                         </div> */}
 
                 {/* Overdue Numbers */}
-                <div className="bg-green-50 rounded-lg p-4 sm:p-6">
+                {/* <div className="bg-green-50 rounded-lg p-4 sm:p-6">
                     <h4 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4 text-center">Overdue Numbers</h4>
                     <p className="text-sm text-gray-600 text-center mb-3 sm:mb-4">Haven't appeared recently</p>
                     <div className="flex justify-center mb-3 sm:mb-4">
                         <LotteryBalls numbers={hotColdPredictions.overdue} size="small" mobileLayout={true} />
                     </div>
                     <p className="text-xs text-center text-gray-500">Statistically likely to appear</p>
-                </div>
+                </div> */}
                 {/* </div>
                 </div> */}
 
@@ -131,7 +131,8 @@ function PredictionRestUI() {
                         Pattern Analysis
                     </h3> */}
 
-                    <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
+                    {/* <div className="grid md:grid-cols-2 gap-4 sm:gap-6"> */}
+                    <div className="w-full">
                         {/* Number Patterns */}
                         {/* <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6">
                             <h4 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Number Patterns</h4>

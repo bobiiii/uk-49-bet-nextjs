@@ -52,19 +52,19 @@ async function page() {
   const lunchData = await getLunchtimeApiCall();
   const teaData = await getTeatimeApiCall();
 
-    const allResults = [...lunchData, ...teaData]; // Combine both
-    const sortedResults = allResults.sort((a, b) => {
-      const dateA = parseDrawDate(a.d_date);
-      const dateB = parseDrawDate(b.d_date);
-      return dateB - dateA; // Newest first
-    });
-    const { hotNumbers, coldNumbers, overdueNumbers } = getHotColdOverdueNumbers(sortedResults);
-  
-  
+  const allResults = [...lunchData, ...teaData]; // Combine both
+  const sortedResults = allResults.sort((a, b) => {
+    const dateA = parseDrawDate(a.d_date);
+    const dateB = parseDrawDate(b.d_date);
+    return dateB - dateA; // Newest first
+  });
+  const { hotNumbers, coldNumbers, overdueNumbers } = getHotColdOverdueNumbers(sortedResults);
 
-const topFrequencies = getNumberFrequencyStats(sortedResults); // Last 50 allResults
-const stats = getAdditionalStats(sortedResults);
-const patternStats = getDrawPatternStats(sortedResults);
+
+
+  const topFrequencies = getNumberFrequencyStats(sortedResults); // Last 50 allResults
+  const stats = getAdditionalStats(sortedResults);
+  const patternStats = getDrawPatternStats(sortedResults);
 
 
 
@@ -127,7 +127,8 @@ const patternStats = getDrawPatternStats(sortedResults);
           </div>
 
           {/* Detailed Statistics */}
-          <div className="grid lg:grid-cols-2 gap-8 mb-8">
+          {/* <div className="grid lg:grid-cols-2 gap-8 mb-8"> */}
+          <div className="w-full mb-8">
             {/* Number Frequency Chart */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-xl font-bold text-gray-900 mb-6">Number Frequency (Last 50 Draws)</h3>
@@ -155,31 +156,31 @@ const patternStats = getDrawPatternStats(sortedResults);
             </div>
 
             {/* Draw Patterns */}
-            <div className="bg-white rounded-lg shadow-md p-6">
+            {/* <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-xl font-bold text-gray-900 mb-6">Draw Patterns</h3>
               <div className="space-y-4">
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                   <span className="font-medium">Most Common Sum Range</span>
-   <span className="text-blue-600 font-bold">{patternStats.mostCommonRange}</span>
+                  <span className="text-blue-600 font-bold">{patternStats.mostCommonRange}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                   <span className="font-medium">Average Draw Sum</span>
-<span className="text-blue-600 font-bold">{patternStats.averageDrawSum}</span>
+                  <span className="text-blue-600 font-bold">{patternStats.averageDrawSum}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                   <span className="font-medium">Consecutive Numbers</span>
-<span className="text-blue-600 font-bold">{patternStats.avgConsecutive} avg</span>
+                  <span className="text-blue-600 font-bold">{patternStats.avgConsecutive} avg</span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                   <span className="font-medium">High/Low Split</span>
-<span className="text-blue-600 font-bold">{patternStats.avgHighLowSplit}</span>
+                  <span className="text-blue-600 font-bold">{patternStats.avgHighLowSplit}</span>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Additional Statistics */}
-          {/* <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <div className="bg-white rounded-lg shadow-md p-6 mb-8">
             <h3 className="text-xl font-bold text-gray-900 mb-6">Additional Statistics</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="text-center">
@@ -190,20 +191,20 @@ const patternStats = getDrawPatternStats(sortedResults);
               </div>
               <div className="text-center">
                 <p className="text-sm text-gray-600">Most Drawn</p>
-<p className="text-2xl font-bold text-gray-900">{stats.mostDrawn}</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.mostDrawn}</p>
 
               </div>
               <div className="text-center">
                 <p className="text-sm text-gray-600">Least Drawn</p>
-<p className="text-2xl font-bold text-gray-900">{stats.leastDrawn}</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.leastDrawn}</p>
 
               </div>
               <div className="text-center">
                 <p className="text-sm text-gray-600">Odd/Even</p>
-<p className="text-2xl font-bold text-gray-900">{stats.oddEvenRatio}</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.oddEvenRatio}</p>
               </div>
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
     </>
