@@ -20,6 +20,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <link rel="icon" href="/favicon.ico" sizes="any" />
         <Toaster />
         {children}
       </body>
