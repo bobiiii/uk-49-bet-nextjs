@@ -55,15 +55,23 @@ export const formatResult = (result, drawType) => {
 
 
 export function getHotColdOverdueNumbers(draws) {
-  // Sort draws by date (newest first using d_date)
-  const sortedDraws = [...draws].sort((a, b) => {
-    const dateA = new Date(formatDrawDate(a.d_date));
-    const dateB = new Date(formatDrawDate(b.d_date));
-    return dateB - dateA;
-  });
+  
 
-  // Take only the latest 100 draws
-  const recentDraws = sortedDraws.slice(0, 100);
+  const today = new Date();
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(today.getDate() - 30);
+
+  // Filter draws within the last 30 days
+  const recentDraws = draws
+    .filter((draw) => {
+      const drawDate = parseDrawDate(draw.d_date);
+      return drawDate >= thirtyDaysAgo && drawDate <= today;
+    })
+    .sort((a, b) => {
+      const dateA = parseDrawDate(a.d_date);
+      const dateB = parseDrawDate(b.d_date);
+      return dateB - dateA;
+    });
 
   const frequencyMap = {};
   const seenNumbers = new Set();
@@ -99,16 +107,14 @@ export function getHotColdOverdueNumbers(draws) {
       topOverdueNumbers.push(i);
     }
   }
-const overdueNumbers = topOverdueNumbers.slice(0, 5);
-
+  const overdueNumbers = topOverdueNumbers.slice(0, 5);
 
   return {
     hotNumbers,
     coldNumbers,
-    overdueNumbers, // full list of overdue numbers (not just top 5)
+    overdueNumbers,
   };
 }
-
 
 
 

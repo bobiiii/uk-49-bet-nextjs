@@ -63,8 +63,11 @@ async function page() {
         return dateB - dateA; // Newest first
       });
 const overdueNumbers = getOverdueNumbersDetailed(sortedResults);
-
+console.log('====================================');
+console.log('overdueNumbers:', overdueNumbers);
+console.log('====================================');
   const topOverdueNumbers = overdueNumbers.slice(0, 6).map(item => item.number);
+  
 
   return (
     <>
@@ -106,7 +109,7 @@ const overdueNumbers = getOverdueNumbersDetailed(sortedResults);
               <Clock className="h-8 w-8 text-purple-500 mr-3" />
               <div>
                 <p className="text-sm text-gray-600">Most Overdue</p>
-                <p className="text-2xl font-bold text-gray-900">13</p>
+                <p className="text-2xl font-bold text-gray-900">{overdueNumbers[0].number}</p>
               </div>
             </div>
           </div>
@@ -116,7 +119,7 @@ const overdueNumbers = getOverdueNumbersDetailed(sortedResults);
               <BarChart3 className="h-8 w-8 text-purple-500 mr-3" />
               <div>
                 <p className="text-sm text-gray-600">Max Days Overdue</p>
-                <p className="text-2xl font-bold text-gray-900">45</p>
+                <p className="text-2xl font-bold text-gray-900">a</p>
               </div>
             </div>
           </div>

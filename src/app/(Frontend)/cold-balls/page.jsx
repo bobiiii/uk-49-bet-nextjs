@@ -3,7 +3,7 @@ import React from 'react';
 import LotteryBalls from '@/components/LotteryBalls';
 import { TrendingDown, Calendar, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
-import { getColdNumbersDetailed, getHotNumbersDetailed, parseDrawDate } from '@/utils/functions';
+import { getColdNumbersDetailed,  parseDrawDate } from '@/utils/functions';
 import { getLunchtimeApiCall, getTeatimeApiCall } from '@/lib/apis';
 
 
@@ -105,7 +105,7 @@ async function page() {
               <TrendingDown className="h-8 w-8 text-blue-500 mr-3" />
               <div>
                 <p className="text-sm text-gray-600">Coldest Number</p>
-                <p className="text-2xl font-bold text-gray-900">1</p>
+                <p className="text-2xl font-bold text-gray-900">{coldNumbers[0].number}</p>
               </div>
             </div>
           </div>
@@ -115,7 +115,7 @@ async function page() {
               <BarChart3 className="h-8 w-8 text-blue-500 mr-3" />
               <div>
                 <p className="text-sm text-gray-600">Min Frequency</p>
-                <p className="text-2xl font-bold text-gray-900">3</p>
+                <p className="text-2xl font-bold text-gray-900">{coldNumbers[0].frequency}</p>
               </div>
             </div>
           </div>
