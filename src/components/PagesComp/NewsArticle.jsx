@@ -45,40 +45,42 @@ export const metadata = {
 };
 
 
-function NewsArticle() {
-    const { slug } = useParams();
-    const [article, setArticle] = useState(null);
+function NewsArticle({data}) {
+
+    
+    const [article, setArticle] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const loadArticle = () => {
-            const savedArticles = localStorage.getItem('newsArticles');
-            if (savedArticles && slug) {
-                const articles = JSON.parse(savedArticles);
-                // First try to find by slug, fallback to id for backward compatibility
-                const foundArticle = articles.find((a) =>
-                    (a.slug === slug || a.id === slug) && a.status === 'published'
-                );
-                setArticle(foundArticle || null);
-            }
-            setLoading(false);
-        };
 
-        loadArticle();
-    }, [slug]);
+  useEffect(() => {
+    // Optional: You could validate or transform data here
+    if (data && data.status === 'Published') {
+      setArticle(data);
 
-    const handleShare = () => {
-        if (navigator.share && article) {
-            navigator.share({
-                title: article.title,
-                text: article.excerpt,
-                url: window.location.href,
-            });
-        } else {
-            navigator.clipboard.writeText(window.location.href);
-            alert('Article URL copied to clipboard!');
-        }
-    };
+        setLoading(false);
+    } else {
+      setArticle(null);
+    }
+  }, [data]);
+
+  const handleShare = () => {
+    if (!article) return;
+
+    if (navigator.share) {
+      navigator.share({
+        title: article.title,
+        text: article.excerpt,
+        url: window.location.href,
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Article URL copied to clipboard!');
+    }
+  };
+
+  if (!article) {
+    return <p className="text-center text-gray-500 mt-10">Article not found or unpublished.</p>;
+  }
 
     if (loading) {
         return (

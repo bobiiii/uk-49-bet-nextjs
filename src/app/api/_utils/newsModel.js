@@ -6,6 +6,11 @@ const NewsSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    slug: {
+        type: String,
+        required: true,
+        unique: true, // Ensure slug is unique
+    },
     excerpt: {
         type: String,
         required: true,

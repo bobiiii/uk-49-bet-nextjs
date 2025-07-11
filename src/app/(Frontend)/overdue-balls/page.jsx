@@ -1,27 +1,24 @@
 export const dynamic = "force-dynamic";
 
-import React from 'react';
-import LotteryBalls from '@/components/LotteryBalls';
-import { Clock, Calendar, BarChart3 } from 'lucide-react';
-import Link from 'next/link';
-import { getLunchtimeApiCall, getTeatimeApiCall } from '@/lib/apis';
-import { getOverdueNumbersDetailed, parseDrawDate } from '@/utils/functions';
-
-
+import React from "react";
+import LotteryBalls from "@/components/LotteryBalls";
+import { Clock, Calendar, BarChart3 } from "lucide-react";
+import Link from "next/link";
+import { getLunchtimeApiCall, getTeatimeApiCall } from "@/lib/apis";
+import { getOverdueNumbersDetailed, parseDrawDate } from "@/utils/functions";
 
 export async function generateMetadata() {
-  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}metadata/get-metadata/overdue-balls`
+  const url = `${process.env.NEXT_PUBLIC_SERVER_URL}metadata/get-metadata/overdue-balls`;
 
   const response = await fetch(url, {
-    method: 'GET',
-    cache: 'no-store',
-  })
+    method: "GET",
+    cache: "no-store",
+  });
 
-  let data = null
+  let data = null;
 
-  const result = await response.json()
-  data = result?.data
-
+  const result = await response.json();
+  data = result?.data;
 
   return {
     title: data?.title || "Overdue Balls",
@@ -34,8 +31,10 @@ export async function generateMetadata() {
       type: "website",
       images: [
         {
-          url: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
-          secureUrl: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          url:
+            data?.ogImage || "https://lovable.dev/opengraph-image-p98pqg.png",
+          secureUrl:
+            data?.ogImage || "https://lovable.dev/opengraph-image-p98pqg.png",
           width: 1200,
           height: 630,
           alt: data?.ogImageAlt || "Overdue Balls",
@@ -46,28 +45,24 @@ export async function generateMetadata() {
     alternates: {
       canonical: data?.canonical || process.env.NEXT_PUBLIC_BASEURL,
     },
-  }
+  };
 }
-
-
 
 async function page() {
   // Mock data for overdue numbers
-   const lunchData = await getLunchtimeApiCall();
-   const teaData = await getTeatimeApiCall();
+  const lunchData = await getLunchtimeApiCall();
+  const teaData = await getTeatimeApiCall();
 
   const allDraws = [...lunchData, ...teaData]; // Combined
   const sortedResults = allDraws.sort((a, b) => {
-        const dateA = parseDrawDate(a.d_date);
-        const dateB = parseDrawDate(b.d_date);
-        return dateB - dateA; // Newest first
-      });
-const overdueNumbers = getOverdueNumbersDetailed(sortedResults);
-console.log('====================================');
-console.log('overdueNumbers:', overdueNumbers);
-console.log('====================================');
-  const topOverdueNumbers = overdueNumbers.slice(0, 6).map(item => item.number);
-  
+    const dateA = parseDrawDate(a.d_date);
+    const dateB = parseDrawDate(b.d_date);
+    return dateB - dateA; // Newest first
+  });
+  const overdueNumbers = getOverdueNumbersDetailed(sortedResults);
+  const topOverdueNumbers = overdueNumbers
+    .slice(0, 6)
+    .map((item) => item.number);
 
   return (
     <>
@@ -78,12 +73,16 @@ console.log('====================================');
             <Clock className="h-8 w-8 text-purple-500 mr-3" />
             <h1 className="text-3xl font-bold text-gray-900">Overdue Balls</h1>
           </div>
-          <p className="text-xl text-gray-600">Numbers that haven't appeared in recent UK49s draws</p>
+          <p className="text-xl text-gray-600">
+            Numbers that haven't appeared in recent UK49s draws
+          </p>
         </div>
 
         {/* Top Overdue Numbers Display */}
         <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-8 mb-8 border-2 border-purple-100">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Top 6 Overdue Numbers</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+            Top 6 Overdue Numbers
+          </h2>
           <div className="flex justify-center mb-6">
             <LotteryBalls numbers={topOverdueNumbers} size="large" />
           </div>
@@ -109,7 +108,9 @@ console.log('====================================');
               <Clock className="h-8 w-8 text-purple-500 mr-3" />
               <div>
                 <p className="text-sm text-gray-600">Most Overdue</p>
-                <p className="text-2xl font-bold text-gray-900">{overdueNumbers[0].number}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {/* {overdueNumbers[0].number || 0} */}
+                </p>
               </div>
             </div>
           </div>
@@ -119,7 +120,7 @@ console.log('====================================');
               <BarChart3 className="h-8 w-8 text-purple-500 mr-3" />
               <div>
                 <p className="text-sm text-gray-600">Max Days Overdue</p>
-                <p className="text-2xl font-bold text-gray-900">a</p>
+                <p className="text-2xl font-bold text-gray-900"> Remaining</p>
               </div>
             </div>
           </div>
@@ -128,17 +129,29 @@ console.log('====================================');
         {/* Overdue Numbers Table */}
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="px-6 py-4 bg-purple-50 border-b">
-            <h3 className="text-xl font-bold text-gray-900">Complete Overdue Numbers List</h3>
+            <h3 className="text-xl font-bold text-gray-900">
+              Complete Overdue Numbers List
+            </h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Number</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Days Overdue</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Seen</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Rank
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Number
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Days Overdue
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Last Seen
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -159,12 +172,20 @@ console.log('====================================');
                       {item.lastSeen}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${item.daysSinceLastSeen > 40 ? 'bg-red-100 text-red-800' :
-                        item.daysSinceLastSeen > 30 ? 'bg-orange-100 text-orange-800' :
-                          'bg-purple-100 text-purple-800'
-                        }`}>
-                        {item.daysSinceLastSeen > 40 ? '🚨 Critical' :
-                          item.daysSinceLastSeen > 30 ? '⚠️ High' : '⏰ Overdue'}
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          item.daysSinceLastSeen > 40
+                            ? "bg-red-100 text-red-800"
+                            : item.daysSinceLastSeen > 30
+                            ? "bg-orange-100 text-orange-800"
+                            : "bg-purple-100 text-purple-800"
+                        }`}
+                      >
+                        {item.daysSinceLastSeen > 40
+                          ? "🚨 Critical"
+                          : item.daysSinceLastSeen > 30
+                          ? "⚠️ High"
+                          : "⏰ Overdue"}
                       </span>
                     </td>
                   </tr>
@@ -198,6 +219,6 @@ console.log('====================================');
       </div>
     </>
   );
-};
+}
 
 export default page;

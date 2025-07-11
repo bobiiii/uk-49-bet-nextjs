@@ -372,6 +372,7 @@ export const addNewsApiCall = async (data) => {
 
     const payload = {
         title: data?.title,
+        slug: data?.slug,
         excerpt: data?.excerpt,
         content: data?.content,
         date: data?.date,
@@ -421,6 +422,24 @@ export const getNewsApiCall = async () => {
     }
 }
 
+export const getSingleNewsApiCall = async (slug) => {
+    const Url = SERVER_URL + `news/get-single-news/${slug}`;
+    try {
+        const res = await fetch(Url, {
+            method: 'GET',
+            cache: 'no-store',
+        })
+
+        const result = await res.json();
+        return result;
+    } catch (error) {
+        return {
+            error: 'Network error',
+            details: error.message,
+        };
+    }
+}
+
 export const DeleteNewsApiCall = async (id) => {
     const Url = SERVER_URL + `news/delete-news/${id}`;
     try {
@@ -447,6 +466,7 @@ export const updateNewsApiCall = async (data, id) => {
 
     const payload = {
         title: data?.title,
+        slug: data?.slug,
         excerpt: data?.excerpt,
         content: data?.content,
         date: data?.date,

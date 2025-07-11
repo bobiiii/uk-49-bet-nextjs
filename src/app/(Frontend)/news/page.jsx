@@ -1,6 +1,8 @@
 export const dynamic = "force-dynamic";
 import React from 'react';
 import News from '@/components/PagesComp/News';
+import { get } from 'mongoose';
+import { getNewsApiCall } from '@/lib/apis';
 
 
 
@@ -44,11 +46,14 @@ export async function generateMetadata() {
   }
 }
 
-function page() {
+async function page() {
+
+const news = await getNewsApiCall()
+
 
   return (
     <>
-      <News />
+      <News news={news?.data || []} />
     </>
   );
 };

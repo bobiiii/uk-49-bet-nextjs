@@ -7,8 +7,8 @@ import { NextResponse } from "next/server";
 export async function PUT(request, { params }) {
     await startDB();
 
-    const { newsId } = params;
-    console.log("newsId", newsId);
+    const { newsId } =await  params;
+
 
     if (!newsId) {
         return NextResponse.json(

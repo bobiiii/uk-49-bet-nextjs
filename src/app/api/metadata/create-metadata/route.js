@@ -1,14 +1,22 @@
+import path from 'path';
 import { NextResponse } from "next/server";
 import { startDB } from "@/app/api/_utils/startDb";
 import { MetadataModel } from "@/app/api/_utils/metadataModel";
+import fs from 'fs';
+
 // import { uploadImageToDrive } from "@/app/api/_utils/imageHandlers";
+
+const METADATA_DIR = path.join(process.cwd(), 'public', 'metadata');
+if (!fs.existsSync(METADATA_DIR)) {
+  fs.mkdirSync(METADATA_DIR, { recursive: true });
+}
 
 export async function POST(req) {
   try {
     await startDB();
     const formData = await req.formData();
     const entityType = formData.get("entityType");
-    // const file = formData.get("ogImage");
+    const file = formData.get("ogImage");
     const keywords = JSON.parse(formData.get("keywords") || "[]");
     const title = formData.get("title");
     const description = formData.get("description");
@@ -46,23 +54,18 @@ export async function POST(req) {
     }
 
 
-    // const buffer = Buffer.from(await file.arrayBuffer());
-    // const ogImage = {
-    //   buffer,
-    //   mimetype: file.type,
-    //   name: file.name,
-    // };
-    // const ogImageDriveID = await uploadImageToDrive(ogImage, process.env.GOOGLE_DRIVE_METADATA_FOLDER_ID);
-    // console.log("ogImageDriveID check", ogImageDriveID);
+  if (!file) {
+      return NextResponse.json({ status: 'error', message: 'No file uploaded' }, { status: 400 });
+    }
 
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const ext = path.extname(file.name);
+    const fileName = `ogImage${ext}`;
+    const filePath = path.join(METADATA_DIR, fileName);
 
-    // Check if ogImageDriveID is a valid string
-    // if (typeof ogImageDriveID !== 'string') {
-    //   return NextResponse.json(
-    //     { error: "Failed to upload image to Google Drive" },
-    //     { status: 500 }
-    //   );
-    // }
+    fs.writeFileSync(filePath, buffer);
+
+  const ogImageUrl = `${process.env.NEXT_PUBLIC_BASEURL}/metadata/${fileName}`;
 
     const metadata = await MetadataModel.create({
       entityType,
@@ -72,7 +75,7 @@ export async function POST(req) {
       keywords,
       ogTitle,
       ogDescription,
-      ogImageId: "sample id",
+      ogImageId: ogImageUrl,
       ogImageAlt,
     });
 

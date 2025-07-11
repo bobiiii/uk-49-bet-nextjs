@@ -1,3 +1,51 @@
+export const generateSlug = (text) => {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '') // remove invalid chars
+    .replace(/\s+/g, '-')         // collapse whitespace and replace by -
+    .replace(/-+/g, '-');         // collapse dashes
+};
+
+
+export const handleImageUpload = async (quillRef) => {
+  const input = document.createElement('input');
+  input.setAttribute('type', 'file');
+  input.setAttribute('accept', 'image/*');
+  input.click();
+
+  input.onchange = async () => {
+    const file = input.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const res = await fetch('/api/news/upload-image', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+      if (res.ok && data.url) {
+        const quill = quillRef.current.getEditor();
+        const range = quill.getSelection(true);
+
+        quill.insertEmbed(range.index, 'image', data.url);
+        quill.setSelection(range.index + 1);
+      } else {
+        alert('Image upload failed');
+      }
+    } catch (error) {
+      console.error('Image upload error:', error);
+      alert('An error occurred while uploading image.');
+    }
+  };
+};
+
+
+
 export const parseDMYtoDate = (dmy) => {
   const [day, month, year] = dmy.split("-");
   return new Date(`${year}-${month}-${day}`);
@@ -230,34 +278,48 @@ export function getColdNumbersDetailed(draws) {
 
 
 export function getOverdueNumbersDetailed(draws) {
-  const recentDraws = draws.slice(0, 100);
-  const seenNumbers = new Set();
+  const recentDraws = draws.slice(0, 100);      // Most recent 100 draws
+  const olderDraws = draws.slice(100);          // Older draws
+  const seenInRecent = new Set();
 
-  // Track all numbers that appeared in last 100 draws
+  // Step 1: Track numbers in the last 100 draws
   recentDraws.forEach((draw) => {
-    const mainBalls = draw.balls;
-    mainBalls.forEach((num) => {
+    draw.balls.forEach((num) => {
       const n = parseInt(num, 10);
       if (!isNaN(n) && n >= 1 && n <= 49) {
-        seenNumbers.add(n);
+        seenInRecent.add(n);
       }
     });
   });
 
-  // Get numbers from 1 to 49 that were never seen
   const overdue = [];
+
+  // Step 2: Find numbers not in last 100 but seen before
   for (let i = 1; i <= 49; i++) {
-    if (!seenNumbers.has(i)) {
-      overdue.push({
-        number: i,
-        status: "Never appeared in last 100 draws"
-      });
+    if (!seenInRecent.has(i)) {
+      // Check if it appeared in older draws
+      const lastSeenDraw = olderDraws.find(draw =>
+        draw.balls.includes(i.toString()) || draw.balls.includes(i)
+      );
+
+      if (lastSeenDraw) {
+        const lastSeenDateStr = lastSeenDraw.d_date || lastSeenDraw.date;
+        const lastSeenDate = new Date(lastSeenDateStr);
+        const today = new Date();
+        const daysAgo = Math.floor((today - lastSeenDate) / (1000 * 60 * 60 * 24));
+
+        overdue.push({
+          number: i,
+          lastSeen: lastSeenDate.toLocaleDateString('en-GB'),
+          daysAgo,
+        });
+      }
     }
   }
 
-  // Return up to 10 overdue numbers
-  return overdue.slice(0, 10);
+  return overdue.slice(0, 10); // Return up to 10 most overdue numbers
 }
+
 
 
 

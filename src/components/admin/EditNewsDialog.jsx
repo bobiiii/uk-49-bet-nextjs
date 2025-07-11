@@ -34,6 +34,7 @@ Quill.register('formats/list', List, true);
 const EditNewsDialog = ({ open, onOpenChange, article, onEdit, updateID, handleAddArticle }) => {
     const [formData, setFormData] = useState({
         title: '',
+        slug: '',
         excerpt: '',
         content: '',
         date: '',
@@ -87,6 +88,7 @@ const EditNewsDialog = ({ open, onOpenChange, article, onEdit, updateID, handleA
         if (article) {
             setFormData({
                 title: article.title,
+                slug: article.slug , 
                 excerpt: article.excerpt,
                 content: article.content,
                 date: article.date,
@@ -138,9 +140,17 @@ const EditNewsDialog = ({ open, onOpenChange, article, onEdit, updateID, handleA
     };
 
 
-    const handleInputChange = (field, value) => {
-        setFormData((prev) => ({ ...prev, [field]: value }));
-    };
+  const handleInputChange = (field, value) => {
+    setFormData((prev) => {
+      const updated = { ...prev, [field]: value };
+
+      if (field === "title" && !slugEdited) {
+        updated.slug = generateSlug(value);
+      }
+
+      return updated;
+    });
+  };
 
     if (!article) return null;
 
@@ -200,6 +210,20 @@ const EditNewsDialog = ({ open, onOpenChange, article, onEdit, updateID, handleA
                                 required
                             />
                         </div>
+
+            <div>
+              <Label htmlFor="slug">Slug *</Label>
+              <Input
+                id="slug"
+                value={formData.slug}
+                onChange={(e) => {
+                  setSlugEdited(true);
+                  handleInputChange("slug", e.target.value);
+                }}
+                placeholder="auto-generated from title, but you can edit"
+                required
+              />
+            </div>
 
                         <div>
                             <Label htmlFor="excerpt">Excerpt *</Label>

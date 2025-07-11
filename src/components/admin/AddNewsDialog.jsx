@@ -1,95 +1,170 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 
-import ReactQuill from 'react-quill-new';
-import 'react-quill-new/dist/quill.snow.css';
-import { Quill } from 'react-quill-new';
-import { addNewsApiCall } from '@/lib/apis';
-import { useToast } from '../ui/use-toast';
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+import { Quill } from "react-quill-new";
+import { addNewsApiCall } from "@/lib/apis";
+import { useToast } from "../ui/use-toast";
+import { generateSlug, handleImageUpload } from "@/utils/functions"; // adjust path if needed
 
 // ✅ Properly register 'list' format once
-const List = Quill.import('formats/list');
-Quill.register('formats/list', List, true);
+const List = Quill.import("formats/list");
+Quill.register("formats/list", List, true);
 
 export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
   const [formData, setFormData] = useState({
-    title: '',
-    excerpt: '',
-    content: '',
-    date: new Date().toISOString().split('T')[0],
-    time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
-    author: '',
-    category: '',
+    title: "",
+    slug: "",
+    excerpt: "",
+    content: "",
+    date: new Date().toISOString().split("T")[0],
+    time: new Date().toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
+    author: "",
+    category: "",
     featured: false,
-    status: 'Published'
+    status: "Published",
   });
+  
+  
+  const [slugEdited, setSlugEdited] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  
+  
+  const prevImagesRef = useRef([]);
+  const quillRef = useRef();
 
   const { toast } = useToast();
 
+  const checkDeletedImages = () => {
+    const editor = quillRef.current?.getEditor();
+    if (!editor) return;
+
+    const html = editor.root.innerHTML;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    const currentImages = Array.from(doc.querySelectorAll("img")).map((img) =>
+      img.getAttribute("src")
+    );
+
+    console.log("🖼️ Current images:", currentImages);
+
+    const deletedImages = prevImagesRef.current.filter(
+      (src) => !currentImages.includes(src)
+    );
+    console.log("🗑️ Deleted images:", deletedImages);
+
+    deletedImages.forEach(async (src) => {
+      if (src.startsWith("/news/")) {
+        try {
+          await fetch("/api/news/delete-image", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url: src }),
+          });
+        } catch (err) {
+          console.error("❌ Failed to delete image", err);
+        }
+      }
+    });
+
+    prevImagesRef.current = currentImages;
+  };
+
+  useEffect(() => {
+    if (!open || !quillRef.current) return;
+
+    const editor = quillRef.current.getEditor();
+    const html = editor.root.innerHTML;
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    const initialImages = Array.from(doc.querySelectorAll("img")).map((img) =>
+      img.getAttribute("src")
+    );
+    prevImagesRef.current = initialImages;
+  }, [open]);
+
   const categories = [
-    'Jackpot News',
-    'Analysis',
-    'Winner Stories',
-    'Technology',
-    'General News',
-    'Statistics',
-    'Tips & Tricks'
+    "Jackpot News",
+    "Analysis",
+    "Winner Stories",
+    "Technology",
+    "General News",
+    "Statistics",
+    "Tips & Tricks",
   ];
 
   const quillModules = {
-    toolbar: [
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ list: 'ordered' }, { list: 'bullet' }],
-      [{ script: 'sub' }, { script: 'super' }],
-      [{ indent: '-1' }, { indent: '+1' }],
-      [{ direction: 'rtl' }],
-      [{ size: ['small', false, 'large', 'huge'] }],
-      [{ color: [] }, { background: [] }],
-      [{ font: [] }],
-      [{ align: [] }],
-      ['link', 'image'],
-      ['clean']
-    ]
+    toolbar: {
+      container: [
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        ["bold", "italic", "underline", "strike"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        [{ script: "sub" }, { script: "super" }],
+        [{ indent: "-1" }, { indent: "+1" }],
+        [{ direction: "rtl" }],
+        [{ size: ["small", false, "large", "huge"] }],
+        [{ color: [] }, { background: [] }],
+        [{ font: [] }],
+        [{ align: [] }],
+        ["link", "image"],
+        ["clean"],
+      ],
+      handlers: {
+        image: () => handleImageUpload(quillRef),
+      },
+    },
   };
 
   const quillFormats = [
-    'header', 'font', 'size',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'indent',
-    'link', 'image', 'color', 'background',
-    'align', 'script'
+    "header",
+    "font",
+    "size",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "blockquote",
+    "list",
+    "indent",
+    "link",
+    "image",
+    "color",
+    "background",
+    "align",
+    "script",
   ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true)
+    setIsLoading(true);
 
-    const res = await addNewsApiCall(formData)
+    const res = await addNewsApiCall(formData);
 
     if (res?.status === "Success") {
-      setIsLoading(false)
+      setIsLoading(false);
       onAdd(formData);
       toast({
         title: "News Added ✅",
@@ -98,28 +173,29 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
         duration: 3000,
       });
       setFormData({
-        title: '',
-        excerpt: '',
-        content: '',
-        date: new Date().toISOString().split('T')[0],
-        time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
-        author: '',
-        category: '',
+        title: "",
+        slug: "",
+        excerpt: "",
+        content: "",
+        date: new Date().toISOString().split("T")[0],
+        time: new Date().toLocaleTimeString("en-GB", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        author: "",
+        category: "",
         featured: false,
-        status: 'Published'
+        status: "Published",
       });
       onOpenChange(false);
-    } else (
+    } else
       setIsLoading(false),
-      toast({
-        title: "Failed to Add ❌",
-        description: `${res.message}`,
-        variant: "destructive",
-        duration: 3000,
-      })
-
-
-    )
+        toast({
+          title: "Failed to Add ❌",
+          description: `${res.message}`,
+          variant: "destructive",
+          duration: 3000,
+        });
 
     // if (!formData.title || !formData.excerpt || !formData.content || !formData.author || !formData.category) {
     //   toast({
@@ -129,12 +205,18 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
     //   });
     //   return;
     // }
-
-
   };
 
   const handleInputChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormData((prev) => {
+      const updated = { ...prev, [field]: value };
+
+      if (field === "title" && !slugEdited) {
+        updated.slug = generateSlug(value);
+      }
+
+      return updated;
+    });
   };
 
   return (
@@ -178,7 +260,9 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
         <DialogContent className="w-[900px] max-w-none max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Add New Article</DialogTitle>
-            <DialogDescription>Create a new SEO-optimized news article for the UK49s website</DialogDescription>
+            <DialogDescription>
+              Create a new SEO-optimized news article for the UK49s website
+            </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -187,8 +271,22 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
               <Input
                 id="title"
                 value={formData.title}
-                onChange={(e) => handleInputChange('title', e.target.value)}
+                onChange={(e) => handleInputChange("title", e.target.value)}
                 placeholder="Enter SEO-optimized article title"
+                required
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="slug">Slug *</Label>
+              <Input
+                id="slug"
+                value={formData.slug}
+                onChange={(e) => {
+                  setSlugEdited(true);
+                  handleInputChange("slug", e.target.value);
+                }}
+                placeholder="auto-generated from title, but you can edit"
                 required
               />
             </div>
@@ -198,7 +296,7 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
               <Textarea
                 id="excerpt"
                 value={formData.excerpt}
-                onChange={(e) => handleInputChange('excerpt', e.target.value)}
+                onChange={(e) => handleInputChange("excerpt", e.target.value)}
                 placeholder="Enter a brief excerpt or meta description (150-160 characters recommended)"
                 rows={3}
                 required
@@ -209,16 +307,29 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
               <Label htmlFor="content">Content *</Label>
               <div className="quill-container-wrapper border rounded-md overflow-hidden">
                 <ReactQuill
+                  ref={quillRef}
                   theme="snow"
                   value={formData.content}
-                  onChange={(value) => handleInputChange('content', value)}
+                  // onChange={(value) => handleInputChange("content", value)}
+                  onChange={(value) => {
+                    handleInputChange("content", value);
+                    checkDeletedImages();
+                  }}
+                  onKeyUp={(e) => {
+                    if (e.key === "Backspace" || e.key === "Delete") {
+                      setTimeout(() => {
+                        checkDeletedImages();
+                      }, 100); // Delay ensures DOM updates finish
+                    }
+                  }}
                   modules={quillModules}
                   formats={quillFormats}
                   placeholder="Write your SEO article content here..."
                 />
               </div>
               <p className="text-sm text-gray-500 mt-1">
-                Use H1, H2, H3 headings for better SEO structure. Add bold/italic text for emphasis.
+                Use H1, H2, H3 headings for better SEO structure. Add
+                bold/italic text for emphasis.
               </p>
             </div>
 
@@ -229,7 +340,7 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
                   id="date"
                   type="date"
                   value={formData.date}
-                  onChange={(e) => handleInputChange('date', e.target.value)}
+                  onChange={(e) => handleInputChange("date", e.target.value)}
                 />
               </div>
               <div>
@@ -237,7 +348,7 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
                 <Input
                   id="time"
                   value={formData.time}
-                  onChange={(e) => handleInputChange('time', e.target.value)}
+                  onChange={(e) => handleInputChange("time", e.target.value)}
                   placeholder="14:30"
                 />
               </div>
@@ -249,14 +360,19 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
                 <Input
                   id="author"
                   value={formData.author}
-                  onChange={(e) => handleInputChange('author', e.target.value)}
+                  onChange={(e) => handleInputChange("author", e.target.value)}
                   placeholder="Enter author name"
                   required
                 />
               </div>
               <div>
                 <Label htmlFor="category">Category *</Label>
-                <Select value={formData.category} onValueChange={(value) => handleInputChange('category', value)}>
+                <Select
+                  value={formData.category}
+                  onValueChange={(value) =>
+                    handleInputChange("category", value)
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
@@ -274,7 +390,10 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="status">Status</Label>
-                <Select value={formData.status} onValueChange={(value) => handleInputChange('status', value)}>
+                <Select
+                  value={formData.status}
+                  onValueChange={(value) => handleInputChange("status", value)}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -288,17 +407,25 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
                 <Checkbox
                   id="featured"
                   checked={formData.featured}
-                  onCheckedChange={(checked) => handleInputChange('featured', checked)}
+                  onCheckedChange={(checked) =>
+                    handleInputChange("featured", checked)
+                  }
                 />
                 <Label htmlFor="featured">Featured Article</Label>
               </div>
             </div>
 
             <div className="flex justify-end space-x-2 pt-4">
-              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+              >
                 Cancel
               </Button>
-              <Button type="submit">{isLoading ? "Adding..." : "Add Article"} </Button>
+              <Button type="submit">
+                {isLoading ? "Adding..." : "Add Article"}{" "}
+              </Button>
             </div>
           </form>
         </DialogContent>
