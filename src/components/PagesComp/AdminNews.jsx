@@ -120,7 +120,7 @@ const AdminNews = () => {
 
   const openEditDialog = (id, article) => {
     setEditingArticle(article)
-    ;
+      ;
     setUpdateID(id)
     setShowEditDialog(true);
   };
@@ -194,7 +194,7 @@ const AdminNews = () => {
                         <TableCell className="font-medium">{article.title}</TableCell>
                         <TableCell><Badge variant="outline">{article.category}</Badge></TableCell>
                         <TableCell>{article.author}</TableCell>
-                        <TableCell>{article.date}</TableCell>
+                        <TableCell>{article.date?.split("T")[0]}</TableCell>
                         <TableCell><Badge variant={article.status === 'Published' ? 'default' : 'secondary'}>{article.status}</Badge></TableCell>
                         <TableCell>{article.featured && <Badge variant="destructive">Featured</Badge>}</TableCell>
                         <TableCell>
