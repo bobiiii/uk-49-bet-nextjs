@@ -63,6 +63,7 @@ const sortedResults = allDraws.sort((a, b) => {
   const hotNumbers = getHotNumbersDetailed(sortedResults);
 
   const topHotNumbers = hotNumbers.slice(0, 6).map((item) => item.number);
+  
 
   return (
     <>
@@ -108,7 +109,7 @@ const sortedResults = allDraws.sort((a, b) => {
               <TrendingUp className="h-8 w-8 text-red-500 mr-3" />
               <div>
                 <p className="text-sm text-gray-600">Hottest Number</p>
-                <p className="text-2xl font-bold text-gray-900">7</p>
+                <p className="text-2xl font-bold text-gray-900">{hotNumbers[0].number}</p>
               </div>
             </div>
           </div>
@@ -118,7 +119,7 @@ const sortedResults = allDraws.sort((a, b) => {
               <BarChart3 className="h-8 w-8 text-red-500 mr-3" />
               <div>
                 <p className="text-sm text-gray-600">Max Frequency</p>
-                <p className="text-2xl font-bold text-gray-900">28</p>
+                <p className="text-2xl font-bold text-gray-900">{hotNumbers[0].frequency}</p>
               </div>
             </div>
           </div>
