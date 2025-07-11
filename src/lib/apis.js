@@ -366,6 +366,114 @@ export const DeleteUserApiCall = async (id) => {
 
 
 
+// News
+export const addNewsApiCall = async (data) => {
+    const Url = SERVER_URL + 'news/add-news';
+
+    const payload = {
+        title: data?.title,
+        excerpt: data?.excerpt,
+        content: data?.content,
+        date: data?.date,
+        time: data?.time,
+        author: data?.author,
+        category: data?.category,
+        status: data?.status,
+        featured: data?.featured,
+    };
+
+    try {
+        const response = await fetch(Url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': `Bearer ${token}`, // Uncomment if needed
+            },
+            body: JSON.stringify(payload),
+        });
+
+        const result = await response.json();
+
+        return result;
+    } catch (error) {
+        return {
+            error: 'Network Error',
+            details: error.message || error,
+        };
+    }
+};
+
+export const getNewsApiCall = async () => {
+    const Url = SERVER_URL + `news/get-news`;
+    try {
+        const res = await fetch(Url, {
+            method: 'GET',
+            cache: 'no-store',
+        })
+
+        const result = await res.json();
+        return result;
+    } catch (error) {
+        return {
+            error: 'Network error',
+            details: error.message,
+        };
+    }
+}
+
+export const DeleteNewsApiCall = async (id) => {
+    const Url = SERVER_URL + `news/delete-news/${id}`;
+    try {
+        const res = await fetch(Url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+
+        const result = await res.json();
+        return result;
+    } catch (error) {
+        return {
+            error: 'Network error',
+            details: error.message,
+        };
+    }
+};
 
 
+export const updateNewsApiCall = async (data, id) => {
+    const Url = SERVER_URL + `news/update-news/${id}`;
 
+    const payload = {
+        title: data?.title,
+        excerpt: data?.excerpt,
+        content: data?.content,
+        date: data?.date,
+        time: data?.time,
+        author: data?.author,
+        category: data?.category,
+        status: data?.status,
+        featured: data?.featured,
+    };
+
+    try {
+        const response = await fetch(Url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                // 'Authorization': `Bearer ${token}`, // Uncomment if needed
+            },
+            body: JSON.stringify(payload),
+        });
+
+        const result = await response.json();
+
+        return result;
+    } catch (error) {
+        return {
+            error: 'Network Error',
+            details: error.message || error,
+        };
+    }
+};

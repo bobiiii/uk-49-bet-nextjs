@@ -260,7 +260,7 @@ export default function AddPredictionDialog({ open, onOpenChange, onAdd, setPred
                             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                                 Cancel
                             </Button>
-                            <Button type="submit">{isLoading ? "Adding" : "Add Prediction"}</Button>
+                            <Button type="submit">{isLoading ? "Adding..." : "Add Prediction"}</Button>
                         </div>
                     </form>
                 </Form>

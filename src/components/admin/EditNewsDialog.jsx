@@ -20,17 +20,18 @@ import {
     SelectValue
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useToast } from '@/hooks/use-toast';
 
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { Quill } from 'react-quill-new';
+import { updateNewsApiCall } from '@/lib/apis';
+import { useToast } from '../ui/use-toast';
 
 // ✅ Fix list format error (register `list`)
 const List = Quill.import('formats/list');
 Quill.register('formats/list', List, true);
 
-const EditNewsDialog = ({ open, onOpenChange, article, onEdit }) => {
+const EditNewsDialog = ({ open, onOpenChange, article, onEdit, updateID, handleAddArticle }) => {
     const [formData, setFormData] = useState({
         title: '',
         excerpt: '',
@@ -42,6 +43,8 @@ const EditNewsDialog = ({ open, onOpenChange, article, onEdit }) => {
         featured: false,
         status: 'published'
     });
+    const [isLoading, setIsLoading] = useState(false);
+
 
     const { toast } = useToast();
 
@@ -96,22 +99,44 @@ const EditNewsDialog = ({ open, onOpenChange, article, onEdit }) => {
         }
     }, [article]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!article) return;
-
-        if (!formData.title || !formData.excerpt || !formData.content || !formData.author || !formData.category) {
-            toast({
-                title: 'Error',
-                description: 'Please fill in all required fields',
-                variant: 'destructive'
-            });
-            return;
+        if (!updateID) return;
+        setIsLoading(true)
+        // Filter only modified or present fields
+        const payload = {};
+        for (let key in formData) {
+            if (formData[key] !== undefined && formData[key] !== null && formData[key] !== '') {
+                payload[key] = formData[key];
+            }
         }
 
-        onEdit(article.id, formData);
-        onOpenChange(false);
+        try {
+            const res = await updateNewsApiCall(payload, updateID)
+            if (res.status === "Success") {
+                setIsLoading(false)
+                toast({
+                    title: "News Updated ✅",
+                    description: `${res.message}`,
+                    variant: "default",
+                    duration: 3000,
+                });
+                handleAddArticle()
+                onEdit(); // notify parent to reload
+                onOpenChange(false);
+            } else {
+                throw new Error(res.message);
+            }
+        } catch (err) {
+            toast({
+                title: "Failed to Updated ❌",
+                description: `${res.message}`,
+                variant: "destructive",
+                duration: 3000,
+            });
+        }
     };
+
 
     const handleInputChange = (field, value) => {
         setFormData((prev) => ({ ...prev, [field]: value }));
@@ -287,7 +312,7 @@ const EditNewsDialog = ({ open, onOpenChange, article, onEdit }) => {
                             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                                 Cancel
                             </Button>
-                            <Button type="submit">Update Article</Button>
+                            <Button type="submit">{isLoading ? "Updating..." : "Update Article"} </Button>
                         </div>
                     </form>
                 </DialogContent>

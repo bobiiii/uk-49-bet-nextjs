@@ -20,11 +20,12 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useToast } from '@/hooks/use-toast';
 
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import { Quill } from 'react-quill-new';
+import { addNewsApiCall } from '@/lib/apis';
+import { useToast } from '../ui/use-toast';
 
 // ✅ Properly register 'list' format once
 const List = Quill.import('formats/list');
@@ -40,8 +41,9 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
     author: '',
     category: '',
     featured: false,
-    status: 'published'
+    status: 'Published'
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const { toast } = useToast();
 
@@ -80,30 +82,55 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
     'align', 'script'
   ];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.title || !formData.excerpt || !formData.content || !formData.author || !formData.category) {
-      toast({
-        title: 'Error',
-        description: 'Please fill in all required fields',
-        variant: 'destructive'
-      });
-      return;
-    }
+    setIsLoading(true)
 
-    onAdd(formData);
-    setFormData({
-      title: '',
-      excerpt: '',
-      content: '',
-      date: new Date().toISOString().split('T')[0],
-      time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
-      author: '',
-      category: '',
-      featured: false,
-      status: 'published'
-    });
-    onOpenChange(false);
+    const res = await addNewsApiCall(formData)
+
+    if (res?.status === "Success") {
+      setIsLoading(false)
+      onAdd(formData);
+      toast({
+        title: "News Added ✅",
+        description: `${res.message}`,
+        variant: "default",
+        duration: 3000,
+      });
+      setFormData({
+        title: '',
+        excerpt: '',
+        content: '',
+        date: new Date().toISOString().split('T')[0],
+        time: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+        author: '',
+        category: '',
+        featured: false,
+        status: 'Published'
+      });
+      onOpenChange(false);
+    } else (
+      setIsLoading(false),
+      toast({
+        title: "Failed to Add ❌",
+        description: `${res.message}`,
+        variant: "destructive",
+        duration: 3000,
+      })
+
+
+    )
+
+    // if (!formData.title || !formData.excerpt || !formData.content || !formData.author || !formData.category) {
+    //   toast({
+    //     title: 'Error',
+    //     description: 'Please fill in all required fields',
+    //     variant: 'destructive'
+    //   });
+    //   return;
+    // }
+
+
   };
 
   const handleInputChange = (field, value) => {
@@ -252,8 +279,8 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="published">Published</SelectItem>
-                    <SelectItem value="draft">Draft</SelectItem>
+                    <SelectItem value="Published">Published</SelectItem>
+                    <SelectItem value="Draft">Draft</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -271,7 +298,7 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                 Cancel
               </Button>
-              <Button type="submit">Add Article</Button>
+              <Button type="submit">{isLoading ? "Adding..." : "Add Article"} </Button>
             </div>
           </form>
         </DialogContent>
