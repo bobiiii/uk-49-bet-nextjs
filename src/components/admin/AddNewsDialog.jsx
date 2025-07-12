@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import {
   Dialog,
   DialogContent,
@@ -115,7 +115,8 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
     "Tips & Tricks",
   ];
 
-  const quillModules = {
+  const quillModules = useMemo(() => ({
+    // const quillModules = {
     toolbar: {
       container: [
         [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -135,26 +136,14 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
         image: () => handleImageUpload(quillRef),
       },
     },
-  };
+    // };
+  }), []);
 
-  const quillFormats = [
-    "header",
-    "font",
-    "size",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "blockquote",
-    "list",
-    "indent",
-    "link",
-    "image",
-    "color",
-    "background",
-    "align",
-    "script",
-  ];
+  const quillFormats = useMemo(() => [
+    "header", "font", "size", "bold", "italic", "underline", "strike",
+    "blockquote", "list", "indent", "link", "image", "color",
+    "background", "align", "script",
+  ], []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
