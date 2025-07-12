@@ -497,3 +497,31 @@ export const updateNewsApiCall = async (data, id) => {
         };
     }
 };
+
+
+export const sendMessageApiCall = async (formData) => {
+  const Url = SERVER_URL + `contact/post`;
+
+  try {
+    const res = await fetch(Url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        fullname: formData.name,
+        email: formData.email,
+        subject: formData.subject,
+        category: formData.category,
+        message: formData.message
+      })
+    });
+
+    const result = await res.json();
+    return result;
+
+  } catch (error) {
+    return {
+      error: 'Network Error',
+      details: error.message || error,
+    };
+  }
+};

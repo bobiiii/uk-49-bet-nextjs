@@ -6,6 +6,7 @@ import emailjs from '@emailjs/browser';
 import Link from 'next/link';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { sendMessageApiCall } from '@/lib/apis';
 
 
 
@@ -22,45 +23,36 @@ function Contact() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState('idle' | 'success' | 'error');
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-        setSubmitStatus('idle');
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsSubmitting(true);
+  setSubmitStatus('idle');
 
-        try {
-            // Initialize EmailJS (replace with your actual IDs)
-            const serviceId = 'service_your_id';
-            const templateId = 'template_your_id';
-            const publicKey = 'your_public_key';
+  try {
+    const response = await sendMessageApiCall(formData); // your custom API call
 
-            const templateParams = {
-                from_name: formData.name,
-                from_email: formData.email,
-                subject: `[${formData.category.toUpperCase()}] ${formData.subject}`,
-                message: formData.message,
-                category: formData.category,
-                to_email: 'aloracarl@gmail.com'
-            };
+    if (response.status == "Success") {
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        category: 'general',
+        message: ''
+      });
+      setSubmitStatus('success');
+    } else {
+      console.error('API responded with error:', response.error || response.message);
+      setSubmitStatus('error');
+    }
+  } catch (error) {
+    console.error('Error submitting contact form:', error);
+    setSubmitStatus('error');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
-            await emailjs.send(serviceId, templateId, templateParams, publicKey);
-
-            // Reset form and show success
-            setFormData({
-                name: '',
-                email: '',
-                subject: '',
-                category: 'general',
-                message: ''
-            });
-            setSubmitStatus('success');
-
-        } catch (error) {
-            console.error('Error sending email:', error);
-            setSubmitStatus('error');
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
 
     const handleChange = (e) => {
         setFormData({

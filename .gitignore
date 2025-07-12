@@ -18,8 +18,10 @@
 sitemap-0.xml
 sitemap.xml
 robots.txt
-
-
+convert.js
+data.json
+formattedData.json
+rawData.txt
 
 # next.js
 /.next/

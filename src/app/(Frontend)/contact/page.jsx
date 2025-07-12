@@ -14,7 +14,7 @@ export async function generateMetadata() {
   })
 
   let data = null
-
+  
   const result = await response.json()
   data = result?.data
 
