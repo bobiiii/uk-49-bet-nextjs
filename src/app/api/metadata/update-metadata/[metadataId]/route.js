@@ -2,6 +2,8 @@ import { MetadataModel } from "@/app/api/_utils/metadataModel";
 import { NextResponse } from "next/server";
 import { startDB } from "@/app/api/_utils/startDb";
 import mongoose from "mongoose";
+import fs from "fs/promises";
+import path from "path";
 // import { updateImageToDrive } from "@/app/api/_utils/imageHandlers";
 
 export async function PUT(req, { params }) {
@@ -31,25 +33,30 @@ return NextResponse.json(
 );
 }
 
-// if (formData.has("ogImageId")) {
-//   const file = formData.get("ogImageId");
 
-//   const buffer = Buffer.from(await file.arrayBuffer());
-//   const ogImageId = {
-//     buffer,
-//     mimetype: file.type,
-//     name: file.name,
-//   };
 
-//   await updateImageToDrive(metadata.ogImageIdId, file);
-  
-// }
+  const newOgImage = formData.get("ogImage"); // `ogImage` is the name of the file input
+    if (newOgImage && newOgImage.name) {
+      // 2. Delete old image from disk
+      if (metadata.ogImageId) {
+        const oldImagePath = path.join(process.cwd(), "public", "metadata", path.basename(metadata.ogImageId));
+        try {
+          await fs.unlink(oldImagePath);
+        } catch (err) {
+          console.warn("Old image not found or already deleted:", err.message);
+        }
+      }
 
-    // Check fields dynamically using if conditions
-    // if (formData.has("entityId")) {
-    //   const entityId = formData.get("entityId");
-    //   updates.entityId = entityId;
-    // }
+      // 3. Save new image to disk
+      const buffer = Buffer.from(await newOgImage.arrayBuffer());
+      const newFileName = `${Date.now()}_${newOgImage.name}`;
+      const newImagePath = path.join(process.cwd(), "public", "metadata", newFileName);
+      await fs.writeFile(newImagePath, buffer);
+
+      // 4. Set updated image path
+      updates.ogImageId = `${process.env.NEXT_PUBLIC_BASEURL}/metadata/${newFileName}`;
+    }
+
 
     if (formData.has("entityType")) {
       const entityType = formData.get("entityType");
