@@ -21,7 +21,7 @@ export async function POST(req) {
     await writeFile(filePath, buffer);
 
     // return relative path so it can be used in frontend like <img src="/news/..." />
-    return NextResponse.json({ url: `${process.env.NEXT_PUBLIC_BASEURL}/news/${fileName}` }, { status: 200 });
+    return NextResponse.json({ url: `${process.env.NEXT_PUBLIC_BASEURL}news/${fileName}` }, { status: 200 });
   } catch (err) {
     console.error('Image upload error:', err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
