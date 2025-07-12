@@ -55,7 +55,6 @@ export function UpdateMetaData({ setIsUpdateMetaData, selectedPage, pageMetaData
             ...form,
             keywords: form.keywords.split(",").map((k) => k.trim()).filter(Boolean),
         };
-        console.log("metaData", metaData);
 
         const res = await updateMetaDataApiCall(metaData, type, pageMetaData?._id);
         if (res?.status === 'Success') {
