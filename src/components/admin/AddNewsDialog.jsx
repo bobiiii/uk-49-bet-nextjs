@@ -48,12 +48,10 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
     featured: false,
     status: "Published",
   });
-  
-  
+
   const [slugEdited, setSlugEdited] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
-  
+
   const prevImagesRef = useRef([]);
   const quillRef = useRef();
 
@@ -77,21 +75,20 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
     );
     console.log("🗑️ Deleted images:", deletedImages);
 
-deletedImages.forEach(async (src) => {
-  if (src.includes("/news/")) {
-    try {
-      const filename = src.split("/news/")[1]; // Only extract the filename part
-      await fetch("/api/news/delete-image", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ filename }),
-      });
-    } catch (err) {
-      console.error("❌ Failed to delete image", err);
-    }
-  }
-});
-
+    deletedImages.forEach(async (src) => {
+      if (src.includes("/news/")) {
+        try {
+          const filename = src.split("/news/")[1]; // Only extract the filename part
+          await fetch("/api/news/delete-image", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ filename }),
+          });
+        } catch (err) {
+          console.error("❌ Failed to delete image", err);
+        }
+      }
+    });
 
     prevImagesRef.current = currentImages;
   };
@@ -315,10 +312,11 @@ deletedImages.forEach(async (src) => {
                   // onChange={(value) => handleInputChange("content", value)}
                   onChange={(value) => {
                     handleInputChange("content", value);
-                    checkDeletedImages();
                   }}
                   onKeyUp={(e) => {
+                    console.log("Key up event:", e.key);
                     if (e.key === "Backspace" || e.key === "Delete") {
+                      console.log("keypressess");
                       setTimeout(() => {
                         checkDeletedImages();
                       }, 100); // Delay ensures DOM updates finish
