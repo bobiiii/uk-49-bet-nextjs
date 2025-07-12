@@ -26,7 +26,7 @@ import "react-quill-new/dist/quill.snow.css";
 import { Quill } from "react-quill-new";
 import { updateNewsApiCall } from "@/lib/apis";
 import { useToast } from "../ui/use-toast";
-import { handleImageUpload } from "@/utils/functions";
+import { generateSlug, handleImageUpload } from "@/utils/functions";
 
 // ✅ Fix list format error (register `list`)
 const List = Quill.import("formats/list");
@@ -53,6 +53,7 @@ const EditNewsDialog = ({
     status: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [slugEdited, setSlugEdited] = useState(false);
 
   const prevImagesRef = useRef([]);
   const quillRef = useRef();
@@ -159,10 +160,10 @@ const EditNewsDialog = ({
   ];
 
   useEffect(() => {
-      
-      
-      if (article) {
-        console.log('article', article);
+
+
+    if (article) {
+      console.log('article', article);
       setFormData({
         title: article.title,
         slug: article.slug,
@@ -321,13 +322,13 @@ const EditNewsDialog = ({
               <Label htmlFor="content">Content *</Label>
               <div className="quill-container-wrapper border rounded-md overflow-hidden">
                 <ReactQuill
-                                  ref={quillRef}
+                  ref={quillRef}
 
                   theme="snow"
                   value={formData.content}
                   onChange={(value) => {
                     handleInputChange("content", value);
-                    
+
                   }}
                   onKeyUp={(e) => {
                     if (e.key === "Backspace" || e.key === "Delete") {

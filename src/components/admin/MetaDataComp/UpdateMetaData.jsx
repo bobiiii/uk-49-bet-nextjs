@@ -57,6 +57,7 @@ export function UpdateMetaData({ setIsUpdateMetaData, selectedPage, pageMetaData
         };
 
         const res = await updateMetaDataApiCall(metaData, type, pageMetaData?._id);
+
         if (res?.status === 'Success') {
             setIsLoading(false);
             toast({
