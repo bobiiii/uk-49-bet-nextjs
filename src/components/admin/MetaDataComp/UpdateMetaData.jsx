@@ -35,7 +35,7 @@ export function UpdateMetaData({ setIsUpdateMetaData, selectedPage, pageMetaData
                 canonical: pageMetaData.canonical || "",
                 ogTitle: pageMetaData.ogTitle || "",
                 ogDescription: pageMetaData.ogDescription || "",
-                ogImageId: pageMetaData.ogImageId || "",
+                ogImage: pageMetaData.ogImage || "",
                 ogImageAlt: pageMetaData.ogImageAlt || "",
             });
         }
@@ -55,7 +55,8 @@ export function UpdateMetaData({ setIsUpdateMetaData, selectedPage, pageMetaData
             ...form,
             keywords: form.keywords.split(",").map((k) => k.trim()).filter(Boolean),
         };
-        
+        console.log("metaData", metaData);
+
         const res = await updateMetaDataApiCall(metaData, type, pageMetaData?._id);
         if (res?.status === 'Success') {
             setIsLoading(false);
@@ -153,7 +154,7 @@ export function UpdateMetaData({ setIsUpdateMetaData, selectedPage, pageMetaData
                         />
                     </div>
 
-                    <div className="grid gap-2">
+                    {/* <div className="grid gap-2">
                         <Label htmlFor="ogImageId">Graph Image ID</Label>
                         <Input
                             id="ogImageId"
@@ -161,6 +162,23 @@ export function UpdateMetaData({ setIsUpdateMetaData, selectedPage, pageMetaData
                             value={form.ogImageId}
                             onChange={handleChange}
                             placeholder="Image ID or URL"
+                        />
+                    </div> */}
+
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="ogImage">Graph Image</Label>
+                        <Input
+                            id="ogImage"
+                            name="ogImage"
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                                setForm((prev) => ({
+                                    ...prev,
+                                    ogImage: e.target.files[0],
+                                }));
+                            }}
                         />
                     </div>
 

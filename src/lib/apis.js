@@ -39,7 +39,7 @@ export const addMetaDataApiCall = async (data, type) => {
     formData?.append('canonical', data?.canonical);
     formData?.append('ogTitle', data?.ogTitle);
     formData?.append('ogDescription', data?.ogDescription);
-    formData?.append('ogImageId', data?.ogImageId);
+    formData?.append('ogImage', data?.ogImage);
     formData?.append('ogImageAlt', data?.ogImageAlt);
     // formData?.append('ogImage', data?.ogImage[0]);
 
@@ -73,7 +73,7 @@ export const updateMetaDataApiCall = async (data, type, id) => {
     formData?.append('canonical', data?.canonical);
     formData?.append('ogTitle', data?.ogTitle);
     formData?.append('ogDescription', data?.ogDescription);
-    formData?.append('ogImageId', data?.ogImageId);
+    formData?.append('ogImage', data?.ogImage);
     formData?.append('ogImageAlt', data?.ogImageAlt);
 
     // optional image upload

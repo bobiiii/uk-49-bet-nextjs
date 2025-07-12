@@ -19,7 +19,8 @@ export function AddMetaData({ setIsAddMetaData, selectedPage }) {
         canonical: "",
         ogTitle: "",
         ogDescription: "",
-        ogImageId: "",
+        // ogImageId: "",
+        ogImage: null,
         ogImageAlt: "",
     });
 
@@ -43,8 +44,10 @@ export function AddMetaData({ setIsAddMetaData, selectedPage }) {
             keywords: form.keywords.split(",").map((k) => k.trim()).filter(Boolean),
         };
 
+
+
         const res = await addMetaDataApiCall(metaData, type);
-       
+
         if (res?.status === 'Success') {
             setIsLoading(false);
             toast({
@@ -141,7 +144,7 @@ export function AddMetaData({ setIsAddMetaData, selectedPage }) {
                         />
                     </div>
 
-                    <div className="grid gap-2">
+                    {/* <div className="grid gap-2">
                         <Label htmlFor="ogImageId">Graph Image </Label>
                         <Input
                             id="ogImageId"
@@ -150,7 +153,24 @@ export function AddMetaData({ setIsAddMetaData, selectedPage }) {
                             onChange={handleChange}
                             placeholder="Image Feature will be added later"
                         />
+                    </div> */}
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="ogImage">Graph Image</Label>
+                        <Input
+                            id="ogImage"
+                            name="ogImage"
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                                setForm((prev) => ({
+                                    ...prev,
+                                    ogImage: e.target.files[0],
+                                }));
+                            }}
+                        />
                     </div>
+
 
                     <div className="grid gap-2">
                         <Label htmlFor="ogImageAlt">Graph Image Alt</Label>
