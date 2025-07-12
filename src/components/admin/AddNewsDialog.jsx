@@ -77,19 +77,21 @@ export default function AddNewsDialog({ open, onOpenChange, onAdd }) {
     );
     console.log("🗑️ Deleted images:", deletedImages);
 
-    deletedImages.forEach(async (src) => {
-      if (src.startsWith("/news/")) {
-        try {
-          await fetch("/api/news/delete-image", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ url: src }),
-          });
-        } catch (err) {
-          console.error("❌ Failed to delete image", err);
-        }
-      }
-    });
+deletedImages.forEach(async (src) => {
+  if (src.includes("/news/")) {
+    try {
+      const filename = src.split("/news/")[1]; // Only extract the filename part
+      await fetch("/api/news/delete-image", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename }),
+      });
+    } catch (err) {
+      console.error("❌ Failed to delete image", err);
+    }
+  }
+});
+
 
     prevImagesRef.current = currentImages;
   };
