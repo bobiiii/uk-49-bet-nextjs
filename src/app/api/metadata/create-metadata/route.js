@@ -65,7 +65,7 @@ export async function POST(req) {
 
     fs.writeFileSync(filePath, buffer);
 
-  const ogImageUrl = `${process.env.NEXT_PUBLIC_BASEURL}/metadata/${fileName}`;
+  const ogImageUrl = `${process.env.NEXT_PUBLIC_BASEURL}metadata/${fileName}`;
 
     const metadata = await MetadataModel.create({
       entityType,

@@ -30,8 +30,8 @@ export async function generateMetadata() {
       type: "website",
       images: [
         {
-          url: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
-          secureUrl: data?.ogImage || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          url: data?.ogImageId || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          secureUrl: data?.ogImageId || 'https://lovable.dev/opengraph-image-p98pqg.png',
           width: 1200,
           height: 630,
           alt: data?.ogImageAlt || "Guide",

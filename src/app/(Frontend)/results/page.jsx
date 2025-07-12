@@ -29,11 +29,11 @@ export async function generateMetadata() {
       type: "website",
       images: [
         {
-          url: "https://lovable.dev/opengraph-image-p98pqg.png",
-          secureUrl: "https://lovable.dev/opengraph-image-p98pqg.png",
+          url: data?.ogImageId || 'https://lovable.dev/opengraph-image-p98pqg.png',
+          secureUrl: data?.ogImageId || 'https://lovable.dev/opengraph-image-p98pqg.png',
           width: 1200,
           height: 630,
-          alt: data?.ogImageAlt || "Results",
+          alt: data?.ogImageAlt || "Tools",
         },
       ],
       site_name: process.env.NEXT_PUBLIC_SITENAME || "Results",

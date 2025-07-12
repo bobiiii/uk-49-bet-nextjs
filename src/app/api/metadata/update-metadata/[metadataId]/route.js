@@ -54,7 +54,7 @@ return NextResponse.json(
       await fs.writeFile(newImagePath, buffer);
 
       // 4. Set updated image path
-      updates.ogImageId = `${process.env.NEXT_PUBLIC_BASEURL}/metadata/${newFileName}`;
+      updates.ogImageId = `${process.env.NEXT_PUBLIC_BASEURL}metadata/${newFileName}`;
     }
 
 
